@@ -12,11 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 public class NewPatient extends Activity implements View.OnClickListener {
 
     RelativeLayout mMainLayout = null;
     TextView mErrorMessage = null;
+    ArrayList<String> mPatientInfo = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,11 @@ public class NewPatient extends Activity implements View.OnClickListener {
                 //If contains first and last name, exit screen
                 else
                 {
+                    mPatientInfo.add(first);
+                    mPatientInfo.add(last);
+                    Intent i = new Intent();
+                    i.putStringArrayListExtra("PatientInfo",mPatientInfo);
+                    setResult(RESULT_OK, i);
                     finish();
                     break;
                 }
