@@ -25,6 +25,8 @@ public class PatientList extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_patient_list);
         View patientListButton = findViewById(R.id.new_patient);
         patientListButton.setOnClickListener(this);
+        //TODO LOAD PATIENTS INTO mPatientNames
+        this.CreateTextList(this, mPatientNames, R.id.new_patient);
 
     }
 
@@ -49,7 +51,17 @@ public class PatientList extends Activity implements View.OnClickListener {
             String fullName = patientData.get(0) + " " + patientData.get(1);
             Log.d("PatientList", fullName);
             mPatientNames.add(fullName);
-            this.CreateTextList(this, mPatientNames, R.id.new_patient);
+            //If empty patient list append first name below new patient button
+            if (mPatientNames.size()==1) {
+                this.AppendTextList(this, fullName, R.id.new_patient);
+            }
+            //Otherwise put it below the last patient in the list
+            else
+            {
+                this.AppendTextList(this, fullName, R.id.new_patient + mPatientNames.size()-1);
+            }
+
+            //TODO SAVE INFORMATON INTO SQL
         }
     }
 
@@ -78,6 +90,23 @@ public class PatientList extends Activity implements View.OnClickListener {
             prevTextViewId = curTextViewId;
             layout.addView(textView, params);
         }
+    }
+
+    public void AppendTextList (Context context, String text, int id) {
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.relativePatientList);
+        final TextView textView = new TextView(context);
+
+        textView.setText(text);
+
+        int curTextViewId = id + 1;
+        textView.setId(curTextViewId);
+        final RelativeLayout.LayoutParams params =
+                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.BELOW, id);
+        textView.setLayoutParams(params);
+
+        layout.addView(textView, params);
     }
 }
 
