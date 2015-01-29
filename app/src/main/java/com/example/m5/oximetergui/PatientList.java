@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ public class PatientList extends Activity implements View.OnClickListener {
 
     RelativeLayout mMainLayout = null;
     ArrayList<String> mPatientNames = new ArrayList<String>();
+    ArrayList<Integer> mPatientButtons = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +35,22 @@ public class PatientList extends Activity implements View.OnClickListener {
     static final int NEW_PATIENT_REQUEST = 1;
 
     public void onClick(View v) {
-        switch (v.getId())
+        int buttonId = v.getId();
+
+        switch (buttonId)
         {
             case R.id.new_patient:
                 Intent i = new Intent(this, NewPatient.class);
                 startActivityForResult(i,NEW_PATIENT_REQUEST);
                 break;
+        }
+
+        for(int i = 0; i < mPatientButtons.size(); i++)
+        {
+            if(buttonId==mPatientButtons.get(i))
+            {
+                Log.d("PatientList","ID pressed " + mPatientButtons.get(i).toString() + " associates to " + mPatientNames.get(i));
+            }
         }
     }
 
@@ -52,14 +64,18 @@ public class PatientList extends Activity implements View.OnClickListener {
             Log.d("PatientList", fullName);
             mPatientNames.add(fullName);
             //If empty patient list append first name below new patient button
+            int prevId;
             if (mPatientNames.size()==1) {
-                this.AppendTextList(this, fullName, R.id.new_patient);
+                prevId = R.id.new_patient;
+                this.AppendButtonList(this, fullName, prevId);
             }
             //Otherwise put it below the last patient in the list
             else
             {
-                this.AppendTextList(this, fullName, R.id.new_patient + mPatientNames.size()-1);
+                prevId = R.id.new_patient + mPatientNames.size()-1;
+                this.AppendButtonList(this, fullName, prevId);
             }
+            mPatientButtons.add(prevId+1);
 
             //TODO SAVE INFORMATON INTO SQL
         }
@@ -92,21 +108,22 @@ public class PatientList extends Activity implements View.OnClickListener {
         }
     }
 
-    public void AppendTextList (Context context, String text, int id) {
+    public void AppendButtonList (Context context, String text, int id) {
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.relativePatientList);
-        final TextView textView = new TextView(context);
+        final Button button = new Button(context);
 
-        textView.setText(text);
+        button.setText(text);
 
         int curTextViewId = id + 1;
-        textView.setId(curTextViewId);
+        button.setId(curTextViewId);
+        button.setOnClickListener(this);
         final RelativeLayout.LayoutParams params =
                 new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.BELOW, id);
-        textView.setLayoutParams(params);
+        button.setLayoutParams(params);
 
-        layout.addView(textView, params);
+        layout.addView(button, params);
     }
 }
 
