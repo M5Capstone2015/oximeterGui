@@ -37,6 +37,7 @@ public class PatientList extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         int buttonId = v.getId();
 
+        //Switch statement for static buttons that can be clicked
         switch (buttonId)
         {
             case R.id.new_patient:
@@ -45,6 +46,7 @@ public class PatientList extends Activity implements View.OnClickListener {
                 break;
         }
 
+        //Iterate through dynamic patient buttons to see if any of them were clicked
         for(int count = 0; count < mPatientButtons.size(); count++)
         {
             if(buttonId==mPatientButtons.get(count))

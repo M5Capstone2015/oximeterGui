@@ -18,5 +18,8 @@
 
     <!-- Patient History -->
     <string name="title_activity_patient_history">PatientHistory</string>
+    <string name="new_reading_label">New Reading</string>
+    <string name="title_activity_new_reading">NewReading</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

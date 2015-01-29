@@ -28,6 +28,10 @@
             android:name=".PatientHistory"
             android:label="@string/title_activity_patient_history" >
         </activity>
+        <activity
+            android:name=".NewReading"
+            android:label="@string/title_activity_new_reading" >
+        </activity>
     </application>
 
 </manifest>
