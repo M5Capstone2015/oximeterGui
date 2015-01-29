@@ -45,11 +45,15 @@ public class PatientList extends Activity implements View.OnClickListener {
                 break;
         }
 
-        for(int i = 0; i < mPatientButtons.size(); i++)
+        for(int count = 0; count < mPatientButtons.size(); count++)
         {
-            if(buttonId==mPatientButtons.get(i))
+            if(buttonId==mPatientButtons.get(count))
             {
-                Log.d("PatientList","ID pressed " + mPatientButtons.get(i).toString() + " associates to " + mPatientNames.get(i));
+                Log.d("PatientList","ID pressed " + mPatientButtons.get(count).toString() + " associates to " + mPatientNames.get(count));
+                Intent i = new Intent(this, PatientHistory.class);
+                i.putExtra("fullname", mPatientNames.get(count));
+                startActivity(i);
+                break;
             }
         }
     }
