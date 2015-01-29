@@ -15,7 +15,8 @@
     <string name="patient_info_label">Patient Info</string>
     <string name="first_name_label">First</string>
     <string name="last_name_label">Last</string>
+
+    <!-- Patient History -->
     <string name="title_activity_patient_history">PatientHistory</string>
-    <string name="hello_world">Hello world!</string>
 
 </resources>
