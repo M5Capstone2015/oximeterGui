@@ -63,24 +63,29 @@ public class PatientList extends Activity implements View.OnClickListener {
             String fullName = patientData.get(0) + " " + patientData.get(1);
             Log.d("PatientList", fullName);
             mPatientNames.add(fullName);
-            //If empty patient list append first name below new patient button
+
             int prevId;
+            //If empty patient list append first name below new patient button
             if (mPatientNames.size()==1) {
                 prevId = R.id.new_patient;
                 this.AppendButtonList(this, fullName, prevId);
             }
+
             //Otherwise put it below the last patient in the list
             else
             {
                 prevId = R.id.new_patient + mPatientNames.size()-1;
                 this.AppendButtonList(this, fullName, prevId);
             }
+
+            //New patient UI ID will be the ID above it plus 1
             mPatientButtons.add(prevId+1);
 
-            //TODO SAVE INFORMATON INTO SQL
+            //TODO SAVE INFORMATION INTO SQL
         }
     }
 
+    //TODO MAKE CreateTextList CALL APPENDBUTTONLIST
     public void CreateTextList (Context context, ArrayList<String> list, int id) {
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.relativePatientList);
 
