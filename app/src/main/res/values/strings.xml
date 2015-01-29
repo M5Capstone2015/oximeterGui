@@ -15,6 +15,7 @@
     <string name="patient_info_label">Patient Info</string>
     <string name="first_name_label">First</string>
     <string name="last_name_label">Last</string>
+    <string name="save_label">Save</string>
 
     <!-- Patient History -->
     <string name="title_activity_patient_history">PatientHistory</string>
@@ -22,6 +23,7 @@
     <string name="title_activity_new_reading">NewReading</string>
 
     <!-- New Reading -->
+    <string name="record_label">Record</string>
     <string name="sp02_label">SP02</string>
     <string name="fake_reading_label">92%</string>
 
