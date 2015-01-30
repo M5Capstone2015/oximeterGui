@@ -8,39 +8,42 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Hunt on 1/29/2015.
- */
-public class PatientListModel {
+
+public class PatientModel {
 
     DB _db;
 
-    public PatientListModel(Context context)
+    public PatientModel(Context context)
     {
         _db = new DB(context);
     }
+
 
     /**
      * Queries patient names for PatientList activity.
      *
      * @return
     */
-    public List<String> LoadPatientNames() // TODO change this to return boolean and take a List<String> to populate
+    public List<Patient> LoadPatientNames() // TODO change this to return boolean and take a List<String> to populate
     {
-        // TODO Consider just using SELECT * FROM Patients and populating Patient objects. Easier that way. Otherwise need to have ref to ID.
         SQLiteDatabase db = _db.getReadableDatabase();
-        Cursor cursor = db.query("Patients", SQL_Constants.FROM, null, null, null, null, ""); // TODO add ORDERBY param later.
-        List<String> names = new ArrayList<>();
+        Cursor cursor = db.query(SQL_Constants.PATIENT_TABLE_NAME,
+                                 SQL_Constants.FROM, null, null, null, null, ""); // TODO add ORDERBY param later.
+
+        List<Patient> patients = new ArrayList<>();
+
         while (cursor.moveToNext())
         {
-            String firstName = cursor.getString(0);
-            String lastName = cursor.getString(1);
-            names.add(firstName + " " + lastName);
+            int ID = cursor.getInt(0);
+            String firstName = cursor.getString(1);
+            String lastName = cursor.getString(2);
+            patients.add(new Patient(ID, firstName, lastName));
         }
-        return names;
+        return patients;
     }
 
     /**
+     *
      * Persists a new patient in the Patient table from a Patient object.
      *
      * @param patient
@@ -49,7 +52,8 @@ public class PatientListModel {
      */
     public boolean AddPatient(Patient patient, StringBuilder errorMessage)
     {
-        try {
+        try
+        {
             SQLiteDatabase db = _db.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(SQL_Constants.PATIENT_FIRSTNAME_COLUMN, patient.FirstName);
@@ -64,5 +68,23 @@ public class PatientListModel {
             return false;
         }
         return true;
+    }
+
+    public Patient FindPatientByID(int id)
+    {
+        SQLiteDatabase db = _db.getReadableDatabase();
+
+        String queryString = String.format(SQL_Constants.SELECT_PATIENT_BY_ID, String.valueOf(id));
+        Cursor cursor2 = db.rawQuery(queryString, null);
+
+        Patient patient = null;
+
+        while (cursor2.moveToNext()) {
+            String firstName = cursor2.getString(1);
+            String lastName = cursor2.getString(2);
+            patient = new Patient(id, firstName, lastName);
+        }
+
+        return patient;
     }
 }

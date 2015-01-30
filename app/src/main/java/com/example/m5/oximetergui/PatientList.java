@@ -1,11 +1,8 @@
 package com.example.m5.oximetergui;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +20,7 @@ public class PatientList extends Activity implements View.OnClickListener {
     ArrayList<String> mPatientNames = new ArrayList<String>();
     ArrayList<Integer> mPatientButtons = new ArrayList<Integer>();
     TextView tv;
-    PatientListModel _model = new PatientListModel(this);
+    PatientModel _model = new PatientModel(this);
 
 
     public void addClick(View v)
@@ -34,15 +31,24 @@ public class PatientList extends Activity implements View.OnClickListener {
 
         StringBuilder sb = new StringBuilder();
         if (!_model.AddPatient(p1, sb)) {
-            String errorMessage = sb.toString();
-            // TODO Do something with error
+            String errorMessage = sb.toString();// TODO Do something with error
+            return;
         }
 
-        List<String> patientNames = _model.LoadPatientNames();
+        List<Patient> patientNames = _model.LoadPatientNames();
+
         String names = "";
-        for (String s : patientNames)
-            names += (s + "\n");
+        for (Patient s : patientNames)
+            names += (s.FirstName + " " + s.LastName + "\n");
         tv.setText(names);
+    }
+
+    public void findByIDClick(View v)
+    {
+        Patient p = _model.FindPatientByID(1);
+
+        tv.setText("Found: " + p.FirstName);
+
     }
 
     @Override
