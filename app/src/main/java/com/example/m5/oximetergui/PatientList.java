@@ -1,9 +1,11 @@
 package com.example.m5.oximetergui;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 
 public class PatientList extends Activity implements View.OnClickListener {
@@ -20,12 +22,35 @@ public class PatientList extends Activity implements View.OnClickListener {
     RelativeLayout mMainLayout = null;
     ArrayList<String> mPatientNames = new ArrayList<String>();
     ArrayList<Integer> mPatientButtons = new ArrayList<Integer>();
+    TextView tv;
+    PatientListModel _model = new PatientListModel(this);
+
+
+    public void addClick(View v)
+    {
+        Patient p1 = new Patient();
+        p1.FirstName = "Hunt";
+        p1.LastName = "Graham";
+
+        StringBuilder sb = new StringBuilder();
+        if (!_model.AddPatient(p1, sb)) {
+            String errorMessage = sb.toString();
+            // TODO Do something with error
+        }
+
+        List<String> patientNames = _model.LoadPatientNames();
+        String names = "";
+        for (String s : patientNames)
+            names += (s + "\n");
+        tv.setText(names);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_list);
         View patientListButton = findViewById(R.id.new_patient);
+        tv = (TextView) findViewById(R.id.textView);
         patientListButton.setOnClickListener(this);
         //TODO LOAD PATIENTS INTO mPatientNames
         this.CreateTextList(this, mPatientNames, R.id.new_patient);
@@ -49,7 +74,7 @@ public class PatientList extends Activity implements View.OnClickListener {
         //Iterate through dynamic patient buttons to see if any of them were clicked
         for(int count = 0; count < mPatientButtons.size(); count++)
         {
-            if(buttonId==mPatientButtons.get(count))
+            if(buttonId == mPatientButtons.get(count))
             {
                 Log.d("PatientList","ID pressed " + mPatientButtons.get(count).toString() + " associates to " + mPatientNames.get(count));
                 Intent i = new Intent(this, PatientHistory.class);
