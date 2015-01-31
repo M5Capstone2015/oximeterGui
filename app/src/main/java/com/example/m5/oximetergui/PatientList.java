@@ -1,12 +1,15 @@
 package com.example.m5.oximetergui;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PatientList extends ListActivity {
+public class PatientList extends ListActivity implements View.OnClickListener {
 
     RelativeLayout mMainLayout = null;
     ArrayList<String> mPatientNames = new ArrayList<String>();
-    ArrayList<Integer> mPatientButtons = new ArrayList<Integer>();
+    List<Integer> mPatientButtons = new ArrayList<Integer>();
     TextView tv;
     PatientModel _model = new PatientModel(this);
 
@@ -58,8 +61,7 @@ public class PatientList extends ListActivity {
         View patientListButton = findViewById(R.id.new_patient);
         tv = (TextView) findViewById(R.id.textView);
         patientListButton.setOnClickListener(this);
-        //TODO LOAD PATIENTS INTO mPatientNames
-        this.CreateTextList(this, mPatientNames, R.id.new_patient);
+        //TODO LOAD PATIENTS INTO mPatientNames AND SETUP LIST ADAPTER
 
     }
 
@@ -76,19 +78,6 @@ public class PatientList extends ListActivity {
                 startActivityForResult(i,NEW_PATIENT_REQUEST);
                 break;
         }
-
-        //Iterate through dynamic patient buttons to see if any of them were clicked
-        for(int count = 0; count < mPatientButtons.size(); count++)
-        {
-            if(buttonId == mPatientButtons.get(count))
-            {
-                Log.d("PatientList","ID pressed " + mPatientButtons.get(count).toString() + " associates to " + mPatientNames.get(count));
-                Intent i = new Intent(this, PatientHistory.class);
-                i.putExtra("fullname", mPatientNames.get(count));
-                startActivity(i);
-                break;
-            }
-        }
     }
 
     @Override
@@ -101,25 +90,25 @@ public class PatientList extends ListActivity {
             Log.d("PatientList", fullName);
             mPatientNames.add(fullName);
 
-            int prevId;
-            //If empty patient list append first name below new patient button
-            if (mPatientNames.size()==1) {
-                prevId = R.id.new_patient;
-                this.AppendButtonList(this, fullName, prevId);
-            }
-
-            //Otherwise put it below the last patient in the list
-            else
-            {
-                prevId = R.id.new_patient + mPatientNames.size()-1;
-                this.AppendButtonList(this, fullName, prevId);
-            }
-
-            //New patient UI ID will be the ID above it plus 1
-            mPatientButtons.add(prevId+1);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_layout, R.id.listText, mPatientNames);
+            setListAdapter(adapter);
 
             //TODO SAVE INFORMATION INTO SQL
         }
+    }
+
+    // when an item of the list is clicked
+    @Override
+    protected void onListItemClick(ListView list, View view, int position, long id) {
+        super.onListItemClick(list, view, position, id);
+
+        //String selectedItem = (String) getListView().getItemAtPosition(position);
+        String selectedItem = (String) getListAdapter().getItem(position);
+
+        Log.d("PatientList","You clicked " + selectedItem + " at position " + position);
+        Intent i = new Intent(this, PatientHistory.class);
+        i.putExtra("fullname",selectedItem);
+        startActivity(i);
     }
 }
 
