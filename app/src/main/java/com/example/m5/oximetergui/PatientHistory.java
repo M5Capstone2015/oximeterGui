@@ -48,8 +48,8 @@ public class PatientHistory extends Activity implements View.OnClickListener {
         switch (buttonId)
         {
             case R.id.new_reading:
-                //Intent i = new Intent(this, NewReading.class);
-                //startActivityForResult(i,NEW_READING_REQUEST);
+                Intent i = new Intent(this, NewReading.class);
+                startActivityForResult(i,NEW_READING_REQUEST);
                 break;
         }
     }
