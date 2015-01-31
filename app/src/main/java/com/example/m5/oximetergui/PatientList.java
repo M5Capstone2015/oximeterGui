@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public class PatientList extends Activity implements View.OnClickListener {
+public class PatientList extends ListActivity {
 
     RelativeLayout mMainLayout = null;
     ArrayList<String> mPatientNames = new ArrayList<String>();
@@ -90,51 +90,6 @@ public class PatientList extends Activity implements View.OnClickListener {
             //TODO SAVE INFORMATION INTO SQL
         }
     }
-
-    //TODO MAKE CreateTextList CALL APPENDBUTTONLIST
-    public void CreateTextList (Context context, ArrayList<String> list, int id) {
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.relativePatientList);
-
-        int prevTextViewId = 0;
-        for (int i = 0; i < list.size(); i++) {
-            final TextView textView = new TextView(context);
-
-            textView.setText(list.get(i));
-
-            int curTextViewId = prevTextViewId + 1;
-            textView.setId(curTextViewId);
-            final RelativeLayout.LayoutParams params =
-                    new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-            if (i == 0 && id != -1) {
-                params.addRule(RelativeLayout.BELOW, id);
-            } else {
-                params.addRule(RelativeLayout.BELOW, prevTextViewId);
-            }
-            textView.setLayoutParams(params);
-
-            prevTextViewId = curTextViewId;
-            layout.addView(textView, params);
-        }
-    }
-
-    public void AppendButtonList (Context context, String text, int id) {
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.relativePatientList);
-        final Button button = new Button(context);
-
-        button.setText(text);
-
-        int curTextViewId = id + 1;
-        button.setId(curTextViewId);
-        button.setOnClickListener(this);
-        final RelativeLayout.LayoutParams params =
-                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.BELOW, id);
-        button.setLayoutParams(params);
-
-        layout.addView(button, params);
-    }
 }
+
 
