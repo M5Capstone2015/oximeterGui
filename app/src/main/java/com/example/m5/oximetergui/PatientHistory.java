@@ -53,4 +53,12 @@ public class PatientHistory extends Activity implements View.OnClickListener {
                 break;
         }
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==RESULT_OK) {
+            Log.d("PatientHistory","Result code was: RESULT OK");
+        }
+    }
 }
