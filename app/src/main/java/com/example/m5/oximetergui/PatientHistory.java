@@ -32,6 +32,7 @@ public class PatientHistory extends Activity implements View.OnClickListener {
             //TODO add error handling?
         }
 
+        //Setup OnClickListeners
         View patientListButton = findViewById(R.id.new_reading);
         patientListButton.setOnClickListener(this);
 
