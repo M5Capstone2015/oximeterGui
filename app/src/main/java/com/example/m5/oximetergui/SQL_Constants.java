@@ -35,7 +35,7 @@ public class SQL_Constants {
             " age = '%s'," +
             " date_of_birth = '%s'," +
             " is_open = '%s'" +
-            " WHERE id = '%s';";
+            " WHERE id = %s;";
 
     public static String UPGRADE = "DROP TABLE IF EXISTS " + PATIENT_TABLE_NAME;
 }

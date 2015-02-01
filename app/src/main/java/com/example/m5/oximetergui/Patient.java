@@ -23,4 +23,12 @@ public class Patient {
     public String DateOfBirth = "";
     public int Age = 0;
     public boolean IsOpen;
+
+    public boolean Validate()
+    {
+        if (FirstName == "")
+            return false;
+        else
+            return true;
+    }
 }

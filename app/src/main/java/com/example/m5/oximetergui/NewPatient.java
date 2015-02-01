@@ -31,6 +31,8 @@ public class NewPatient extends Activity implements View.OnClickListener {
         patientListButton.setOnClickListener(this);
     }
 
+
+    //TODO Refactor to put validation logic in Patient class
     public void onClick(View v) {
         switch (v.getId())
         {
@@ -57,6 +59,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
                 {
                     mPatientInfo.add(first);
                     mPatientInfo.add(last);
+                    // TODO Move to Intent Constants final class
                     Intent i = new Intent();
                     i.putStringArrayListExtra("PatientInfo",mPatientInfo);
                     setResult(RESULT_OK, i);
@@ -66,6 +69,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
         }
     }
 
+    // TODO refactor this to its own class.  ErrorMessage em = new ErrorMessage(errorText, context);
     private void createErrorMessage()
     {
         //If this is the first time we've stored the main relative layout, retrieve the layout

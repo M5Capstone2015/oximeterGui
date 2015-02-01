@@ -109,6 +109,7 @@ public class PatientList extends ListActivity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
+            //TODO pass patient not string list
             ArrayList<String> patientData = data.getStringArrayListExtra("PatientInfo");
             Log.d("PatientList", patientData.get(0));
             Log.d("PatientList", patientData.get(1));

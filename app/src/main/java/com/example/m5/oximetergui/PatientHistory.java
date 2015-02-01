@@ -17,6 +17,7 @@ public class PatientHistory extends ListActivity implements View.OnClickListener
     String mPatientName;
     ArrayList<String> mReadingDates = new ArrayList<String>();
 
+    // TODO move to constants. Also refactor this to pass Patient object through intent
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +52,14 @@ public class PatientHistory extends ListActivity implements View.OnClickListener
         {
             case R.id.new_reading:
                 Intent i = new Intent(this, NewReading.class);
-                startActivityForResult(i,NEW_READING_REQUEST);
+                startActivityForResult(i, NEW_READING_REQUEST);
                 break;
         }
     }
 
 
     @Override
+    // TODO add object in intent
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode==RESULT_OK) {
             Log.d("PatientHistory","Result code was: RESULT OK");

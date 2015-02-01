@@ -16,6 +16,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         patientListButton.setOnClickListener(this);
     }
 
+    // TODO New patient vs New Reading:  Refactor to one class.  Should have conditional:  Is patient selected or not, display data either way.
+
+    // If  have_patient
+    //      blow up xml for that put it on top
+    // else
+    //      blow up other xml
+
+    // TODO think about how to handle non-selected readings.
+
+    // TODO figure out format for data in Model. We know:  10 sec rolling average
+
     public void onClick(View v)
     {
         switch (v.getId())
