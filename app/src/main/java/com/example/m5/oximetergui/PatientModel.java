@@ -70,6 +70,11 @@ public class PatientModel {
         return true;
     }
 
+    /**
+     * Retrieve patient from DB by its ID.
+     * @param id
+     * @return
+     */
     public Patient FindPatientByID(int id)
     {
         SQLiteDatabase db = _db.getReadableDatabase();
@@ -86,5 +91,30 @@ public class PatientModel {
         }
 
         return patient;
+    }
+
+    public boolean UpdatePatient(Patient patient, StringBuilder sb) // TODO fix this, some SQL syntax problem
+    {
+        try
+        {
+            SQLiteDatabase db = _db.getReadableDatabase();
+
+            String updateString = String.format(SQL_Constants.UPDATE_PATIENT,
+                                                patient.FirstName,
+                                                patient.LastName,
+                                                String.valueOf(patient.Age),
+                                                patient.DateOfBirth,
+                                                String.valueOf(patient.IsOpen),
+                                                String.valueOf(patient.ID)
+            );
+
+            db.rawQuery(updateString, null);
+        }
+        catch (Exception e)
+        {
+            sb.append(e.getMessage());
+            return false;
+        }
+        return true;
     }
 }

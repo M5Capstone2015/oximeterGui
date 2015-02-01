@@ -38,6 +38,11 @@ public class PatientList extends ListActivity implements View.OnClickListener {
             return;
         }
 
+        DisplayPatients();
+    }
+
+    private void DisplayPatients()
+    {
         List<Patient> patientNames = _model.LoadPatientNames();
 
         String names = "";
@@ -48,9 +53,30 @@ public class PatientList extends ListActivity implements View.OnClickListener {
 
     public void findByIDClick(View v)
     {
-        Patient p = _model.FindPatientByID(1);
+        //Patient p = _model.FindPatientByID(1);
 
-        tv.setText("Found: " + p.FirstName);
+        //tv.setText("Found: " + p.FirstName);
+
+        Patient p = new Patient();
+        p.FirstName = "John";
+        p.LastName = "Steve";
+        p.Age = 15;
+        p.ID = 5;
+        p.DateOfBirth = "February";
+        p.IsOpen = false;
+
+        StringBuilder sb = new StringBuilder();
+
+        if(!_model.UpdatePatient(p, sb))
+        {
+            String errorMessage = sb.toString();
+            tv.setText(errorMessage);
+            return;
+        }
+
+        DisplayPatients();
+
+
 
     }
 
@@ -104,9 +130,9 @@ public class PatientList extends ListActivity implements View.OnClickListener {
 
         String selectedItem = (String) getListAdapter().getItem(position);
 
-        Log.d("PatientList","You clicked " + selectedItem + " at position " + position);
+        Log.d("PatientList", "You clicked " + selectedItem + " at position " + position);
         Intent i = new Intent(this, PatientHistory.class);
-        i.putExtra("fullname",selectedItem);
+        i.putExtra("fullname", selectedItem);
         startActivity(i);
     }
 }

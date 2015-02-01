@@ -20,4 +20,7 @@ public class Patient {
     public int ID;
     public String FirstName = "";
     public String LastName = "";
+    public String DateOfBirth = "";
+    public int Age = 0;
+    public boolean IsOpen;
 }

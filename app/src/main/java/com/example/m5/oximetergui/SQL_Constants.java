@@ -29,5 +29,13 @@ public class SQL_Constants {
 
     public static String SELECT_PATIENT_BY_ID = "SELECT * FROM Patients WHERE id=%s LIMIT 1";
 
+    public static String UPDATE_PATIENT = "UPDATE Patients" +
+            " SET first_name = '%s'," +
+            " last_name = '%s'," +
+            " age = '%s'," +
+            " date_of_birth = '%s'," +
+            " is_open = '%s'" +
+            " WHERE id = '%s';";
+
     public static String UPGRADE = "DROP TABLE IF EXISTS " + PATIENT_TABLE_NAME;
 }
