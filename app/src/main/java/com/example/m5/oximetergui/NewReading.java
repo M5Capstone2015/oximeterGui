@@ -67,7 +67,7 @@ public class NewReading extends Activity implements View.OnClickListener {
                 "Day: " + day + System.getProperty("line.separator") +
                 "Month: " + month + System.getProperty("line.separator") +
                 "Year: " + year + System.getProperty("line.separator"));
-        date.add(String.valueOf(seconds));
+        date.add(String.valueOf(year));
         date.add(String.valueOf(month));
         date.add(String.valueOf(day));
         date.add(String.valueOf(hours));
