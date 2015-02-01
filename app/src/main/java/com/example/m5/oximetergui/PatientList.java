@@ -22,70 +22,12 @@ public class PatientList extends ListActivity implements View.OnClickListener {
     RelativeLayout mMainLayout = null;
     ArrayList<String> mPatientNames = new ArrayList<String>();
     List<Integer> mPatientButtons = new ArrayList<Integer>();
-    TextView tv;
-    PatientModel _model = new PatientModel(this);
-
-
-    public void addClick(View v)
-    {
-        Patient p1 = new Patient();
-        p1.FirstName = "Hunt";
-        p1.LastName = "Graham";
-
-        StringBuilder sb = new StringBuilder();
-        if (!_model.AddPatient(p1, sb)) {
-            String errorMessage = sb.toString();// TODO Do something with error
-            return;
-        }
-
-        DisplayPatients();
-    }
-
-    private void DisplayPatients()
-    {
-        List<Patient> patientNames = _model.LoadPatientNames();
-
-        String names = "";
-        for (Patient s : patientNames)
-            names += (s.FirstName + " " + s.LastName + "\n");
-        tv.setText(names);
-    }
-
-    public void findByIDClick(View v)
-    {
-        //Patient p = _model.FindPatientByID(1);
-
-        //tv.setText("Found: " + p.FirstName);
-
-        Patient p = new Patient();
-        p.FirstName = "John";
-        p.LastName = "Steve";
-        p.Age = 15;
-        p.ID = 5;
-        p.DateOfBirth = "February";
-        p.IsOpen = false;
-
-        StringBuilder sb = new StringBuilder();
-
-        if(!_model.UpdatePatient(p, sb))
-        {
-            String errorMessage = sb.toString();
-            tv.setText(errorMessage);
-            return;
-        }
-
-        DisplayPatients();
-
-
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_list);
         View patientListButton = findViewById(R.id.new_patient);
-        tv = (TextView) findViewById(R.id.textView);
         patientListButton.setOnClickListener(this);
         //TODO LOAD PATIENTS INTO mPatientNames AND SETUP LIST ADAPTER
 
