@@ -55,9 +55,22 @@ public class SQL_Sandbox extends ActionBarActivity {
         UpdatePatients();
     }
 
+    public void updateClick(View v)
+    {
+        Patient p = new Patient();
+        p.IsOpen = true;
+        p.DateOfBirth = "";
+        p.Age = 15;
+        p.ID = 1;
+        p.FirstName = "Steve";
+        p.LastName = "Joel";
+        _model.UpdatePatient(p, null);
+        UpdatePatients();
+    }
+
     public void SelectFirstPatientData(View v)
     {
-        List<Data> data = _dataModel.getDataByID(1);
+        Data data = _dataModel.getDataByID(1);
     }
 
     @Override

@@ -30,7 +30,7 @@ public class PatientModel {
         Cursor cursor = db.query(SQL_Constants.PATIENT_TABLE_NAME,
                                  SQL_Constants.FROM, null, null, null, null, ""); // TODO add ORDERBY param later.
 
-        List<Patient> patients = new ArrayList<>();
+        List<Patient> patients = new ArrayList<>();  // TODO consider only having search and recents section?
 
         while (cursor.moveToNext())
         {
@@ -93,22 +93,29 @@ public class PatientModel {
         return patient;
     }
 
+    /**
+     * Update all fields in Patient table row. Will update the row with corresponding to
+     * the ID field passed in by the Patient object.
+     * @param patient
+     * @param sb
+     * @return
+     */
     public boolean UpdatePatient(Patient patient, StringBuilder sb) // TODO fix this, some SQL syntax problem
     {
         try
         {
-            SQLiteDatabase db = _db.getReadableDatabase();
+            SQLiteDatabase db = _db.getWritableDatabase();
 
             String updateString = String.format(SQL_Constants.UPDATE_PATIENT,
                                                 patient.FirstName,
                                                 patient.LastName,
-                                                String.valueOf(patient.Age),
+                                                patient.Age,
                                                 patient.DateOfBirth,
-                                                String.valueOf(patient.IsOpen),
-                                                String.valueOf(patient.ID)
+                                                patient.IsOpen ? 1 : 0,
+                                                patient.ID
             );
 
-            db.rawQuery(updateString, null);
+            db.execSQL(updateString);
         }
         catch (Exception e)
         {

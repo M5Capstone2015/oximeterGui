@@ -15,11 +15,6 @@ public class DB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        /*
-        db.execSQL( "CREATE TABLE " + PATIENT_TABLE_NAME+ " (" + _ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TIME
-                + " INTEGER," + TITLE + " TEXT NOT NULL);" );
-        */
         db.execSQL(SQL_Constants.CREATE_DB_SQL_STRING);
     }
 
