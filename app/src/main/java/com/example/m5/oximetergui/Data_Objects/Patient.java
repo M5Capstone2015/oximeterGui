@@ -1,4 +1,4 @@
-package com.example.m5.oximetergui;
+package com.example.m5.oximetergui.Data_Objects;
 
 /**
  * Created by Hunt on 1/29/2015.

@@ -1,4 +1,4 @@
-package com.example.m5.oximetergui;
+package com.example.m5.oximetergui.Activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -6,6 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.Models.PatientModel;
+import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.R;
+import com.example.m5.oximetergui.Data_Objects.Reading;
 
 import java.util.List;
 
@@ -70,7 +76,7 @@ public class SQL_Sandbox extends ActionBarActivity {
 
     public void SelectFirstPatientData(View v)
     {
-        Data data = _dataModel.getDataByID(1);
+        Reading data = _dataModel.getDataByID(1);
     }
 
     @Override

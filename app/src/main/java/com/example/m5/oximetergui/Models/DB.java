@@ -1,8 +1,10 @@
-package com.example.m5.oximetergui;
+package com.example.m5.oximetergui.Models;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.m5.oximetergui.Constants.SQL_Constants;
 
 public class DB extends SQLiteOpenHelper {
 

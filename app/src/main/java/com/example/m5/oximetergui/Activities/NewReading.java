@@ -1,10 +1,12 @@
-package com.example.m5.oximetergui;
+package com.example.m5.oximetergui.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

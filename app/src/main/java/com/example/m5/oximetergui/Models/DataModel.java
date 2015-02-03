@@ -1,11 +1,14 @@
-package com.example.m5.oximetergui;
+package com.example.m5.oximetergui.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.Image;
 
+import com.example.m5.oximetergui.Data_Objects.Reading;
+import com.example.m5.oximetergui.Constants.SQL_Constants;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,27 +24,52 @@ public class DataModel {
     }
 
     /**
-     * Fetches a reading by ID.
+     * Fetches a reading by ID. Takes Reading ID as parameter.
      * @param id
      * @return
      */
-    public Data getDataByID(int id) // TODO test
+    public Reading getDataByID(int id) // TODO test
     {
         SQLiteDatabase db = _db.getReadableDatabase();
         String queryString = String.format(SQL_Constants.SELECT_DATA_BY_ID, id);
         Cursor cursor = db.rawQuery(queryString, null);
 
-        Data data = null;
+        Reading data = null;
         while (cursor.moveToNext())
         {
             int ID = cursor.getInt(0);
             String startTime = cursor.getString(1);
             String endTime = cursor.getString(2);
             String readingData = cursor.getString(3);
-            data = new Data(ID, startTime, endTime, readingData);
+            data = new Reading(ID, startTime, endTime, readingData);
         }
 
         return data;
+    }
+
+    /**
+     * Fetches all readings corresponding to a patient. Takes targets patient's ID
+     * as parameter.
+     * @param id
+     * @return
+     */
+    public List<Reading> GetDataByPatientID(int id)
+    {
+        SQLiteDatabase db = _db.getReadableDatabase();
+        String queryString = String.format(SQL_Constants.SELECT_DATA_BY_PATIENT, id);
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        List<Reading> readings = new ArrayList<Reading>();
+        while (cursor.moveToNext())
+        {
+            int ID = cursor.getInt(0);
+            String startTime = cursor.getString(1);
+            String endTime = cursor.getString(2);
+            String dataString = cursor.getString(3);
+            readings.add(new Reading(ID, startTime, endTime, dataString));
+        }
+
+        return readings;
     }
 
     /**
@@ -49,7 +77,7 @@ public class DataModel {
      * @param data
      * @return
      */
-    public boolean AddNewReading(Data data)  // TODO test
+    public boolean AddNewReading(Reading data)  // TODO test
     {
 
         SQLiteDatabase db = _db.getWritableDatabase();

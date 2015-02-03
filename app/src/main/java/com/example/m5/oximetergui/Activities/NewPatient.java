@@ -1,4 +1,4 @@
-package com.example.m5.oximetergui;
+package com.example.m5.oximetergui.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
 

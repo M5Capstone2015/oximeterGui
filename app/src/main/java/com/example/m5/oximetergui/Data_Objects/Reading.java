@@ -1,13 +1,13 @@
-package com.example.m5.oximetergui;
+package com.example.m5.oximetergui.Data_Objects;
 
 /**
  * Created by Hunt on 2/2/2015.
  */
-public class Data {
+public class Reading {
 
-    public Data() {}
+    public Reading() {}
 
-    public Data(int id, String start, String end, String data)
+    public Reading(int id, String start, String end, String data)
     {
         ID = id;
         StartDate = start;

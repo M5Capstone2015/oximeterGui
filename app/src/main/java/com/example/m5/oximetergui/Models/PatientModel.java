@@ -1,9 +1,12 @@
-package com.example.m5.oximetergui;
+package com.example.m5.oximetergui.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.Constants.SQL_Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ public class PatientModel {
 
         while (cursor.moveToNext())
         {
-            int ID = cursor.getInt(0);
+            int ID = cursor.getInt(0);  // TODO fill out rest of paramters
             String firstName = cursor.getString(1);
             String lastName = cursor.getString(2);
             patients.add(new Patient(ID, firstName, lastName));
@@ -62,8 +65,6 @@ public class PatientModel {
         }
         catch (Exception e)
         {
-            if (errorMessage == null)
-                errorMessage = new StringBuilder();
             errorMessage.append(e.getMessage()); // Can't pass Strings by reference in Java so have to use this. Java sucks.
             return false;
         }
@@ -84,7 +85,8 @@ public class PatientModel {
 
         Patient patient = null;
 
-        while (cursor2.moveToNext()) {
+        while (cursor2.moveToNext())
+        {
             String firstName = cursor2.getString(1);
             String lastName = cursor2.getString(2);
             patient = new Patient(id, firstName, lastName);
@@ -92,6 +94,33 @@ public class PatientModel {
 
         return patient;
     }
+
+
+    /**
+     * Returns first 0-10 patients thats' first or last name contain the search string.
+     * @param searchString
+     * @return
+     */
+    public List<Patient> SearchPatients(String searchString)  // TODO test.
+    {
+        SQLiteDatabase db = _db.getReadableDatabase();  // TODO Consider how to handle the patients AFTER the first 0 to 10. 'Load More' button to get next? Also consider handling a space in the middle and searching first and last name. AND clause instead of or.
+
+        String queryString = String.format(SQL_Constants.SEARCH_PATIENT_BY_NAME, searchString, searchString);
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        List<Patient> patients = new ArrayList<>();  // TODO consider only having search and recents section?
+
+        while (cursor.moveToNext())
+        {
+            int ID = cursor.getInt(0);  // TODO fill in other parameters.
+            String firstName = cursor.getString(1);
+            String lastName = cursor.getString(2);
+            patients.add(new Patient(ID, firstName, lastName));
+        }
+
+        return patients;
+    }
+
 
     /**
      * Update all fields in Patient table row. Will update the row with corresponding to
