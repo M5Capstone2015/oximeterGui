@@ -19,6 +19,12 @@ public class SQL_Constants {
                     "age INT," +
                     "date_of_birth TEXT," +
                     "is_open INT" +
+            ");" +
+            "CREATE TABLE Data(" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT" +
+                    "date DATETIME," +
+                    "data TEXT," +
+                    "patient_id INT" +
             ");";
 
     public static String[] FROM = new String[] {

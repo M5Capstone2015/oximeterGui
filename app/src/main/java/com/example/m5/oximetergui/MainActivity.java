@@ -27,6 +27,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     // TODO figure out format for data in Model. We know:  10 sec rolling average
 
+    public void sqlClick(View v)
+    {
+        Intent i = new Intent(this, SQL_Sandbox.class);
+        startActivity(i);
+    }
+
     public void onClick(View v)
     {
         switch (v.getId())

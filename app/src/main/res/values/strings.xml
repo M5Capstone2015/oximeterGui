@@ -26,5 +26,7 @@
     <string name="record_label">Record</string>
     <string name="sp02_label">SP02</string>
     <string name="fake_reading_label">92%</string>
+    <string name="title_activity_sql__sandbox">SQL_Sandbox</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

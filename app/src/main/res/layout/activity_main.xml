@@ -14,4 +14,13 @@
         android:text="@string/patient_list_label"
         android:id="@+id/patient_list"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SQL Sandbox"
+        android:onClick="sqlClick"
+        android:id="@+id/button"
+        android:layout_below="@+id/patient_list"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
