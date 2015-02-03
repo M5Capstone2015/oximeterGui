@@ -1,5 +1,7 @@
 package com.example.m5.oximetergui.Data_Objects;
 
+import java.util.List;
+
 /**
  * Created by Hunt on 2/2/2015.
  */
@@ -21,4 +23,14 @@ public class Reading {
     public String DataString = "";
     public boolean IsSynced = false;
 
+    // TODO only passing Data String as constructor param then parsing into a List.
+    public int[][] dataPoints;
+
+    private void ParseDataString()
+    {
+        // split by , and trim white space
+        // loop through each and add to dataPoints.
+        // how we do this will be dependent on what graphing lib is used.
+        dataPoints = new int[6][7];
+    }
 }

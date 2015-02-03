@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class DataModel {
 
-    DB _db;
+    DAL _dal;
 
     public DataModel(Context context)
     {
-        _db = new DB(context);
+        _dal = new DAL(context);
     }
 
     /**
@@ -30,7 +30,7 @@ public class DataModel {
      */
     public Reading getDataByID(int id) // TODO test
     {
-        SQLiteDatabase db = _db.getReadableDatabase();
+        SQLiteDatabase db = _dal.getReadableDatabase();
         String queryString = String.format(SQL_Constants.SELECT_DATA_BY_ID, id);
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -55,11 +55,11 @@ public class DataModel {
      */
     public List<Reading> GetDataByPatientID(int id)
     {
-        SQLiteDatabase db = _db.getReadableDatabase();
+        SQLiteDatabase db = _dal.getReadableDatabase();
         String queryString = String.format(SQL_Constants.SELECT_DATA_BY_PATIENT, id);
         Cursor cursor = db.rawQuery(queryString, null);
 
-        List<Reading> readings = new ArrayList<Reading>();
+        List<Reading> readings = new ArrayList<>();
         while (cursor.moveToNext())
         {
             int ID = cursor.getInt(0);
@@ -80,7 +80,7 @@ public class DataModel {
     public boolean AddNewReading(Reading data)  // TODO test
     {
 
-        SQLiteDatabase db = _db.getWritableDatabase();
+        SQLiteDatabase db = _dal.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(SQL_Constants.DATA_STARTDATE_COLUMN, data.StartDate);
@@ -100,7 +100,7 @@ public class DataModel {
      */
     public void SyncReading(int id)  // TODO test
     {
-        SQLiteDatabase db = _db.getWritableDatabase();
+        SQLiteDatabase db = _dal.getWritableDatabase();
         String queryString = String.format(SQL_Constants.UPDATE_DATA_SYNC, 1, id);
         db.execSQL(queryString);
     }
@@ -114,7 +114,7 @@ public class DataModel {
      */
     public boolean AssignReadingToPatient(int reading_id, int patient_id) // tODO test
     {
-        SQLiteDatabase db = _db.getWritableDatabase();
+        SQLiteDatabase db = _dal.getWritableDatabase();
         String queryString = String.format(SQL_Constants.UPDATE_DATA_SYNC, patient_id, reading_id);
         db.execSQL(queryString);
         return true;

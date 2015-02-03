@@ -6,12 +6,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.m5.oximetergui.Constants.SQL_Constants;
 
-public class DB extends SQLiteOpenHelper {
+public class DAL extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "pulse.db";
     private static final int DATABASE_VERSION = 1;
 
-    public DB(Context ctx) {
+    public DAL(Context ctx) {
         super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

@@ -14,11 +14,11 @@ import java.util.List;
 
 public class PatientModel {
 
-    DB _db;
+    DAL _dal;
 
     public PatientModel(Context context)
     {
-        _db = new DB(context);
+        _dal = new DAL(context);
     }
 
 
@@ -29,7 +29,7 @@ public class PatientModel {
     */
     public List<Patient> LoadPatientNames() // TODO change this to return boolean and take a List<String> to populate
     {
-        SQLiteDatabase db = _db.getReadableDatabase();
+        SQLiteDatabase db = _dal.getReadableDatabase();
         Cursor cursor = db.query(SQL_Constants.PATIENT_TABLE_NAME,
                                  SQL_Constants.FROM, null, null, null, null, ""); // TODO add ORDERBY param later.
 
@@ -57,7 +57,7 @@ public class PatientModel {
     {
         try
         {
-            SQLiteDatabase db = _db.getWritableDatabase();
+            SQLiteDatabase db = _dal.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(SQL_Constants.PATIENT_FIRSTNAME_COLUMN, patient.FirstName);
             values.put(SQL_Constants.PATIENT_LASTNAME_COLUMN, patient.LastName);
@@ -78,7 +78,7 @@ public class PatientModel {
      */
     public Patient FindPatientByID(int id)
     {
-        SQLiteDatabase db = _db.getReadableDatabase();
+        SQLiteDatabase db = _dal.getReadableDatabase();
 
         String queryString = String.format(SQL_Constants.SELECT_PATIENT_BY_ID, String.valueOf(id));
         Cursor cursor2 = db.rawQuery(queryString, null);
@@ -103,7 +103,7 @@ public class PatientModel {
      */
     public List<Patient> SearchPatients(String searchString)  // TODO test.
     {
-        SQLiteDatabase db = _db.getReadableDatabase();  // TODO Consider how to handle the patients AFTER the first 0 to 10. 'Load More' button to get next? Also consider handling a space in the middle and searching first and last name. AND clause instead of or.
+        SQLiteDatabase db = _dal.getReadableDatabase();  // TODO Consider how to handle the patients AFTER the first 0 to 10. 'Load More' button to get next? Also consider handling a space in the middle and searching first and last name. AND clause instead of or.
 
         String queryString = String.format(SQL_Constants.SEARCH_PATIENT_BY_NAME, searchString, searchString);
         Cursor cursor = db.rawQuery(queryString, null);
@@ -133,7 +133,7 @@ public class PatientModel {
     {
         try
         {
-            SQLiteDatabase db = _db.getWritableDatabase();
+            SQLiteDatabase db = _dal.getWritableDatabase();
 
             String updateString = String.format(SQL_Constants.UPDATE_PATIENT,
                                                 patient.FirstName,
