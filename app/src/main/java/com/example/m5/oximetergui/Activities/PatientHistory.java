@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.m5.oximetergui.Activities.NewReading;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -53,7 +52,7 @@ public class PatientHistory extends ListActivity implements View.OnClickListener
         switch (buttonId)
         {
             case R.id.new_reading:
-                Intent i = new Intent(this, NewReading.class);
+                Intent i = new Intent(this, MainActivity.class);
                 startActivityForResult(i, NEW_READING_REQUEST);
                 break;
         }
