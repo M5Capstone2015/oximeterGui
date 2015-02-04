@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.Data_Objects.Patient;
