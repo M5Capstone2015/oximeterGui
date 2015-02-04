@@ -17,6 +17,13 @@ public class Reading {
         DataString = data;
     }
 
+    public Reading(String start, String end, String data)
+    {
+        StartDate = start;
+        EndDate = end;
+        DataString = data;
+    }
+
     public int ID;
     public String StartDate = "";
     public String EndDate = "";

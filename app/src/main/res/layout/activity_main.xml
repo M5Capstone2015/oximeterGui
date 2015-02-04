@@ -37,7 +37,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="56%"
         android:textSize="80dp"
-        android:id="@+id/textView2"
+        android:id="@+id/percentView"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
