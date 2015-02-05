@@ -74,7 +74,7 @@ public class PatientList extends ListActivity implements View.OnClickListener {
 
         Log.d("PatientList", "You clicked " + selectedItem + " at position " + position);
         Intent i = new Intent(this, PatientHistory.class);
-        i.putExtra("fullname", selectedItem);
+        i.putExtra(Intent_Constants.NameToPatient, selectedItem);
         startActivity(i);
     }
 }

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.m5.oximetergui.Constants.General_Constants;
+import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class PatientHistory extends ListActivity implements View.OnClickListener
         setContentView(R.layout.activity_patient_history);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mPatientName = extras.getString("fullname");
+            mPatientName = extras.getString(Intent_Constants.NameToPatient);
             Log.d("Patient " + mPatientName, mPatientName + " was receieved as the patient's full name");
             TextView nameTitle = (TextView)findViewById(R.id.historyNameTitle);
             nameTitle.setText(mPatientName);
