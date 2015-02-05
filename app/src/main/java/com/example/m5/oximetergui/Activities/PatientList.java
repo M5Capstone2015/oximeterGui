@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
+import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -19,9 +20,7 @@ import java.util.List;
 
 public class PatientList extends ListActivity implements View.OnClickListener {
 
-    RelativeLayout mMainLayout = null;
     ArrayList<String> mPatientNames = new ArrayList<String>();
-    List<Integer> mPatientButtons = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +49,10 @@ public class PatientList extends ListActivity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            //TODO pass patient not string list
-            ArrayList<String> patientData = data.getStringArrayListExtra(Intent_Constants.NewPatientInfo);
-            Log.d("PatientList", patientData.get(0));
-            Log.d("PatientList", patientData.get(1));
-            String fullName = patientData.get(0) + " " + patientData.get(1);
+            Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
+            Log.d("PatientList", patientData.FirstName);
+            Log.d("PatientList", patientData.LastName);
+            String fullName = patientData.FirstName + " " + patientData.LastName;
             Log.d("PatientList", fullName);
             mPatientNames.add(fullName);
 

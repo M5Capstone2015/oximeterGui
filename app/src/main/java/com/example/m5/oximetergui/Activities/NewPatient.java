@@ -55,7 +55,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
                     mPatientInfo.add(mPatient.FirstName);
                     mPatientInfo.add(mPatient.LastName);
                     Intent i = new Intent();
-                    i.putStringArrayListExtra(Intent_Constants.NewPatientInfo,mPatientInfo);
+                    i.putExtra(Intent_Constants.NewPatientInfo,mPatient);
                     setResult(RESULT_OK, i);
                     finish();
                     break;
@@ -63,7 +63,6 @@ public class NewPatient extends Activity implements View.OnClickListener {
         }
     }
 
-    // TODO refactor this to its own class.  ErrorMessage em = new ErrorMessage(errorText, context);
     private void createErrorMessage()
     {
         //If this is the first time we've stored the main relative layout, retrieve the layout
