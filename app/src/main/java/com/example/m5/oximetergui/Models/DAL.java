@@ -17,7 +17,14 @@ public class DAL extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_Constants.CREATE_DB_SQL_STRING);
+        try {
+            db.execSQL(SQL_Constants.CREATE_DB_SQL_STRING);
+            db.execSQL(SQL_Constants.CREATE_READING);
+        }
+        catch (Exception e)
+        {
+            String msg = e.getMessage();
+        }
     }
 
     @Override

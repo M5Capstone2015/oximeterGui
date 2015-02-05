@@ -75,10 +75,46 @@ public class SQL_Sandbox extends ActionBarActivity {
         UpdatePatients();
     }
 
+    public void selectData(View v)
+    {
+        try {
+            //List<Reading> readings = _dataModel.GetDataByPatientID(1);
+            List<Reading> readings = _dataModel.GetAllData();
+            String txt = "";
+            for (Reading r : readings)
+                txt += ("\n" + r.DataString);
+
+            tv.setText(txt);
+        }
+        catch (Exception e)
+        {
+            String mes = e.getMessage();
+            tv.setText(mes);
+        }
+    }
+
+    public void addReading(View v) {
+        try {
+            Reading r = new Reading();
+            r.DataString = "1,1,1,2,3,4,2,2,3";
+            r.StartDate = "1-20-2001 12:22";  // TODO consider changing start/end date format to include seconds.
+            r.EndDate = "1-20-2001 12:35";
+
+            _dataModel.AddNewReading(r);
+        }
+        catch(Exception e)
+        {
+            String mes = e.getMessage();
+            tv.setText(mes);
+        }
+    }
+
+    /*
     public void SelectFirstPatientData(View v)
     {
         Reading data = _dataModel.getDataByID(1);
     }
+    */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
