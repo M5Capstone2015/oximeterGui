@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.Helpers.ErrorMessage;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -73,11 +74,8 @@ public class NewPatient extends Activity implements View.OnClickListener {
 
         //If we have yet to display an error message, display message
         if (mErrorMessage == null) {
-            mErrorMessage = (TextView) getLayoutInflater().inflate(R.layout.textview_error_message, null);
-            final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.BELOW, R.id.save);
-            mErrorMessage.setLayoutParams(params);
+            ErrorMessage em = new ErrorMessage("Please Fill out all required fields", this);
+            mErrorMessage = em.CreateErrorBelow(R.id.save);
             mMainLayout.addView(mErrorMessage);
         }
     }
