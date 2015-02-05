@@ -3,15 +3,12 @@ package com.example.m5.oximetergui.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
-import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -22,6 +19,8 @@ public class NewPatient extends Activity implements View.OnClickListener {
     RelativeLayout mMainLayout = null;
     TextView mErrorMessage = null;
     ArrayList<String> mPatientInfo = new ArrayList<String>();
+    Patient mPatient = new Patient();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,33 +33,25 @@ public class NewPatient extends Activity implements View.OnClickListener {
     }
 
 
-    //TODO Refactor to put validation logic in Patient class
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.save:
                 EditText firstName = (EditText)findViewById(R.id.firstName);
                 EditText lastName = (EditText)findViewById(R.id.lastName);
-                String first = firstName.getText().toString();
-                String last = lastName.getText().toString();
+                mPatient.FirstName = firstName.getText().toString();
+                mPatient.LastName = lastName.getText().toString();
 
-                //If no first name, throw error message on screen
-                if (first.matches("")) {
-                    Log.d("NewPatient","No First Name Entered");
-                    this.createErrorMessage();
-                }
-
-                //If no last name, throw error message on screen
-                else if (last.matches("")) {
-                    Log.d("NewPatient","No Last Name Entered");
+                if (!mPatient.Validate())
+                {
                     this.createErrorMessage();
                 }
 
                 //If contains first and last name, exit screen
                 else
                 {
-                    mPatientInfo.add(first);
-                    mPatientInfo.add(last);
+                    mPatientInfo.add(mPatient.FirstName);
+                    mPatientInfo.add(mPatient.LastName);
                     // TODO Move to Intent Constants final class
                     Intent i = new Intent();
                     i.putStringArrayListExtra("PatientInfo",mPatientInfo);

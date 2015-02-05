@@ -33,7 +33,8 @@ public class Patient {
 
     public boolean Validate() // TODO Finish this method. Do we want some these fields to be nullable?
     {
-        if (FirstName == "" || LastName == "")
+        boolean result = true;
+        if (FirstName.matches("") || LastName.matches(""))
             return false;
         else
             return true;
