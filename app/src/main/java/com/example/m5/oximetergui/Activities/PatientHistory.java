@@ -64,7 +64,7 @@ public class PatientHistory extends ListActivity implements View.OnClickListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode==RESULT_OK) {
             Log.d("PatientHistory","Result code was: RESULT OK");
-            ArrayList<String> dateInfo = data.getStringArrayListExtra("Date");
+            ArrayList<String> dateInfo = data.getStringArrayListExtra(Intent_Constants.ReadingDate);
             String formattedDate = dateInfo.get(1) + "/" + dateInfo.get(2) + "/" + dateInfo.get(0) + " at " + dateInfo.get(3) + ":" + dateInfo.get(4) + ":" +  dateInfo.get(5);
             mReadingDates.add(formattedDate);
 
