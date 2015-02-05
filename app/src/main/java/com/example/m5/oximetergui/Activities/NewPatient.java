@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Helpers.ErrorMessage;
 import com.example.m5.oximetergui.R;
@@ -53,9 +54,8 @@ public class NewPatient extends Activity implements View.OnClickListener {
                 {
                     mPatientInfo.add(mPatient.FirstName);
                     mPatientInfo.add(mPatient.LastName);
-                    // TODO Move to Intent Constants final class
                     Intent i = new Intent();
-                    i.putStringArrayListExtra("PatientInfo",mPatientInfo);
+                    i.putStringArrayListExtra(Intent_Constants.NewPatientInfo,mPatientInfo);
                     setResult(RESULT_OK, i);
                     finish();
                     break;

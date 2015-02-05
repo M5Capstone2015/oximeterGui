@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class PatientList extends ListActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
             //TODO pass patient not string list
-            ArrayList<String> patientData = data.getStringArrayListExtra("PatientInfo");
+            ArrayList<String> patientData = data.getStringArrayListExtra(Intent_Constants.NewPatientInfo);
             Log.d("PatientList", patientData.get(0));
             Log.d("PatientList", patientData.get(1));
             String fullName = patientData.get(0) + " " + patientData.get(1);
