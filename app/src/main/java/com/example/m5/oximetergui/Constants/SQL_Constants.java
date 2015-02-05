@@ -17,7 +17,7 @@ public class SQL_Constants {
     // Readings column names
     public static String DATA_STARTDATE_COLUMN = "start_date";
     public static String DATA_ENDDATE_COLUMN = "end_date";
-    public static String DATA_READINGDATA_COLUMN = "is_synced";
+    public static String DATA_READINGDATA_COLUMN = "data_string";
     public static String DATA_ISSYNCED_COLUMN = "is_synced";
 
     // Create table statements
@@ -29,13 +29,15 @@ public class SQL_Constants {
                     "age INT," +
                     "date_of_birth TEXT," +
                     "is_open INT" +
-            ");" +
+            ");"; //+
+
+    public static String CREATE_READING = // TODO Set each column name as a variable.
             "CREATE TABLE Readings(" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "start_date DATETIME," +
                     "end_date TEXT," +
-                    "patient_id INT" +
-                    "data_string INT" +
+                    "patient_id INT," +
+                    "data_string INT," +
                     "is_synced INT" +
             ");";
 
@@ -60,8 +62,9 @@ public class SQL_Constants {
     public static String SEARCH_PATIENT_BY_NAME = "SELECT * FROM Readings WHERE first LIKE '%%%s%%' OR last LIKE '%%%s%%' LIMIT 10"; // TODO add an ORDERBY clause?
 
     // Readings query strings
+    public static String SELECT_ALL_READINGS_= "SELECT * FROM Readings";
     public static String SELECT_DATA_BY_ID = "SELECT * FROM Readings WHERE id=%s LIMIT 1";
-    public static String SELECT_DATA_BY_PATIENT = "SELECT * FROM Readings WHERE patient_id=%s LIMIT 1";
+    public static String SELECT_DATA_BY_PATIENT = "SELECT * FROM Readings WHERE patient_id=%s";
     public static String UPDATE_DATA_SYNC = "UPDATE Readings " +
                                             "SET is_synced = %s, " +
                                             "WHERE id = %s;";
