@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.R;
 
@@ -32,7 +33,6 @@ public class PatientList extends ListActivity implements View.OnClickListener {
 
     }
 
-    static final int NEW_PATIENT_REQUEST = 1;
 
     public void onClick(View v) {
         int buttonId = v.getId();
@@ -42,7 +42,7 @@ public class PatientList extends ListActivity implements View.OnClickListener {
         {
             case R.id.new_patient:
                 Intent i = new Intent(this, NewPatient.class);
-                startActivityForResult(i,NEW_PATIENT_REQUEST);
+                startActivityForResult(i, General_Constants.NEW_PATIENT_REQUEST);
                 break;
         }
     }
