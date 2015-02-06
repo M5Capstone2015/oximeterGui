@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.List;
 public class PatientList extends ListActivity implements View.OnClickListener {
 
     ArrayList<String> mPatientNames = new ArrayList<String>();
+    PatientModel _model = new PatientModel(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +31,11 @@ public class PatientList extends ListActivity implements View.OnClickListener {
         setContentView(R.layout.activity_patient_list);
         View patientListButton = findViewById(R.id.new_patient);
         patientListButton.setOnClickListener(this);
-        //TODO LOAD PATIENTS INTO mPatientNames AND SETUP LIST ADAPTER
-
+        List<Patient> patients = _model.LoadPatientNames();
+        for (Patient p : patients)
+            mPatientNames.add(p.FirstName + " " + p.LastName);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_layout, R.id.listText, mPatientNames);
+        setListAdapter(adapter);
     }
 
 
@@ -59,7 +65,8 @@ public class PatientList extends ListActivity implements View.OnClickListener {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_layout, R.id.listText, mPatientNames);
             setListAdapter(adapter);
 
-            //TODO SAVE INFORMATION INTO SQL
+            StringBuilder sb = new StringBuilder();
+            _model.AddPatient(patientData, sb);
         }
     }
 
