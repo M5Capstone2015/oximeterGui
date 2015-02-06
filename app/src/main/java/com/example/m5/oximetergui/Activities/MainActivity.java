@@ -24,6 +24,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView percentView; // TODO refactor this to its own class. SetRed() SetGreen SetPercent() methods.
     private boolean _recording = false;
     private boolean _patientSelected = false;
+    private String mPatientName=null;
 
     ReadingCollector _collector = new ReadingCollector();
 
@@ -46,16 +47,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (extras != null)
         {
             //Blow up patient name
-            String patientName = extras.getString(Intent_Constants.NameToPatient);
+            mPatientName = extras.getString(Intent_Constants.NameToPatient);
             TextView nameTitle = (TextView)findViewById(R.id.patient_name);
-            nameTitle.setText(patientName);
-
-            //Button PatientList = (Button)findViewById(R.id.patient_list);
-
+            nameTitle.setText(mPatientName);
         }
 
         View patientListButton = findViewById(R.id.patient_list);
         patientListButton.setOnClickListener(this);
+        View saveButton = findViewById(R.id.save_reading);
+        saveButton.setOnClickListener(this);
 
         percentView = (TextView) findViewById(R.id.percentView);
          _dataModel = new DataModel(this);
@@ -74,9 +74,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch (v.getId())
         {
             case R.id.patient_list:
-                Intent i = new Intent(this, PatientList.class);
-                startActivity(i);
+                Intent i1 = new Intent(this, PatientList.class);
+                startActivity(i1);
                 break;
+
+            case R.id.save_reading:
+                if (mPatientName!=null) {
+                    Intent i2 = new Intent();
+                    setResult(RESULT_OK, i2);
+                    finish();
+                }
+
         }
     }
 
