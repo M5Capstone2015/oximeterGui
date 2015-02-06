@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.DateHelper;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
@@ -35,8 +37,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //      blow up other xml
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null)
+        {
+            //Blow up patient name
+            String patientName = extras.getString(Intent_Constants.NameToPatient);
+            TextView nameTitle = (TextView)findViewById(R.id.patient_name);
+            nameTitle.setText(patientName);
+
+            //Button PatientList = (Button)findViewById(R.id.patient_list);
+
+        }
 
         View patientListButton = findViewById(R.id.patient_list);
         patientListButton.setOnClickListener(this);

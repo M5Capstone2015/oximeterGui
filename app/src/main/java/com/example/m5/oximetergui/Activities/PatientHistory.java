@@ -53,6 +53,7 @@ public class PatientHistory extends ListActivity implements View.OnClickListener
         {
             case R.id.new_reading:
                 Intent i = new Intent(this, MainActivity.class);
+                i.putExtra(Intent_Constants.NameToPatient, mPatientName);
                 startActivityForResult(i, General_Constants.NEW_READING_REQUEST);
                 break;
         }
