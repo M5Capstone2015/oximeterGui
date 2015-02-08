@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Constants.SQL_Constants;
 
@@ -53,7 +54,7 @@ public class DataModel {
      * @param id
      * @return
      */
-    public List<Reading> GetDataByPatientID(int id)
+    public List<Reading> GetDataByPatientID(int id)  // TODO test
     {
         SQLiteDatabase db = _dal.getReadableDatabase();
         String queryString = String.format(SQL_Constants.SELECT_DATA_BY_PATIENT, id);
@@ -95,14 +96,14 @@ public class DataModel {
      * @param data
      * @return
      */
-    public boolean AddNewReading(Reading data)  // TODO test
+    public boolean AddNewReading(Reading data)  // TODO test all columns.
     {
 
         SQLiteDatabase db = _dal.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        //values.put(SQL_Constants.DATA_STARTDATE_COLUMN, data.StartDate);
-        //values.put(SQL_Constants.DATA_ENDDATE_COLUMN, data.EndDate);
+        values.put(SQL_Constants.DATA_STARTDATE_COLUMN, data.StartDate);
+        values.put(SQL_Constants.DATA_ENDDATE_COLUMN, data.EndDate);
         values.put(SQL_Constants.DATA_READINGDATA_COLUMN, data.DataString);  // TODO Change names around here. Data class/table should really be Reading. Data column should be DataString
         values.put(SQL_Constants.DATA_ISSYNCED_COLUMN, data.IsSynced ? 1 : 0);
         db.insertOrThrow(SQL_Constants.DATA_TABLE_NAME, null, values);
@@ -137,5 +138,4 @@ public class DataModel {
         db.execSQL(queryString);
         return true;
     }
-
 }

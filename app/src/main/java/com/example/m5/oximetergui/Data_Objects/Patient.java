@@ -44,13 +44,9 @@ public class Patient implements Parcelable {
     public int Age = 0; // TODO get rid of this.
     public boolean IsOpen;
 
-    public boolean Validate() // TODO Finish this method. Do we want some these fields to be nullable?
+    public boolean Validate() // TODO Finish this method.
     {
-        boolean result = true;
-        if (FirstName.matches("") || LastName.matches(""))
-            return false;
-        else
-            return true;
+        return FirstName.matches("") || LastName.matches("");
     }
 
 

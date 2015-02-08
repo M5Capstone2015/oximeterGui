@@ -149,6 +149,7 @@ public class PatientModel {
         catch (Exception e)
         {
             sb.append(e.getMessage());
+            // commit
             return false;
         }
         return true;
