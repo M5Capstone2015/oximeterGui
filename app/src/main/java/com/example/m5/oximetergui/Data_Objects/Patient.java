@@ -23,7 +23,14 @@ public class Patient implements Parcelable {
         this.DateOfBirth = data[2];
     }
 
-    public Patient(String firstName, String lastName, String dateOfBirth, Boolean isOpen)
+    public Patient(String firstName, String lastName, String dateOfBirth, Boolean isOpen) // TODO get these constructors under control.
+    {
+        this.FirstName = firstName;
+        this.LastName = lastName;
+        this.DateOfBirth = dateOfBirth;
+    }
+
+    public Patient(String ID, String firstName, String lastName, String dateOfBirth, Boolean isOpen)
     {
         this.FirstName = firstName;
         this.LastName = lastName;
@@ -41,16 +48,11 @@ public class Patient implements Parcelable {
     public String FirstName = "";
     public String LastName = "";
     public String DateOfBirth = "";
-    public int Age = 0; // TODO get rid of this.
     public boolean IsOpen;
 
     public boolean Validate() // TODO Finish this method. Do we want some these fields to be nullable?
     {
-        boolean result = true;
-        if (FirstName.matches("") || LastName.matches(""))
-            return false;
-        else
-            return true;
+        return FirstName.matches("") || LastName.matches("");
     }
 
 

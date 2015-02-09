@@ -7,8 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Constants.SQL_Constants;
+import com.example.m5.oximetergui.Helpers.DateHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -27,7 +29,7 @@ public class PatientModel {
      *
      * @return
     */
-    public List<Patient> LoadPatientNames() // TODO change this to return boolean and take a List<String> to populate
+    public List<Patient> LoadPatientNames()
     {
         SQLiteDatabase db = _dal.getReadableDatabase();
         Cursor cursor = db.query(SQL_Constants.PATIENT_TABLE_NAME,
@@ -40,15 +42,15 @@ public class PatientModel {
             int ID = cursor.getInt(0);  // TODO fill out rest of paramters
             String firstName = cursor.getString(1);
             String lastName = cursor.getString(2);
-            patients.add(new Patient(ID, firstName, lastName));
+            String dob = cursor.getString(3);
+            Boolean isOpen = cursor.getInt(4) < 1 ? false : true;
+            Patient p = new Patient(String.valueOf(ID), firstName, lastName, dob, isOpen);
+            patients.add(p);
         }
         return patients;
     }
 
     /**
-     *
-     * Persists a new patient in the Patient table from a Patient object.
-     *
      * @param patient
      * @param errorMessage
      * @return
@@ -61,6 +63,8 @@ public class PatientModel {
             ContentValues values = new ContentValues();
             values.put(SQL_Constants.PATIENT_FIRSTNAME_COLUMN, patient.FirstName);
             values.put(SQL_Constants.PATIENT_LASTNAME_COLUMN, patient.LastName);
+            values.put(SQL_Constants.PATIENT_DOB_COLUMN, patient.DateOfBirth);
+            values.put(SQL_Constants.PATIENT_ISOPEN_COLUMN, patient.IsOpen ? 1 : 0);
             db.insertOrThrow(SQL_Constants.PATIENT_TABLE_NAME, null, values);
         }
         catch (Exception e)
@@ -101,7 +105,7 @@ public class PatientModel {
      * @param searchString
      * @return
      */
-    public List<Patient> SearchPatients(String searchString)  // TODO test.
+    public List<Patient> SearchPatients(String searchString)  // TODO test all fields.
     {
         SQLiteDatabase db = _dal.getReadableDatabase();  // TODO Consider how to handle the patients AFTER the first 0 to 10. 'Load More' button to get next? Also consider handling a space in the middle and searching first and last name. AND clause instead of or.
 
@@ -129,7 +133,7 @@ public class PatientModel {
      * @param sb
      * @return
      */
-    public boolean UpdatePatient(Patient patient, StringBuilder sb) // TODO fix this, some SQL syntax problem
+    public boolean UpdatePatient(Patient patient, StringBuilder sb)
     {
         try
         {
@@ -138,7 +142,6 @@ public class PatientModel {
             String updateString = String.format(SQL_Constants.UPDATE_PATIENT,
                                                 patient.FirstName,
                                                 patient.LastName,
-                                                patient.Age,
                                                 patient.DateOfBirth,
                                                 patient.IsOpen ? 1 : 0,
                                                 patient.ID

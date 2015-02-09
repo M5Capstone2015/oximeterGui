@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Helpers.DateHelper;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.Models.PatientModel;
@@ -32,7 +33,16 @@ public class SQL_Sandbox extends ActionBarActivity {
 
     public void patientsClick(View v)
     {
-        List<Patient> patients = _model.LoadPatientNames();
+        List<Patient> patients;
+        try {
+            patients = _model.LoadPatientNames();
+        }
+        catch (Exception e)
+        {
+            tv.setText(e.getMessage());
+            return;
+        }
+
         String names = "";
         for (Patient p : patients)
             names += (p.FirstName + " " + p.LastName + "\n");
@@ -55,22 +65,26 @@ public class SQL_Sandbox extends ActionBarActivity {
         Patient p = new Patient();
         p.FirstName = "Bob";
         p.LastName = "Dull";
+        p.DateOfBirth = DateHelper.GetCurrentDateTime();
+        p.IsOpen = false;
 
         StringBuilder sb = new StringBuilder();
-        _model.AddPatient(p, sb);
+        if (_model.AddPatient(p, sb))
+        {
+            tv.setText(sb.toString());
+        }
 
-        UpdatePatients();
+        //UpdatePatients();
     }
 
     public void updateClick(View v)
     {
         Patient p = new Patient();
         p.IsOpen = true;
-        p.DateOfBirth = "";
-        p.Age = 15;
+        p.DateOfBirth = DateHelper.GetCurrentDateTime();
         p.ID = 1;
-        p.FirstName = "Steve";
-        p.LastName = "Joel";
+        p.FirstName = "Don";
+        p.LastName = "Draper";
         _model.UpdatePatient(p, null);
         UpdatePatients();
     }

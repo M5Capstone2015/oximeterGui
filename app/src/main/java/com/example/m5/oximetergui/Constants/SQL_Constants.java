@@ -12,6 +12,8 @@ public class SQL_Constants {
     // Patient column names
     public static String PATIENT_FIRSTNAME_COLUMN = "first_name"; // todo maybe get read of these. Overly verbose for a small DB
     public static String PATIENT_LASTNAME_COLUMN = "last_name";
+    public static String PATIENT_DOB_COLUMN = "date_of_birth";
+    public static String PATIENT_ISOPEN_COLUMN = "is_open";
     public static String PATIENT_ID_COLUMN = "id";
 
     // Readings column names
@@ -26,7 +28,6 @@ public class SQL_Constants {
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "first_name TEXT," +
                     "last_name TEXT," +
-                    "age INT," +
                     "date_of_birth TEXT," +
                     "is_open INT" +
             ");"; //+
@@ -45,7 +46,9 @@ public class SQL_Constants {
     public static String[] FROM = new String[] {
             PATIENT_ID_COLUMN,
             PATIENT_FIRSTNAME_COLUMN,
-            PATIENT_LASTNAME_COLUMN
+            PATIENT_LASTNAME_COLUMN,
+            PATIENT_DOB_COLUMN,
+            PATIENT_ISOPEN_COLUMN
     };
 
     // Patient query strings
@@ -53,7 +56,6 @@ public class SQL_Constants {
     public static String UPDATE_PATIENT = "UPDATE Patients" +
             " SET first_name = '%s'," +
             " last_name = '%s'," +
-            " age = %s," +
             " date_of_birth = '%s'," +
             " is_open = %s" +
             " WHERE id = %s;";
