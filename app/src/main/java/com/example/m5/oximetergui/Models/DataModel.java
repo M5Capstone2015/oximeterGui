@@ -83,7 +83,9 @@ public class DataModel {
             int ID = cursor.getInt(0);
             String startTime = cursor.getString(1);
             String endTime = cursor.getString(2);
+            int patient_id = cursor.getInt(3);
             String dataString = cursor.getString(4);
+            Boolean synced = cursor.getInt(5) > 0 ? true : false;
             readings.add(new Reading(ID, startTime, endTime, dataString));
         }
 
