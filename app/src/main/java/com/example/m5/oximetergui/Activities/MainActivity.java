@@ -3,21 +3,16 @@ package com.example.m5.oximetergui.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Reading;
-import com.example.m5.oximetergui.Helpers.DateHelper;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
 import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
-
-import java.util.Date;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -28,20 +23,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private String mPatientName = null;
 
     ReadingCollector _collector = new ReadingCollector();
-
     NuJack _nuJack;
-
-    private Date _startTime;
     DataModel _dataModel;
 
-    // TODO Should have conditional:  Is patient selected or not, display data either way. Use intent or startActivityForResult()
-    // If  have_patient
-    //      blow up xml for that put it on top
-    // else
-    //      blow up other xml
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -49,10 +36,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if (extras != null)
         {
-            //Blow up patient name
             mPatientName = extras.getString(Intent_Constants.NameToPatient);
             TextView nameTitle = (TextView)findViewById(R.id.patient_name);
             nameTitle.setText(mPatientName);
+            _patientSelected = true;
         }
 
         View patientListButton = findViewById(R.id.patient_list);
@@ -60,12 +47,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
         View saveButton = findViewById(R.id.save_reading);
         saveButton.setOnClickListener(this);
 
+        _dataModel = new DataModel(this);
         _nuJack = new NuJack(_listener);
         _nuJack.Start();
 
         percentView = (TextView) findViewById(R.id.percentView);
+    }
 
-         _dataModel = new DataModel(this);
+    @Override
+    public void onResume()  // TODO load percent/patient selected/and rolling average data
+    {
+        super.onResume();
+        if (_nuJack != null)
+            _nuJack.Start();
+    }
+
+    @Override
+    public void onPause() // TODO save percent/patient selected/and rolling average data
+    {
+        super.onPause();
+        if (_nuJack != null)
+            _nuJack.Stop();
     }
 
     public void sqlClick(View v)
@@ -73,8 +75,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Intent i = new Intent(this, SQL_Sandbox.class);
         startActivity(i);
     }
-
-    // TODO refactor then import NuJack libs.
 
     public void onClick(View v)
     {
@@ -95,10 +95,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-
     public void startReadingClick(View v)
     {
+        _collector.Restart();
 
+        _recording = true;
+
+        /*
         if (_patientSelected)
         {
             // Render name
@@ -107,32 +110,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
         {
             // Render something else (maybe nothing)
         }
-
-        _collector.Reset();
-
-        _startTime = DateHelper.StringToDate(DateHelper.GetCurrentDateTime()); // TODO this is actually disgusting... same as below
-
-        _recording = true;
+        */
     }
 
     public void stopReadingClick(View v)
     {
         _recording = false;
 
-        // Save to model
-        Reading newReading = new Reading(DateHelper.DateToString(_startTime), // TODO refactor this into ReadingCollector class
-                                         DateHelper.GetCurrentDateTime(),
-                                         _collector.GetData()
-        );
+        Reading newReading = _collector.GetReading();
         _dataModel.AddNewReading(newReading);
 
+        /*
         if (_patientSelected)
         {
         }
         else
         {
-
         }
+        */
     }
 
     private OnDataAvailableListener _listener = new OnDataAvailableListener() {

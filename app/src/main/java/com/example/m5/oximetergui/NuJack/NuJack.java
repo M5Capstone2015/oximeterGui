@@ -54,7 +54,8 @@ public class NuJack {
 
     };
 
-    private String convertBitsToString(List<Integer> bitlist) {
+    private String convertBitsToString(List<Integer> bitlist)
+    {
         String accum = "";
         for (Integer i : bitlist)
             accum += String.valueOf(i);
@@ -68,7 +69,9 @@ public class NuJack {
     {
         _running = false;
         _audioReceiver.stopAudioIO();
-        try {
+
+        try
+        {
             _inputThread.join();
         }
         catch (Exception e)

@@ -8,13 +8,17 @@ import android.os.Parcelable;
  */
 public class Patient implements Parcelable {
 
-    public Patient()
-    {
+    public int ID;
+    public String FirstName = "";
+    public String LastName = "";
+    public String DateOfBirth = "";
+    public boolean IsOpen;
 
-    }
+    public Patient() { }
 
     // Parcelling part
-    public Patient(Parcel in){
+    public Patient(Parcel in)
+    {
         String[] data = new String[3];
 
         in.readStringArray(data);
@@ -44,25 +48,19 @@ public class Patient implements Parcelable {
         this.LastName = last;
     }
 
-    public int ID;
-    public String FirstName = "";
-    public String LastName = "";
-    public String DateOfBirth = "";
-    public boolean IsOpen;
-
     public boolean Validate() // TODO Finish this method. Do we want some these fields to be nullable?
     {
         return FirstName.matches("") || LastName.matches("");
     }
 
-
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel dest, int flags)
+    {
         dest.writeStringArray(new String[] {this.FirstName,
                 this.LastName,
-                this.DateOfBirth});
+                this.DateOfBirth
+        });
     }
-
 
     @Override
     public int describeContents(){
