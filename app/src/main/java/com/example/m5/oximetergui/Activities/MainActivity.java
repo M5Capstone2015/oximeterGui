@@ -13,6 +13,7 @@ import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.DateHelper;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.NuJack.NuJack;
 import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
 
@@ -24,9 +25,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView percentView; // TODO refactor this to its own class. SetRed() SetGreen SetPercent() methods.
     private boolean _recording = false;
     private boolean _patientSelected = false;
-    private String mPatientName=null;
+    private String mPatientName = null;
 
     ReadingCollector _collector = new ReadingCollector();
+
+    NuJack _nuJack;
 
     private Date _startTime;
     DataModel _dataModel;
@@ -57,7 +60,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         View saveButton = findViewById(R.id.save_reading);
         saveButton.setOnClickListener(this);
 
+        _nuJack = new NuJack(_listener);
+        _nuJack.Start();
+
         percentView = (TextView) findViewById(R.id.percentView);
+
          _dataModel = new DataModel(this);
     }
 
@@ -131,11 +138,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private OnDataAvailableListener _listener = new OnDataAvailableListener() {
 
         @Override
-        public void DataAvailable(int data)
+        public void DataAvailable(String _data)
         {
             if (!_recording)
                 return;
 
+            int data = Integer.parseInt(_data);
             _collector.AddNewData(data);
             percentView.setText(data < 10 ? " " + data : String.valueOf(data));
         }

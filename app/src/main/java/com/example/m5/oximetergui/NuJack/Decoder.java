@@ -2,7 +2,6 @@ package com.example.m5.oximetergui.NuJack;
 
 import com.example.m5.oximetergui.Constants.General_Constants;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,24 +10,31 @@ import java.util.List;
  */
 public class Decoder {
 
-    public Decoder()
-    {
-        // TODO initiate 'real' AudioReceiver object here
-    }
-
-    public Decoder(List<Integer> fakeData)
-    {
-        // TODO fill in unit test constructor.
-    }
-
     int counter0 = 0;
     int counter1 = 0;
     int counter2 = 0;
     int startflag = 0;
+    boolean _foundData = false;
 
-    public List<Integer> bitlist = new ArrayList<Integer>();
+    public List<Integer> bitlist = new ArrayList<>();
 
-    public void HandleBit(int transition)
+    public List<Integer> HandleData(List<Integer> freqs)
+    {
+        for (Integer i : freqs)
+            this.HandleBit(i);
+        if (_foundData)
+            return bitlist; // TODO change this return nullable Integer
+        else
+            return null;
+    }
+
+    public void Reset()
+    {
+        // reset all counters/flags
+        // reset sum average and avg frame
+    }
+
+    private void HandleBit(int transition)
     {
         updateAverage(transition);
         float freq = checkFreq(_movingAverage);
@@ -85,7 +91,10 @@ public class Decoder {
             System.out.println("----WHOLE BIT----");
             for (Integer i : bitlist)
                 System.out.println("\t" + i);
-            bitlist.clear();
+            _foundData = true;
+            return; // TODO think this through
+            // _listener.HandleData(data);
+            //bitlist.clear();
         }
     }
 
@@ -102,7 +111,7 @@ public class Decoder {
 
     private int _sum = 0;
     private float _movingAverage = 0.0f;
-    private List<Integer> dataStack = new ArrayList<Integer>();
+    private List<Integer> dataStack = new ArrayList<>();
 
     private void updateAverage(int newNum)
     {

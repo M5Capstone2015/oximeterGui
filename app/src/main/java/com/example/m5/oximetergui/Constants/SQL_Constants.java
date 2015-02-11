@@ -23,7 +23,7 @@ public class SQL_Constants {
     public static String DATA_ISSYNCED_COLUMN = "is_synced";
 
     // Create table statements
-    public static String CREATE_DB_SQL_STRING = // TODO Set each column name as a variable.
+    public static String CREATE_DB_SQL_STRING =
             "CREATE TABLE Patients(" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "first_name TEXT," +
@@ -32,7 +32,7 @@ public class SQL_Constants {
                     "is_open INT" +
             ");"; //+
 
-    public static String CREATE_READING = // TODO Set each column name as a variable.
+    public static String CREATE_READING =
             "CREATE TABLE Readings(" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "start_date DATETIME," +
