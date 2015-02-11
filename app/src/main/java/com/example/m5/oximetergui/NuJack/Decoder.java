@@ -92,7 +92,7 @@ public class Decoder {
             for (Integer i : bitlist)
                 System.out.println("\t" + i);
             _foundData = true;
-            return; // TODO think this through
+            return; // TODO Think through what should happen to rest of reading.
             // _listener.HandleData(data);
             //bitlist.clear();
         }

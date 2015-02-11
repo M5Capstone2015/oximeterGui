@@ -10,7 +10,7 @@ public class SQL_Constants {
     public static String DATA_TABLE_NAME = "Readings";
 
     // Patient column names
-    public static String PATIENT_FIRSTNAME_COLUMN = "first_name"; // todo maybe get read of these. Overly verbose for a small DB
+    public static String PATIENT_FIRSTNAME_COLUMN = "first_name";
     public static String PATIENT_LASTNAME_COLUMN = "last_name";
     public static String PATIENT_DOB_COLUMN = "date_of_birth";
     public static String PATIENT_ISOPEN_COLUMN = "is_open";
@@ -61,7 +61,7 @@ public class SQL_Constants {
             " WHERE id = %s;";
 
     // Query first 10 patients with last or first name
-    public static String SEARCH_PATIENT_BY_NAME = "SELECT * FROM Readings WHERE first LIKE '%%%s%%' OR last LIKE '%%%s%%' LIMIT 10"; // TODO add an ORDERBY clause?
+    public static String SEARCH_PATIENT_BY_NAME = "SELECT * FROM Readings WHERE first LIKE '%%%s%%' OR last LIKE '%%%s%%' LIMIT 10";
 
     // Readings query strings
     public static String SELECT_ALL_READINGS_= "SELECT * FROM Readings";

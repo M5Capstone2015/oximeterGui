@@ -105,7 +105,7 @@ public class DataModel {
         ContentValues values = new ContentValues();
         //values.put(SQL_Constants.DATA_STARTDATE_COLUMN, data.StartDate);
         //values.put(SQL_Constants.DATA_ENDDATE_COLUMN, data.EndDate);
-        values.put(SQL_Constants.DATA_READINGDATA_COLUMN, data.DataString);  // TODO Change names around here. Data class/table should really be Reading. Data column should be DataString
+        values.put(SQL_Constants.DATA_READINGDATA_COLUMN, data.DataString);
         values.put(SQL_Constants.DATA_ISSYNCED_COLUMN, data.IsSynced ? 1 : 0);
         db.insertOrThrow(SQL_Constants.DATA_TABLE_NAME, null, values);
 
