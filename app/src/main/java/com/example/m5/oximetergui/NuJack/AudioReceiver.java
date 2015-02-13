@@ -22,37 +22,6 @@ public class AudioReceiver {
         _audioRecord = findAudioRecord();
     }
 
-    private static int[] mSampleRates = new int[] {44100, 22050, 11025, 8000};
-    private AudioRecord findAudioRecord()
-    {
-        for (int rate : mSampleRates)
-        {
-            for (short audioFormat : new short[] { AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_16BIT })
-            {
-                for (short channelConfig : new short[] { AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO })
-                {
-                    try {
-                        //Log.d(C.TAG, "Attempting rate " + rate + "Hz, bits: " + audioFormat + ", channel: "
-                        //+ channelConfig);
-                        int bufferSize = AudioRecord.getMinBufferSize(rate, channelConfig, audioFormat);
-
-                        if (bufferSize != AudioRecord.ERROR_BAD_VALUE) {
-                            // check if we can instantiate and have a success
-                            AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, rate, channelConfig, audioFormat, bufferSize);
-
-                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
-                                return recorder;
-                        }
-                    } catch (Exception e) {
-                        //Log.e(C.TAG, rate + "Exception, keep trying.",e);
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-
     ///////////////////////////////////////////////
     // Constants
     ///////////////////////////////////////////////
@@ -66,51 +35,13 @@ public class AudioReceiver {
     // IO is FSK-modulated at either 613 or 1226 Hz (0 / 1)
     final private int _ioBaseFrequency = 613;
 
-    ///////////////////////////////////////////////
-    // Main interfaces
-    ///////////////////////////////////////////////
-
-    // Used for receiving and transmitting the
-    // primitive data elements (1s and 0s)
-    //private OutgoingSource _source = null;
-    //private IncomingSink _sink = null;
-
-
-    // For Audio Output
-    //AudioTrack _audioTrack;
-    //Thread _outputThread;
-
-    // For Audio Input
     AudioRecord _audioRecord;
-    Thread _inputThread;
-
-    ///////////////////////////////////////////////
-    // Output state
-    ///////////////////////////////////////////////
-
-    // For performance reasons we batch update
-    // the audio output buffer with this many bits.
-    final private int _bitsInBuffer = 100;
-
-    // To ensure efficient computation we create some buffers.
-    private short[] _outHighHighBuffer;
-    private short[] _outLowLowBuffer;
-    private short[] _outHighLowBuffer;
-    private short[] _outLowHighBuffer;
-
-    private int _outBitBufferPos = 0;
-    private int _powerFrequencyPos = 0;
-
-    private short[] _stereoBuffer;
-    private short[] _recBuffer;
-
-    private boolean _isInitialized = false;
-    private boolean _isRunning = false;
-    private boolean _stop = false;
 
     ///////////////////////////////////////////////
     // Input state
     ///////////////////////////////////////////////
+
+    private short[] _recBuffer;
 
     private enum SearchState { ZERO_CROSS, NEGATIVE_PEAK, POSITIVE_PEAK };
     private SearchState _searchState = SearchState.ZERO_CROSS;
@@ -132,14 +63,9 @@ public class AudioReceiver {
     // peaks
     private int _edgeDistance = 0;
 
-    private List<Integer> _freqStack = new ArrayList<Integer>();
-
-    ///////////////////////////////////////////////
-    // Processors
-    ///////////////////////////////////////////////
+    private List<Integer> _freqStack = new ArrayList<>();
 
     private void processInputBuffer(int shortsRead) {
-
 
         // We are basically trying to figure out where the edges are here,
         // in order to find the distance between them and pass that on to
@@ -170,10 +96,6 @@ public class AudioReceiver {
 
         //System.out.println("func finished");
     }
-
-    ///////////////////////////////////////////////
-    // Incoming Bias and Smoothing Functions
-    ///////////////////////////////////////////////
 
     private double addAndReturnMean(int in) {
         _toMean[_toMeanPos++] = in;
@@ -212,181 +134,28 @@ public class AudioReceiver {
         return _biasMean;
     }
 
-    ///////////////////////////////////////////////
-    // Audio Interface
-    // Note: these exist primarily to pass control to
-    //       the responsible subfunctions. NO code here.
-    ///////////////////////////////////////////////
-
-    Runnable _inputProcessor = new Runnable() {
-        public void run() {
-            Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-
-            while (!_stop) {
-                int shortsRead = _audioRecord.read(_recBuffer, 0, _recBuffer.length);
-                processInputBuffer(shortsRead);
-            }
-        }
-    };
-
-    ///////////////////////////////////////////////
-    // Public Interface
-    ///////////////////////////////////////////////
-    public int getPowerFrequency() {
-        return _powerFrequency;
-    }
-
-    public void setPowerFrequency(int powerFrequency) {
-        _powerFrequency = powerFrequency;
-    }
-
-    /*
-    public void registerIncomingSink(IncomingSink sink) {
-        if (_isRunning) {
-            throw new UnsupportedOperationException("AudioIO must be stopped to set a new sink.");
-        }
-        _sink = sink;
-    }
-    */
-
-    public void initialize() {
-        // Create buffers to hold what a high and low
-        // frequency waveform looks like
-        int bufferSize = getBufferSize();
-
-        _outHighHighBuffer = new short[bufferSize];
-        _outHighLowBuffer = new short[bufferSize];
-        _outLowHighBuffer = new short[bufferSize];
-        _outLowLowBuffer = new short[bufferSize];
-
-        for (int i = 0; i < bufferSize; i++) {
-
-            // NOTE: We bound this due to some weird java issues with casting to
-            // shorts.+
-            _outHighHighBuffer[i] = (short) (
-                    boundToShort(Math.sin((double)i * (double)2 * Math.PI * (double)_ioBaseFrequency / (double)_sampleFrequency) * Short.MAX_VALUE)
-            );
-
-            _outHighLowBuffer[i] = (short) (
-                    boundToShort(Math.sin((double)i * (double)4 * Math.PI * (double)_ioBaseFrequency / (double)_sampleFrequency) * Short.MAX_VALUE)
-            );
-
-            _outLowLowBuffer[i] = (short) (
-                    boundToShort(Math.sin((double)(i + bufferSize) * (double)2 * Math.PI * (double)_ioBaseFrequency / (double)_sampleFrequency) * Short.MAX_VALUE)
-            );
-
-            _outLowHighBuffer[i] = (short) (
-                    boundToShort(Math.sin((double)(i + bufferSize/2) * (double)4 * Math.PI * (double)_ioBaseFrequency / (double)_sampleFrequency) * Short.MAX_VALUE)
-            );
-        }
-
-        _isInitialized = true;
-    }
-
-    public void startAudioIO() {
-
-        if (!_isInitialized) {
-            initialize();
-        }
-
-        if (_isRunning) {
-            return;
-        }
-
-        _stop = false;
-
+    public void startAudioIO()
+    {
         attachAudioResources();
-
         _audioRecord.startRecording();
-
-        _inputThread = new Thread(_inputProcessor);
-        //_inputThread.start(); // disabled for debuging....
-
-        // DEBUG
-        //fakeAudioRead(); // Commenting this out for now just to test this class.
-        // DEBUG
-
     }
 
-    //
-    // DEBUG
-    //
-    public List<Integer> fakeAudioRead()  // Change this to return any freq coefficients.
+    public List<Integer> Read(int samples)
     {
         _freqStack.clear();
 
-        int shortsRead = _audioRecord.read(_recBuffer, 0, _recBuffer.length);
-        processInputBuffer(shortsRead);
-        return _freqStack;
-        //_recBuffer = _audioRecord.read();
-        //System.out.println("data size: " + _recBuffer.length);
-        //processInputBuffer(_recBuffer.length);
-    }
-
-    public List<Integer> fakeAudioRead(List<Short> data)  // Change this to return any freq coefficients.
-    {
-        _freqStack.clear();
-
-        _recBuffer = new short[data.size() + 1];
-
-        for (int i = 0; i < data.size(); i++)
-            _recBuffer[i] = data.get(i);
-
-        processInputBuffer(data.size());
+        //for (int i = 0; i < samples; i++) { // todo pass amount of samples to take
+            int shortsRead = _audioRecord.read(_recBuffer, 0, _recBuffer.length);
+            processInputBuffer(shortsRead);
+        //}
         return _freqStack;
     }
-
-
-
-
-    //
-    // DEBUG
-    //
-    /*
-    public void printSink()
-    {
-        FakeSink fs = (FakeSink) _sink;
-        fs.Print();
-    }
-    */
-
-    public void stopAudioIO() {
-        _stop = true;
-
-        try {
-            //_outputThread.join();
-            _inputThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        releaseAudioResources();
-
-        _isRunning = false;
-    }
-
-    ///////////////////////////////////////////////
-    // Support functions
-    ///////////////////////////////////////////////
 
     private void attachAudioResources() {
+
         int bufferSize = getBufferSize();
-
-        // The stereo buffer should be large enough to ensure
-        // that scheduling doesn't mess it up.
-        _stereoBuffer = new short[bufferSize * _bitsInBuffer];
-
-        // COUMMENTED OUT FOR DEBUGGING
-		/*
-		_audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-					     _sampleFrequency,
-					     AudioFormat.CHANNEL_OUT_STEREO,
-                			     AudioFormat.ENCODING_PCM_16BIT,
-					     44100,
-                			     AudioTrack.MODE_STREAM);
-		*/
-
         int recBufferSize = 5;
+
         //int recBufferSize =
         //AudioRecord.getMinBufferSize(_sampleFrequency, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
@@ -395,27 +164,56 @@ public class AudioReceiver {
 		        _sampleFrequency, AudioFormat.CHANNEL_IN_MONO,
 		        AudioFormat.ENCODING_PCM_16BIT, recBufferSize);
 			*/
-        //_audioRecord = new FakeAudioRecord();
+        _audioRecord = findAudioRecord(); // maybe change this to try defualt then iterate.
 
         _recBuffer = new short[recBufferSize * 10];
     }
 
-    private void releaseAudioResources() {
-        //_audioTrack.release();
+    private void releaseAudioResources()
+    {
         _audioRecord.release();
-
-        //_audioTrack = null;
         _audioRecord = null;
-
-        _stereoBuffer = null;
         _recBuffer = null;
     }
 
-    private double boundToShort(double in) {
-        return (in >= 32786.0) ? 32786.0 : (in <= -32786.0 ? -32786.0 : in );
+    public void Stop()
+    {
+        releaseAudioResources();
     }
 
-    private int getBufferSize() {
+
+    private static int[] mSampleRates = new int[] {44100, 22050, 11025, 8000};
+    private AudioRecord findAudioRecord()
+    {
+        for (int rate : mSampleRates)
+        {
+            for (short audioFormat : new short[] { AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_16BIT })
+            {
+                for (short channelConfig : new short[] { AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO })
+                {
+                    try {
+                        //Log.d(C.TAG, "Attempting rate " + rate + "Hz, bits: " + audioFormat + ", channel: "
+                        //+ channelConfig);
+                        int bufferSize = AudioRecord.getMinBufferSize(rate, channelConfig, audioFormat);
+
+                        if (bufferSize != AudioRecord.ERROR_BAD_VALUE) {
+                            // check if we can instantiate and have a success
+                            AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, rate, channelConfig, audioFormat, bufferSize);
+
+                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
+                                return recorder;
+                        }
+                    } catch (Exception e) {
+                        //Log.e(C.TAG, rate + "Exception, keep trying.",e);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private int getBufferSize()
+    {
         return _sampleFrequency / _ioBaseFrequency / 2;
     }
 }

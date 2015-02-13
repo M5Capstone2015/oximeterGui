@@ -18,11 +18,12 @@ import com.example.m5.oximetergui.R;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     private TextView percentView; // TODO refactor this to its own class. SetRed() SetGreen SetPercent() methods.
-    private boolean _recording = false;
-    private boolean _patientSelected = false;
     private String mPatientName = null;
 
-    ReadingCollector _collector = new ReadingCollector();
+    private boolean _recording = false;
+    private boolean _patientSelected = false;
+
+    ReadingCollector _collector;
     NuJack _nuJack;
     DataModel _dataModel;
 
@@ -42,15 +43,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
             _patientSelected = true;
         }
 
-        View patientListButton = findViewById(R.id.patient_list);
-        patientListButton.setOnClickListener(this);
-        View saveButton = findViewById(R.id.save_reading);
-        saveButton.setOnClickListener(this);
-
+        _collector = new ReadingCollector();
         _dataModel = new DataModel(this);
         _nuJack = new NuJack(_listener);
         _nuJack.Start();
 
+        View patientListButton = findViewById(R.id.patient_list);
+        patientListButton.setOnClickListener(this);
+        View saveButton = findViewById(R.id.save_reading);
+        saveButton.setOnClickListener(this);
         percentView = (TextView) findViewById(R.id.percentView);
     }
 

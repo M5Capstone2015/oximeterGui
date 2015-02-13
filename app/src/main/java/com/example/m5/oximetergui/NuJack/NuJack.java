@@ -8,14 +8,18 @@ import java.util.List;
 public class NuJack {
 
     private AudioReceiver _audioReceiver;
+    private AudioSender _audioSender;
     private Decoder _decoder;
+
     private OnDataAvailableListener _listener;
-    boolean _running = false;
-    Thread _inputThread;
+    private boolean _running = false;
+    private Thread _inputThread;
+    private Thread _outputThread;
 
     public NuJack(OnDataAvailableListener listener)
     {
         _audioReceiver = new AudioReceiver();
+        _audioSender = new AudioSender();
         _decoder = new Decoder();
         _listener = listener;
     }
@@ -28,11 +32,15 @@ public class NuJack {
         // Start reading
         _audioReceiver.startAudioIO();
 
+        _running = true;
 
         // Start input processor
-        _running = true;
         _inputThread = new Thread(_inputProcessor);
         _inputThread.start();
+
+        // Start power source
+        _outputThread = new Thread(_outputProcessor);
+        _outputThread.start();
     }
 
     Runnable _inputProcessor = new Runnable() {
@@ -43,15 +51,28 @@ public class NuJack {
 
             while (_running)
             {
-                List<Integer> data = _audioReceiver.fakeAudioRead();
+                List<Integer> data = _audioReceiver.Read(1);
                 List<Integer> result = _decoder.HandleData(data);
 
-                if (result != null && result.size() == 8) {  // TODO clean this shit up.
+                if (result != null && result.size() == 8) {  // TODO refactor this to Integer obj
                     _listener.DataAvailable(convertBitsToString(result));
                 }
             }
         }
 
+    };
+
+    Runnable _outputProcessor = new Runnable() {
+        public void run()
+        {
+            Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+
+            while (_running)
+            {
+                if (_audioSender != null)
+                    _audioSender.Send();
+            }
+        }
     };
 
     private String convertBitsToString(List<Integer> bitlist)
@@ -68,11 +89,12 @@ public class NuJack {
     public void Stop()
     {
         _running = false;
-        _audioReceiver.stopAudioIO();
+        _audioReceiver.Stop();
 
         try
         {
             _inputThread.join();
+            _outputThread.join();
         }
         catch (Exception e)
         {
