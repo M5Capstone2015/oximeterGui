@@ -3,9 +3,7 @@ package com.example.m5.oximetergui.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.m5.oximetergui.Constants.General_Constants;
@@ -15,7 +13,6 @@ import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.MainHelper;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
-import com.example.m5.oximetergui.NuJack.NuJack;
 import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
 
@@ -80,7 +77,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.patient_name:
                 //TODO Make this take you to patient info
-                Log.d("Main","Test");
+                Intent i2 = new Intent(this, NewPatient.class);
+                i2.putExtra(Intent_Constants.NamePatient, _patient);
+                startActivity(i2);
                 break;
             case R.id.start_stop_reading:
                 if (_recording==false)
@@ -124,7 +123,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            _patient = data.getParcelableExtra(Intent_Constants.NameToPatient);
+            _patient = data.getParcelableExtra(Intent_Constants.NamePatient);
             _mainHelper.LoadPatient(_patient, false);
         }
     }

@@ -22,6 +22,22 @@ public class PatientInfoHelper {
         _v = v;
     }
 
+    public void ConstructMainLayout() {
+        _main.setContentView(R.layout.activity_new_patient);
+        View savebutton = _main.findViewById(R.id.save);
+        savebutton.setOnClickListener(_v);
+    }
+
+    public void ConstructExistingLayout(Patient p)
+    {
+        _main.setContentView(R.layout.activity_new_patient_existing);
+        TextView first = (TextView)_main.findViewById(R.id.firstName);
+        first.setText(p.FirstName);
+        TextView last = (TextView)_main.findViewById(R.id.lastName);
+        last.setText(p.LastName);
+    }
+
+
     public void createErrorMessage()
     {
         RelativeLayout mMainLayout = (RelativeLayout) _main.findViewById(R.id.relativeNewPatient);

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.m5.oximetergui.Constants.General_Constants;
@@ -27,7 +26,7 @@ public class PatientHistory extends ListActivity implements View.OnClickListener
         setContentView(R.layout.activity_patient_history);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mPatientName = extras.getString(Intent_Constants.NameToPatient);
+            mPatientName = extras.getString(Intent_Constants.NamePatient);
             Log.d("Patient " + mPatientName, mPatientName + " was receieved as the patient's full name");
             TextView nameTitle = (TextView)findViewById(R.id.historyNameTitle);
             nameTitle.setText(mPatientName);
@@ -53,7 +52,7 @@ public class PatientHistory extends ListActivity implements View.OnClickListener
         {
             case R.id.new_reading:
                 Intent i = new Intent(this, MainActivity.class);
-                i.putExtra(Intent_Constants.NameToPatient, mPatientName);
+                i.putExtra(Intent_Constants.NamePatient, mPatientName);
                 startActivityForResult(i, General_Constants.NEW_READING_REQUEST);
                 break;
         }

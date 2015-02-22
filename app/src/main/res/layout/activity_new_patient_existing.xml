@@ -16,22 +16,20 @@
         android:textSize="20dp"
         android:id="@+id/patientInfo" />
 
-    <EditText
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/first_name_label"
-        android:inputType="text"
+        android:hint=""
         android:layout_below="@+id/patientInfo"
         android:layout_marginTop="25dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/firstName"/>
 
-    <EditText
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/last_name_label"
-        android:inputType="text"
+        android:hint=""
         android:layout_below="@+id/firstName"
         android:layout_marginTop="25dp"
         android:layout_alignParentLeft="true"
@@ -39,13 +37,13 @@
         android:id="@+id/lastName"/>
 
     <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lastName"
-        android:text="@string/save_label"
-        android:layout_marginTop="25dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/save"/>
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="Edit"
+        android:id="@+id/Edit"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/firstName"
+        android:layout_alignEnd="@+id/firstName"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

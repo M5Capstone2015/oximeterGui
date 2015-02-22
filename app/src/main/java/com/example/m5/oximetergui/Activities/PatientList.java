@@ -7,12 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
-import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.R;
 
@@ -85,7 +83,7 @@ public class PatientList extends ListActivity implements View.OnClickListener {
         p.FirstName = firstName;
         p.LastName = lastName;
         Intent i = new Intent();
-        i.putExtra(Intent_Constants.NameToPatient,p);
+        i.putExtra(Intent_Constants.NamePatient,p);
         setResult(RESULT_OK, i);
         finish();
     }

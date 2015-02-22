@@ -23,22 +23,30 @@ public class NewPatient extends Activity implements View.OnClickListener {
     ArrayList<String> mPatientInfo = new ArrayList<String>();
     Patient mPatient = new Patient();
     PatientInfoHelper _helper = new PatientInfoHelper(this, this);
+    boolean _editmode=false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_patient);
+        Intent i = getIntent();
+        Bundle extras = i.getExtras();
+        if (extras!=null) {
+            mPatient = extras.getParcelable(Intent_Constants.NamePatient);
+            _helper.ConstructExistingLayout(mPatient);
+        }
+        else {
+            _helper.ConstructMainLayout();
+        }
 
-        //Create listener for save button
-        View patientListButton = findViewById(R.id.save);
-        patientListButton.setOnClickListener(this);
     }
 
 
     public void onClick(View v) {
         switch (v.getId())
         {
+            case R.id.Edit:
+                break;
             case R.id.save:
                 mPatient = _helper.ConstructPatient();
 

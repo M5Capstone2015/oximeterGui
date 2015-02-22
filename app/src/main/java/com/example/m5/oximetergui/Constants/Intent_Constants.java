@@ -5,6 +5,6 @@ package com.example.m5.oximetergui.Constants;
  */
 public class Intent_Constants {
     public static String NewPatientInfo = "NewPatientInfo";
-    public static String NameToPatient = "FullName";
+    public static String NamePatient = "FullName";
     public static String ReadingDate = "Date";
 }
