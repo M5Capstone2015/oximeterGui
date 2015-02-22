@@ -26,7 +26,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private String mPatientName = null;
 
     private boolean _recording = false;
-    private boolean _patientSelected = false;
 
     ReadingCollector _collector;
     //NuJack _nuJack;
@@ -37,18 +36,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Bundle extras = getIntent().getExtras();
-
-        if (extras != null)
-        {
-            mPatientName = extras.getString(Intent_Constants.NameToPatient);
-            TextView nameTitle = (TextView)findViewById(R.id.patient_name);
-            nameTitle.setText(mPatientName);
-            _patientSelected = true;
-        }
-
         _mainHelper = new MainHelper(this, this);
         _collector = new ReadingCollector();
         _dataModel = new DataModel(this);
@@ -56,7 +43,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //_nuJack.Start();
 
 
-        _mainHelper.ConstructMainLayout();
+        _mainHelper.ConstructMainLayout(R.layout.activity_main);
         percentView = (TextView) findViewById(R.id.percentView);
     }
 
@@ -153,15 +140,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            mPatientName = extras.getString(Intent_Constants.NameToPatient);
-            _patientSelected = true;
-            View v = findViewById (R.id.main);
-            v.invalidate();
-            setContentView(R.layout.activity_main_patient_selected);
-            TextView nameTitle = (TextView)findViewById(R.id.patient_name);
-            nameTitle.setText(mPatientName);
-            _mainHelper.ConstructMainLayout();
+            Patient p = new Patient();
+            p = data.getParcelableExtra(Intent_Constants.NameToPatient);
+            _mainHelper.LoadPatient(p);
         }
     }
 }
