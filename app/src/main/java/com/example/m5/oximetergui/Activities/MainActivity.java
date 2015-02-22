@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         _collector = new ReadingCollector();
         _dataModel = new DataModel(this);
         _nuJack = new NuJack(_listener);
-        _nuJack.Start();
+        //_nuJack.Start();
 
         View patientListButton = findViewById(R.id.patient_list);
         patientListButton.setOnClickListener(this);

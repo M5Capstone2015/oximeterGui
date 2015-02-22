@@ -14,13 +14,15 @@ public class AudioSender {
     public AudioSender()
     {
         _track = Initialize();
-        _track.play();
+        if (_track != null)
+            _track.play();
     }
 
     public void Send()
     {
         short[] outputWave = new short[500];
-        _track.write(outputWave, 0, outputWave.length);
+        if (_track != null)
+            _track.write(outputWave, 0, outputWave.length);
     }
 
     private AudioTrack Initialize()
