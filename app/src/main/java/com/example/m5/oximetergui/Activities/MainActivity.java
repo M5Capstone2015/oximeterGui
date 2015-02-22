@@ -3,11 +3,16 @@ package com.example.m5.oximetergui.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
+import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
+import com.example.m5.oximetergui.Helpers.MainHelper;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
@@ -24,8 +29,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private boolean _patientSelected = false;
 
     ReadingCollector _collector;
-    NuJack _nuJack;
+    //NuJack _nuJack;
     DataModel _dataModel;
+    MainHelper _mainHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,15 +49,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             _patientSelected = true;
         }
 
+        _mainHelper = new MainHelper(this, this);
         _collector = new ReadingCollector();
         _dataModel = new DataModel(this);
-        _nuJack = new NuJack(_listener);
+        //_nuJack = new NuJack(_listener);
         //_nuJack.Start();
 
-        View patientListButton = findViewById(R.id.patient_list);
-        patientListButton.setOnClickListener(this);
-        View saveButton = findViewById(R.id.save_reading);
-        saveButton.setOnClickListener(this);
+
+        _mainHelper.ConstructMainLayout();
         percentView = (TextView) findViewById(R.id.percentView);
     }
 
@@ -59,16 +64,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onResume()  // TODO load percent/patient selected/and rolling average data
     {
         super.onResume();
-        if (_nuJack != null)
-            _nuJack.Start();
+        //if (_nuJack != null)
+           // _nuJack.Start();
     }
 
     @Override
     public void onPause() // TODO save percent/patient selected/and rolling average data
     {
         super.onPause();
-        if (_nuJack != null)
-            _nuJack.Stop();
+        //if (_nuJack != null)
+        //    _nuJack.Stop();
     }
 
     public void sqlClick(View v)
@@ -83,7 +88,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         {
             case R.id.patient_list:
                 Intent i1 = new Intent(this, PatientList.class);
-                startActivity(i1);
+                startActivityForResult(i1, General_Constants.PATIENT_REQUEST);
                 break;
 
             case R.id.save_reading:
@@ -144,4 +149,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
             percentView.setText(data < 10 ? " " + data : String.valueOf(data));
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            mPatientName = extras.getString(Intent_Constants.NameToPatient);
+            _patientSelected = true;
+            View v = findViewById (R.id.main);
+            v.invalidate();
+            setContentView(R.layout.activity_main_patient_selected);
+            TextView nameTitle = (TextView)findViewById(R.id.patient_name);
+            nameTitle.setText(mPatientName);
+            _mainHelper.ConstructMainLayout();
+        }
+    }
 }
