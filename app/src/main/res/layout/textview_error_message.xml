@@ -3,5 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:text="Please Fill out all required fields"
+    android:id="@+id/error_message"
     android:layout_marginTop="80dp">
 </TextView>

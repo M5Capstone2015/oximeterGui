@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Helpers.ErrorMessage;
+import com.example.m5.oximetergui.Helpers.PatientInfoHelper;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -19,9 +20,9 @@ import java.util.ArrayList;
 public class NewPatient extends Activity implements View.OnClickListener {
 
     RelativeLayout mMainLayout = null;
-    TextView mErrorMessage = null;
     ArrayList<String> mPatientInfo = new ArrayList<String>();
     Patient mPatient = new Patient();
+    PatientInfoHelper _helper = new PatientInfoHelper(this, this);
 
 
     @Override
@@ -39,14 +40,11 @@ public class NewPatient extends Activity implements View.OnClickListener {
         switch (v.getId())
         {
             case R.id.save:
-                EditText firstName = (EditText)findViewById(R.id.firstName);
-                EditText lastName = (EditText)findViewById(R.id.lastName);
-                mPatient.FirstName = firstName.getText().toString();
-                mPatient.LastName = lastName.getText().toString();
+                mPatient = _helper.ConstructPatient();
 
                 if (!mPatient.Validate())
                 {
-                    this.createErrorMessage();
+                    _helper.createErrorMessage();
                 }
 
                 //If contains first and last name, exit screen
@@ -63,19 +61,5 @@ public class NewPatient extends Activity implements View.OnClickListener {
         }
     }
 
-    private void createErrorMessage()
-    {
-        //If this is the first time we've stored the main relative layout, retrieve the layout
-        //via its ID
-        if (mMainLayout == null) {
-            mMainLayout = (RelativeLayout) findViewById(R.id.relativeNewPatient);
-        }
 
-        //If we have yet to display an error message, display message
-        if (mErrorMessage == null) {
-            ErrorMessage em = new ErrorMessage("Please Fill out all required fields", this);
-            mErrorMessage = em.CreateErrorBelow(R.id.save);
-            mMainLayout.addView(mErrorMessage);
-        }
-    }
 }
