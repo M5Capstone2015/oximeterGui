@@ -77,14 +77,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Intent i1 = new Intent(this, PatientList.class);
                 startActivityForResult(i1, General_Constants.PATIENT_REQUEST);
                 break;
-
-            case R.id.save_reading:
-                if (mPatientName!=null) {
-                    Intent i2 = new Intent();
-                    setResult(RESULT_OK, i2);
-                    finish();
-                }
-
+            case R.id.patient_name:
+                //TODO Make this take you to patient info
+                Log.d("Main","Test");
+                break;
         }
     }
 

@@ -27,8 +27,6 @@ public class MainHelper {
         _main.setContentView(layout);
         View patientListButton = _main.findViewById(R.id.patient_list);
         patientListButton.setOnClickListener(_v);
-        View saveButton = _main.findViewById(R.id.save_reading);
-        saveButton.setOnClickListener(_v);
     }
 
     public void LoadPatient(Patient p)
@@ -38,6 +36,8 @@ public class MainHelper {
         this.ConstructMainLayout(R.layout.activity_main_patient_selected);
         TextView nameTitle = (TextView)_main.findViewById(R.id.patient_name);
         nameTitle.setText(p.FirstName + " " + p.LastName);
+        View name = _main.findViewById(R.id.patient_name);
+        name.setOnClickListener(_v);
     }
 
 
