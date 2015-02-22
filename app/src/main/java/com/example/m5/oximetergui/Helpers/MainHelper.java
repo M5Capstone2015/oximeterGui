@@ -27,18 +27,51 @@ public class MainHelper {
         _main.setContentView(layout);
         View patientListButton = _main.findViewById(R.id.patient_list);
         patientListButton.setOnClickListener(_v);
+        View recordButton = _main.findViewById(R.id.start_stop_reading);
+        recordButton.setOnClickListener(_v);
     }
 
-    public void LoadPatient(Patient p)
+    public void LoadPatient(Patient p, boolean recording)
     {
         View v = _main.findViewById (R.id.main);
         v.invalidate();
-        this.ConstructMainLayout(R.layout.activity_main_patient_selected);
+        if (recording==false) {
+            this.ConstructMainLayout(R.layout.activity_main_patient_selected);
+        }
+        else{
+            this.ConstructMainLayout(R.layout.activity_main_patient_selected_recording);
+        }
         TextView nameTitle = (TextView)_main.findViewById(R.id.patient_name);
         nameTitle.setText(p.FirstName + " " + p.LastName);
         View name = _main.findViewById(R.id.patient_name);
         name.setOnClickListener(_v);
     }
+
+    public void StartRecording(Patient p)
+    {
+        if (p == null)
+        {
+            this.ConstructMainLayout(R.layout.activity_main_recording);
+        }
+        else
+        {
+            this.LoadPatient(p, true);
+        }
+    }
+
+
+    public void StopRecording(Patient p)
+    {
+        if (p == null)
+        {
+            this.ConstructMainLayout(R.layout.activity_main);
+        }
+        else
+        {
+            this.LoadPatient(p, false);
+        }
+    }
+
 
 
 }

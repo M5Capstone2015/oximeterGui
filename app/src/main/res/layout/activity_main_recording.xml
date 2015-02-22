@@ -11,16 +11,13 @@
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/patient_name"
-        android:textSize="30dp"/>
+        android:layout_height="wrap_content"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/patient_list_label"
-        android:id="@+id/patient_list"
-        android:layout_below="@+id/patient_name"/>
+        android:id="@+id/patient_list"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -34,7 +31,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Start Reading"
+        android:text="Stop Reading"
         android:id="@+id/start_stop_reading"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

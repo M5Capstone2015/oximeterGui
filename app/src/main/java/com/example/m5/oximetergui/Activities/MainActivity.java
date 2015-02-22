@@ -31,6 +31,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //NuJack _nuJack;
     DataModel _dataModel;
     MainHelper _mainHelper;
+    Patient _patient = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -81,42 +82,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 //TODO Make this take you to patient info
                 Log.d("Main","Test");
                 break;
+            case R.id.start_stop_reading:
+                if (_recording==false)
+                    startReadingClick();
+                else
+                    stopReadingClick();
+                break;
         }
     }
 
-    public void startReadingClick(View v)
+    public void startReadingClick()
     {
         _collector.Restart();
-
         _recording = true;
-
-        /*
-        if (_patientSelected)
-        {
-            // Render name
-        }
-        else
-        {
-            // Render something else (maybe nothing)
-        }
-        */
+        _mainHelper.StartRecording(_patient);
     }
 
-    public void stopReadingClick(View v)
+    public void stopReadingClick()
     {
         _recording = false;
 
         Reading newReading = _collector.GetReading();
-        _dataModel.AddNewReading(newReading);
-
-        /*
-        if (_patientSelected)
-        {
-        }
-        else
-        {
-        }
-        */
+        //_dataModel.AddNewReading(newReading); //Commented because currently crashing shit
+        _mainHelper.StopRecording(_patient);
     }
 
     private OnDataAvailableListener _listener = new OnDataAvailableListener() {
@@ -136,9 +124,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK) {
-            Patient p = new Patient();
-            p = data.getParcelableExtra(Intent_Constants.NameToPatient);
-            _mainHelper.LoadPatient(p);
+            _patient = data.getParcelableExtra(Intent_Constants.NameToPatient);
+            _mainHelper.LoadPatient(_patient, false);
         }
     }
 }
