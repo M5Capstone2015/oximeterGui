@@ -17,13 +17,15 @@ public class MainHelper {
     Activity _main;
     View.OnClickListener _v;
 
-    public MainHelper(Activity main, View.OnClickListener v) {
+    public MainHelper(Activity main, View.OnClickListener v)
+    {
         _main = main;
         _v = v;
     }
 
 
-    public void ConstructMainLayout(int layout) {
+    public void ConstructMainLayout(int layout)
+    {
         _main.setContentView(layout);
         View patientListButton = _main.findViewById(R.id.patient_list);
         patientListButton.setOnClickListener(_v);
@@ -35,14 +37,15 @@ public class MainHelper {
     {
         View v = _main.findViewById (R.id.main);
         v.invalidate();
-        if (recording==false) {
+
+        if (recording == false)
             this.ConstructMainLayout(R.layout.activity_main_patient_selected);
-        }
-        else{
+        else
             this.ConstructMainLayout(R.layout.activity_main_patient_selected_recording);
-        }
-        TextView nameTitle = (TextView)_main.findViewById(R.id.patient_name);
+
+        TextView nameTitle = (TextView) _main.findViewById(R.id.patient_name);
         nameTitle.setText(p.FirstName + " " + p.LastName);
+
         View name = _main.findViewById(R.id.patient_name);
         name.setOnClickListener(_v);
     }
