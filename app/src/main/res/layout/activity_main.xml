@@ -6,9 +6,9 @@
 
     <fragment
         android:id="@+id/fragment_firstpane"
-        android:name="com.example.m5.oximetergui.Activities.MainActivity.PatientListFragment"
+        android:name="com.example.m5.oximetergui.Activities.MainActivity.SliderFragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
     <fragment
         android:id="@+id/fragment_secondpane"

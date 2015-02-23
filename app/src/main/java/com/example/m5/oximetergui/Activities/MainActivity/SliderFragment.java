@@ -14,7 +14,7 @@ import com.example.m5.oximetergui.R;
 /**
  * Created by Hunt on 2/23/2015.
  */
-public class PatientListFragment extends Fragment {
+public class SliderFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,15 +27,15 @@ public class PatientListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.patient_list, container, false);
-        //Button b = (Button) v.findViewById(R.id.closeButton);
-        //b.setOnClickListener(listener);
+        Button b = (Button) v.findViewById(R.id.closeButton);
+        b.setOnClickListener(listener);
         return v;
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //((PaneTest) getActivity()).OpenPane();
+            ((MainActivity) getActivity()).ClosePane();
         }
     };
 
@@ -47,5 +47,4 @@ public class PatientListFragment extends Fragment {
         inflater.inflate(R.menu.menu_patient_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
 }

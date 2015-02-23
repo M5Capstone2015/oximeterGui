@@ -27,18 +27,22 @@ public class MainScreenFrag extends Fragment {
     {
         // TODO Auto-generated method stub
         View v = inflater.inflate(R.layout.main_screen, container, false);
-
-        //Button b = (Button) v.findViewById(R.id.openButton);
-        //b.setOnClickListener(listener);
+        InitializeButtons(v);
 
         return v;
+    }
+
+    private void InitializeButtons(View v)
+    {
+        Button b = (Button) v.findViewById(R.id.patient_list);
+        b.setOnClickListener(listener);
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
-            //((PaneTest) getActivity())._OpenPane();
+            ((MainActivity) getActivity())._OpenPane();
         }
 
     };

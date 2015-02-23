@@ -10,14 +10,22 @@
     android:orientation="vertical"
     tools:context=".FirstPane" >
 
-    <TextView
-        android:text="Testing Testing Testing\nAnd more testing!!!"
-        android:layout_width="wrap_content"
+    <Button
+        android:text="New Patient"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="Bobby $murda"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="Johny 'Killer' Doe"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
     <Button
         android:text="Close Pane"
         android:id="@+id/closeButton"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

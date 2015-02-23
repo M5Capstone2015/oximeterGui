@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
 
     SlidingPaneLayout pane;
 
-    public void OpenPane()
+    public void ClosePane()
     {
         pane.closePane();
     }
@@ -122,12 +122,6 @@ public class MainActivity extends Activity {
         super.onPause();
         //if (_nuJack != null)
         //    _nuJack.Stop();
-    }
-
-    public void sqlClick(View v)
-    {
-        Intent i = new Intent(this, SQL_Sandbox.class);
-        startActivity(i);
     }
 
     /*
