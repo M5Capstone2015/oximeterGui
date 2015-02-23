@@ -1,11 +1,15 @@
-package com.example.m5.oximetergui.Activities;
+package com.example.m5.oximetergui.Activities.MainActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Activities.NewPatient;
+import com.example.m5.oximetergui.Activities.PatientList;
+import com.example.m5.oximetergui.Activities.SQL_Sandbox;
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
@@ -17,7 +21,7 @@ import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
 
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity {
 
     private TextView percentView; // TODO refactor this to its own class. SetRed() SetGreen SetPercent() methods.
     private String mPatientName = null;
@@ -30,20 +34,79 @@ public class MainActivity extends Activity implements View.OnClickListener {
     MainHelper _mainHelper;
     Patient _patient = null;
 
+    SlidingPaneLayout pane;
+
+    public void OpenPane()
+    {
+        pane.closePane();
+    }
+
+    public void _OpenPane()
+    {
+        pane.openPane();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        pane = (SlidingPaneLayout) findViewById(R.id.slidingpanelayout);
+
+        pane.setPanelSlideListener(new SlidingPaneLayout.SimplePanelSlideListener()
+        {
+
+            @Override
+            public void onPanelClosed(View panel) {
+                // TODO Auto-generated method stub
+                switch (panel.getId()) {
+                    case R.id.fragment_secondpane:
+                        getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(false);
+                        getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(true);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onPanelOpened(View panel) {
+                // TODO Auto-generated method stub
+                switch (panel.getId()) {
+                    case R.id.fragment_secondpane:
+                        getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(true);
+                        getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(false);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                // TODO Auto-generated method stub
+            }
+
+        });
+    }
+
+
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        _mainHelper = new MainHelper(this, this);
-        _collector = new ReadingCollector();
-        _dataModel = new DataModel(this);
+        //_mainHelper = new MainHelper(this, this);
+        //_collector = new ReadingCollector();
+        //_dataModel = new DataModel(this);
         //_nuJack = new NuJack(_listener);
         //_nuJack.Start();
 
 
-        _mainHelper.ConstructMainLayout(R.layout.activity_main);
-        percentView = (TextView) findViewById(R.id.percentView);
+        //_mainHelper.ConstructMainLayout(R.layout.activity_main);
+        //percentView = (TextView) findViewById(R.id.percentView);
     }
+    */
 
     @Override
     public void onResume()  // TODO load percent/patient selected/and rolling average data
@@ -67,6 +130,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         startActivity(i);
     }
 
+    /*
     public void onClick(View v)
     {
         switch (v.getId())
@@ -82,7 +146,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivity(i2);
                 break;
             case R.id.start_stop_reading:
-                if (_recording==false)
+                if (_recording == false)
                     startReadingClick();
                 else
                     stopReadingClick();
@@ -94,7 +158,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     {
         _collector.Restart();
         _recording = true;
-        _mainHelper.StartRecording(_patient);
+        //_mainHelper.StartRecording(_patient);
     }
 
     public void stopReadingClick()
@@ -103,7 +167,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         Reading newReading = _collector.GetReading();
         //_dataModel.AddNewReading(newReading); //Commented because currently crashing shit
-        _mainHelper.StopRecording(_patient);
+        //_mainHelper.StopRecording(_patient);
     }
 
     private OnDataAvailableListener _listener = new OnDataAvailableListener() {
@@ -119,6 +183,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             percentView.setText(data < 10 ? " " + data : String.valueOf(data));
         }
     };
+    */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
