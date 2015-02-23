@@ -16,6 +16,7 @@ import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.MainHelper;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
+import com.example.m5.oximetergui.Helpers.Slider;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
@@ -34,7 +35,7 @@ public class MainActivity extends Activity {
     MainHelper _mainHelper;
     Patient _patient = null;
 
-    SlidingPaneLayout pane;
+    Slider pane;
 
     public void ClosePane()
     {
@@ -46,11 +47,21 @@ public class MainActivity extends Activity {
         pane.openPane();
     }
 
+    public void DisablePane()
+    {
+        pane.DisableSlide();
+    }
+
+    public void EnablePane()
+    {
+        pane.SetSlidable();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        pane = (SlidingPaneLayout) findViewById(R.id.slidingpanelayout);
+        pane = (Slider) findViewById(R.id.slidingpanelayout);
 
         pane.setPanelSlideListener(new SlidingPaneLayout.SimplePanelSlideListener()
         {
@@ -120,32 +131,8 @@ public class MainActivity extends Activity {
     public void onPause() // TODO save percent/patient selected/and rolling average data
     {
         super.onPause();
-        //if (_nuJack != null)
+        //if (_nuJack != null) // TODO need to create public interface on frags to save shit.
         //    _nuJack.Stop();
-    }
-
-    /*
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
-            case R.id.patient_list:
-                Intent i1 = new Intent(this, PatientList.class);
-                startActivityForResult(i1, General_Constants.PATIENT_REQUEST);
-                break;
-            case R.id.patient_name:
-                //TODO Make this take you to patient info
-                Intent i2 = new Intent(this, NewPatient.class);
-                i2.putExtra(Intent_Constants.NamePatient, _patient);
-                startActivity(i2);
-                break;
-            case R.id.start_stop_reading:
-                if (_recording == false)
-                    startReadingClick();
-                else
-                    stopReadingClick();
-                break;
-        }
     }
 
     public void startReadingClick()
@@ -164,6 +151,7 @@ public class MainActivity extends Activity {
         //_mainHelper.StopRecording(_patient);
     }
 
+    /*
     private OnDataAvailableListener _listener = new OnDataAvailableListener() {
 
         @Override
