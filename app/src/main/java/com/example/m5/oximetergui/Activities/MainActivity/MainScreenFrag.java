@@ -15,6 +15,7 @@ import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.MainHelper;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.NuJack.NuJack;
 import com.example.m5.oximetergui.R;
 
 /**
@@ -27,7 +28,7 @@ public class MainScreenFrag extends Fragment {
     private MainActivity _mainActivity;
 
     ReadingCollector _collector = null;
-    //NuJack _nuJack = null;
+    NuJack _nuJack = null;
     private DataModel _dataModel = null;
     private MainHelper _mainHelper = null;
     private boolean _recording = false;
