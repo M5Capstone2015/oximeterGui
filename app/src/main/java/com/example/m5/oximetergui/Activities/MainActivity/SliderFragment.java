@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -69,15 +70,25 @@ public class SliderFragment extends Fragment {
         newPatientButton = v.findViewById(R.id.newPatientButton);
         newPatientButton.setOnClickListener(listener);
         _patientsList = (ListView) v.findViewById(R.id.patientList);
+        _patientsList.setOnItemClickListener(itemListener);
+
 
     }
-    // This is just for demo purposes.
+    private AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> list, View view, int position, long i){
+            Patient selectedItem = (Patient) list.getAdapter().getItem(position);
+            Log.d("PatientList", "You clicked " + selectedItem.FirstName + " " + selectedItem.LastName + " at position " + position);
+        }
+    };
+
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
             int viewID = v.getId();
             switch (viewID) {
+                // This button is just for demo purposes.
                 case R.id.closeButton:
                     _mainActivity.ClosePane();
                     break;
