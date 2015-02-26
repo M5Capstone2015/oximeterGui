@@ -1,9 +1,13 @@
 package com.example.m5.oximetergui.Activities.MainActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.view.View;
+
+import com.example.m5.oximetergui.Activities.NewPatient;
+import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Helpers.Slider;
 import com.example.m5.oximetergui.R;
 

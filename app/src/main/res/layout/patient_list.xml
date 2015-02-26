@@ -13,6 +13,7 @@
     <Button
         android:text="New Patient"
         android:layout_width="fill_parent"
+        android:id="@+id/newPatientButton"
         android:layout_height="wrap_content" />
     <Button
         android:text="Bobby $murda"

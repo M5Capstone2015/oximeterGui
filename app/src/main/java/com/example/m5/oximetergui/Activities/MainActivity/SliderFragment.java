@@ -1,6 +1,7 @@
 package com.example.m5.oximetergui.Activities.MainActivity;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,17 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.m5.oximetergui.Activities.NewPatient;
+import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
-import com.example.m5.oximetergui.Data_Objects.Reading;
-import com.example.m5.oximetergui.Helpers.MainHelper;
-import com.example.m5.oximetergui.Helpers.ReadingCollector;
-import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.R;
 
 public class SliderFragment extends Fragment {
 
     private MainScreenFrag _mainScreenFrag;
     private MainActivity _mainActivity;
+    private View newPatientButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,9 +40,7 @@ public class SliderFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.patient_list, container, false);
-
-        Button b = (Button) v.findViewById(R.id.closeButton);
-        b.setOnClickListener(listener);
+        InitializeButtons(v);
 
         //_mainScreenFrag = Fragment.ge // todo init frag
         _mainActivity = (MainActivity) getActivity();
@@ -50,11 +48,28 @@ public class SliderFragment extends Fragment {
         return v;
     }
 
+    private void InitializeButtons(View v) {
+        Button b = (Button) v.findViewById(R.id.closeButton);
+        b.setOnClickListener(listener);
+        newPatientButton = v.findViewById(R.id.newPatientButton);
+        newPatientButton.setOnClickListener(listener);
+
+    }
     // This is just for demo purposes.
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            _mainActivity.ClosePane();
+
+            int viewID = v.getId();
+            switch (viewID) {
+                case R.id.closeButton:
+                    _mainActivity.ClosePane();
+                    break;
+                case R.id.newPatientButton:
+                    Intent i = new Intent(getActivity().getBaseContext(), NewPatient.class);
+                    startActivityForResult(i, General_Constants.NEW_PATIENT_REQUEST);
+                    break;
+            }
         }
     };
 
