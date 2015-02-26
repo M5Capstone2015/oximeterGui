@@ -60,6 +60,8 @@ public class SliderFragment extends Fragment {
         for (Patient p : patients)
             _patients.add(p);
         InitializeViews(v);
+        PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
+        _patientsList.setAdapter(pAdapter);
 
         return v;
     }
