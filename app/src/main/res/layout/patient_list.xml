@@ -15,14 +15,15 @@
         android:layout_width="fill_parent"
         android:id="@+id/newPatientButton"
         android:layout_height="wrap_content" />
-    <Button
-        android:text="Bobby $murda"
+    <!-- List of Patients -->
+    <ListView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:text="Johny 'Killer' Doe"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/patientList"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/border_ui"
+        android:layout_below="@+id/new_patient" />
     <Button
         android:text="Close Pane"
         android:id="@+id/closeButton"
