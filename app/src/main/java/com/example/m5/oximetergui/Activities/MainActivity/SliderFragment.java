@@ -18,9 +18,11 @@ import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Helpers.PatientAdapter;
+import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SliderFragment extends Fragment {
 
@@ -29,6 +31,7 @@ public class SliderFragment extends Fragment {
     private View newPatientButton;
     ArrayList<Patient> _patients = new ArrayList<Patient>();
     ListView _patientsList;
+    PatientModel _model;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,10 +52,13 @@ public class SliderFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.patient_list, container, false);
-        InitializeViews(v);
-
         //_mainScreenFrag = Fragment.ge // todo init frag
         _mainActivity = (MainActivity) getActivity();
+        _model = new PatientModel(_mainActivity);
+        List<Patient> patients = _model.LoadPatientNames();
+        for (Patient p : patients)
+            _patients.add(p);
+        InitializeViews(v);
 
         return v;
     }
@@ -95,8 +101,8 @@ public class SliderFragment extends Fragment {
             PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
             _patientsList.setAdapter(pAdapter);
 
-            /*StringBuilder sb = new StringBuilder();
-            _model.AddPatient(patientData, sb);*/
+            StringBuilder sb = new StringBuilder();
+            _model.AddPatient(patientData, sb);
         }
     }
 
