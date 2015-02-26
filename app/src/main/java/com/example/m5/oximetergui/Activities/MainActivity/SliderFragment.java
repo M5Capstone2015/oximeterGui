@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -18,6 +17,7 @@ import com.example.m5.oximetergui.Activities.NewPatient;
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.Helpers.PatientAdapter;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class SliderFragment extends Fragment {
     private MainScreenFrag _mainScreenFrag;
     private MainActivity _mainActivity;
     private View newPatientButton;
-    ArrayList<String> _patientNames = new ArrayList<String>();
+    ArrayList<Patient> _patients = new ArrayList<Patient>();
     ListView _patientsList;
 
     @Override
@@ -89,14 +89,11 @@ public class SliderFragment extends Fragment {
             Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
             Log.d("PatientListSlider", patientData.FirstName);
             Log.d("PatientListSlider", patientData.LastName);
-            String fullName = patientData.FirstName + " " + patientData.LastName;
-            Log.d("PatientListSlider", fullName);
 
             //TODO implement model and list
-            _patientNames.add(fullName);
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), R.layout.row_layout, R.id.listText, _patientNames);
-            _patientsList.setAdapter(adapter);
+            _patients.add(patientData);
+            PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
+            _patientsList.setAdapter(pAdapter);
 
             /*StringBuilder sb = new StringBuilder();
             _model.AddPatient(patientData, sb);*/

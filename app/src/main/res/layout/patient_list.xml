@@ -22,8 +22,8 @@
         android:id="@+id/patientList"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@drawable/border_ui"
-        android:layout_below="@+id/new_patient" />
+        android:layout_below="@+id/new_patient"
+        android:background="@drawable/border_ui"  />
     <Button
         android:text="Close Pane"
         android:id="@+id/closeButton"
