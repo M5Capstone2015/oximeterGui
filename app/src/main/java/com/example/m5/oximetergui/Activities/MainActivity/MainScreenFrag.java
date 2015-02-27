@@ -25,15 +25,20 @@ import com.example.m5.oximetergui.R;
  */
 public class MainScreenFrag extends Fragment {
 
+    // --- Activities and Fragments --- //
     private MainScreenFrag _mainScreenFrag;
     private MainActivity _mainActivity;
 
+    // --- Helpers/Model --- //
     ReadingCollector _collector = null;  // TODO wrap all this (minus NuJack) in an object for easy serialization.
     NuJack _nuJack = null; // TODO disable horizontal screen orientation
     private DataModel _dataModel = null;
+
+    // --- View state Objects --- //
     private boolean _recording = false;
     private Patient _currentPatient = null;
 
+    // --- Views --- //
     private View startButton;
     private View stopButton;
     private View selectPatientsButton;
@@ -57,6 +62,12 @@ public class MainScreenFrag extends Fragment {
         _mainActivity.ClosePane();
     }
 
+    private void PatientListClick()
+    {
+        if (!_recording)
+            _mainActivity._OpenPane();
+    }
+
     private void SetViewVisible(View v)
     {
         v.setVisibility(View.VISIBLE);
@@ -69,6 +80,9 @@ public class MainScreenFrag extends Fragment {
 
     private void LogOut()
     {
+        if (_recording) // todo maybe just make this invisible.
+            return;
+
         _currentPatient = null;
 
         SetViewInvisible(infoTextView);
@@ -85,10 +99,16 @@ public class MainScreenFrag extends Fragment {
         stopButton.setVisibility(View.VISIBLE);
 
         // todo disable proper shit here
+        _mainActivity.DisablePane();
+        // disable logout
+        // disable info button
     }
 
     private void PatientInfo()
     {
+        if (_recording) // todo just make button invisible instead.
+            return;
+
         Intent i = new Intent(_mainActivity, Info.class);
         startActivity(i);
     }
@@ -99,6 +119,8 @@ public class MainScreenFrag extends Fragment {
 
         stopButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
+
+        _mainActivity.EnablePane();
 
         // todo re enable proper shit here
 
@@ -138,6 +160,8 @@ public class MainScreenFrag extends Fragment {
 
         infoTextView = (TextView) v.findViewById(R.id.patient_name);
         infoTextView.setOnClickListener(startButtonListener);
+
+        percent = (TextView) v.findViewById(R.id.percentView);
     }
 
     private OnClickListener startButtonListener = new OnClickListener() {
@@ -151,7 +175,8 @@ public class MainScreenFrag extends Fragment {
             int viewID = v.getId();
             switch (viewID) {
                 case R.id.patient_list:
-                    _mainActivity._OpenPane();
+                    _mainScreenFrag.PatientListClick();
+                    //_mainActivity._OpenPane();
                     break;
                 case R.id.start_reading:
                     _mainScreenFrag.StartRecording();

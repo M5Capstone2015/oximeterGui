@@ -50,10 +50,15 @@ public class Patient implements Parcelable {
 
     public boolean Validate() // TODO Finish this method. Do we want some these fields to be nullable?
     {
-        if(FirstName.matches("") || LastName.matches(""))
-            return false;
-        else
-            return true;
+        return !FirstName.matches("") || LastName.matches("");
+    }
+
+    public void Update(Patient p)
+    {
+        this.LastName = p.LastName;
+        this.FirstName = p.FirstName;
+        this.DateOfBirth = p.DateOfBirth;
+        this.IsOpen = p.IsOpen;
     }
 
     @Override

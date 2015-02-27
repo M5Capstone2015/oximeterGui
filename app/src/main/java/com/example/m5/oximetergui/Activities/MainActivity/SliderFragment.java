@@ -113,8 +113,7 @@ public class SliderFragment extends Fragment {
             Log.d("PatientListSlider", patientData.FirstName);
             Log.d("PatientListSlider", patientData.LastName);
 
-            //TODO implement model and list
-            _patients.add(patientData);
+            _patients.add(patientData); // TODO need to implement this for UPDATE as well.
             PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
             _patientsList.setAdapter(pAdapter);
 
