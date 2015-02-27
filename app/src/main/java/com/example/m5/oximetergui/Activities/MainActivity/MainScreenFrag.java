@@ -2,6 +2,7 @@ package com.example.m5.oximetergui.Activities.MainActivity;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,18 +37,39 @@ public class MainScreenFrag extends Fragment {
     private View startButton;
     private View stopButton;
     private View selectPatientsButton;
-    private View infoButton;
+    private TextView infoTextView;
     private TextView percent;
 
     public void LogInPatient(Patient p)
     {
+        if (p == null)
+            return;
+
         _currentPatient = p;
-        // TODO update GUI here
+
+        SetViewInvisible(selectPatientsButton);
+        infoTextView.setText(p.FirstName + " " + p.LastName);
+        SetViewVisible(infoTextView);
+
+        _mainActivity.ClosePane();
+    }
+
+    private void SetViewVisible(View v)
+    {
+        v.setVisibility(View.VISIBLE);
+    }
+
+    private void SetViewInvisible(View v)
+    {
+        v.setVisibility(View.INVISIBLE);
     }
 
     private void LogOut()
     {
         _currentPatient = null;
+
+        SetViewInvisible(infoTextView);
+        SetViewVisible(selectPatientsButton);
         // TOOD udpate GUI here
     }
 
@@ -57,6 +79,12 @@ public class MainScreenFrag extends Fragment {
 
         startButton.setVisibility(View.INVISIBLE);
         stopButton.setVisibility(View.VISIBLE);
+    }
+
+    private void PatientInfo()
+    {
+        Intent i = new Intent(_mainActivity, Info.class);
+        startActivity(i);
     }
 
     private void StopRecording()
@@ -96,6 +124,9 @@ public class MainScreenFrag extends Fragment {
 
         stopButton = v.findViewById(R.id.stop_reading_main);
         stopButton.setOnClickListener(startButtonListener);
+
+        infoTextView = (TextView) v.findViewById(R.id.patient_name);
+        infoTextView.setOnClickListener(startButtonListener);
     }
 
     private OnClickListener startButtonListener = new OnClickListener() {
@@ -116,6 +147,9 @@ public class MainScreenFrag extends Fragment {
                     break;
                 case R.id.stop_reading_main:
                     _mainScreenFrag.StopRecording();
+                    break;
+                case R.id.patient_name:
+                    _mainScreenFrag.PatientInfo();
                     break;
             }
         }

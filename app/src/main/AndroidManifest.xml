@@ -34,6 +34,14 @@
             android:name=".Activities.SQL_Sandbox"
             android:label="@string/title_activity_sql__sandbox" >
         </activity>
+        <activity
+            android:name=".Activities.MainActivity.Info"
+            android:label="@string/title_activity_info"
+            android:parentActivityName=".Activities.MainActivity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.m5.oximetergui.Activities.MainActivity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
