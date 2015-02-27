@@ -37,6 +37,7 @@ public class MainScreenFrag extends Fragment {
     private View startButton;
     private View stopButton;
     private View selectPatientsButton;
+    private View logOutButton;
     private TextView infoTextView;
     private TextView percent;
 
@@ -48,8 +49,10 @@ public class MainScreenFrag extends Fragment {
         _currentPatient = p;
 
         SetViewInvisible(selectPatientsButton);
+
         infoTextView.setText(p.FirstName + " " + p.LastName);
         SetViewVisible(infoTextView);
+        SetViewVisible(logOutButton);
 
         _mainActivity.ClosePane();
     }
@@ -70,6 +73,7 @@ public class MainScreenFrag extends Fragment {
 
         SetViewInvisible(infoTextView);
         SetViewVisible(selectPatientsButton);
+        SetViewInvisible(logOutButton);
         // TOOD udpate GUI here
     }
 
@@ -79,6 +83,8 @@ public class MainScreenFrag extends Fragment {
 
         startButton.setVisibility(View.INVISIBLE);
         stopButton.setVisibility(View.VISIBLE);
+
+        // todo disable proper shit here
     }
 
     private void PatientInfo()
@@ -93,6 +99,8 @@ public class MainScreenFrag extends Fragment {
 
         stopButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
+
+        // todo re enable proper shit here
 
         //Reading newReading = _collector.GetReading();
         //_dataModel.AddNewReading(newReading); // TODO fix. Commented because currently crashing shit
@@ -125,6 +133,9 @@ public class MainScreenFrag extends Fragment {
         stopButton = v.findViewById(R.id.stop_reading_main);
         stopButton.setOnClickListener(startButtonListener);
 
+        logOutButton = v.findViewById(R.id.log_out_button);
+        logOutButton.setOnClickListener(startButtonListener);
+
         infoTextView = (TextView) v.findViewById(R.id.patient_name);
         infoTextView.setOnClickListener(startButtonListener);
     }
@@ -150,6 +161,9 @@ public class MainScreenFrag extends Fragment {
                     break;
                 case R.id.patient_name:
                     _mainScreenFrag.PatientInfo();
+                    break;
+                case R.id.log_out_button:
+                    _mainScreenFrag.LogOut();
                     break;
             }
         }
