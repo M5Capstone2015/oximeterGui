@@ -68,15 +68,11 @@ public class MainScreenFrag extends Fragment {
 
         //Reading newReading = _collector.GetReading();
         //_dataModel.AddNewReading(newReading); // TODO fix. Commented because currently crashing shit
-        //_mainHelper.StopRecording(_patient);
-
-        // TODO update GUI
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override

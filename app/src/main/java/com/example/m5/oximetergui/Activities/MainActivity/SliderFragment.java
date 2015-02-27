@@ -40,25 +40,21 @@ public class SliderFragment extends Fragment {
     }
 
 
-    private void Login(Patient p)
-    {
-        _mainActivity.ClosePane();
-        _mainScreenFrag.LogInPatient(p);
-        // TODO update GUI
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+                             Bundle savedInstanceState)
+    {
         View v = inflater.inflate(R.layout.patient_list, container, false);
-        //_mainScreenFrag = Fragment.ge // todo init frag
+
+        _mainScreenFrag = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
         _mainActivity = (MainActivity) getActivity();
+
         _model = new PatientModel(_mainActivity);
+
         List<Patient> patients = _model.LoadPatientNames();
         for (Patient p : patients)
             _patients.add(p);
+
         InitializeViews(v);
         PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
         _patientsList.setAdapter(pAdapter);
@@ -66,21 +62,27 @@ public class SliderFragment extends Fragment {
         return v;
     }
 
-    private void InitializeViews(View v) {
+    private void InitializeViews(View v)
+    {
         Button b = (Button) v.findViewById(R.id.closeButton);
         b.setOnClickListener(listener);
+
         newPatientButton = v.findViewById(R.id.newPatientButton);
         newPatientButton.setOnClickListener(listener);
+
         _patientsList = (ListView) v.findViewById(R.id.patientList);
         _patientsList.setOnItemClickListener(itemListener);
-
-
     }
+
     private AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> list, View view, int position, long i){
             Patient selectedItem = (Patient) list.getAdapter().getItem(position);
+
             Log.d("PatientList", "You clicked " + selectedItem.FirstName + " " + selectedItem.LastName + " at position " + position);
+            MainScreenFrag mainScreen = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
+            mainScreen.LogInPatient(selectedItem);
+
         }
     };
 
@@ -89,7 +91,8 @@ public class SliderFragment extends Fragment {
         public void onClick(View v) {
 
             int viewID = v.getId();
-            switch (viewID) {
+            switch (viewID)
+            {
                 // This button is just for demo purposes.
                 case R.id.closeButton:
                     _mainActivity.ClosePane();
@@ -104,7 +107,8 @@ public class SliderFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK)
+        {
             Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
             Log.d("PatientListSlider", patientData.FirstName);
             Log.d("PatientListSlider", patientData.LastName);

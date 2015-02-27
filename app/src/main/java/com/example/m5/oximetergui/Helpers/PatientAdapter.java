@@ -15,7 +15,8 @@ import java.util.List;
 /**
  * Created by danabeled on 2/26/2015.
  */
-public class PatientAdapter extends BaseAdapter {
+public class PatientAdapter extends BaseAdapter
+{
     private LayoutInflater mInflater;
     private List<Patient> mPatients;
 
@@ -40,15 +41,18 @@ public class PatientAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         View view;
         ViewHolder holder;
-        if(convertView == null) {
+
+        if (convertView == null) {
             view = mInflater.inflate(R.layout.row_layout, parent, false);
             holder = new ViewHolder();
-            holder.name = (TextView)view.findViewById(R.id.listText);
+            holder.name = (TextView) view.findViewById(R.id.listText);
             view.setTag(holder);
-        } else {
+        }
+        else {
             view = convertView;
             holder = (ViewHolder)view.getTag();
         }
