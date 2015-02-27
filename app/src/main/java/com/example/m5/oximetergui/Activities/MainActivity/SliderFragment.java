@@ -90,6 +90,10 @@ public class SliderFragment extends Fragment {
     private AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> list, View view, int position, long i){
+
+            if (!_mainActivity.IsOpen()) // For some reason this click event fires when the pane is closed for somereason.
+                return;
+
             Patient selectedItem = (Patient) list.getAdapter().getItem(position);
 
             Log.d("PatientList", "You clicked " + selectedItem.FirstName + " " + selectedItem.LastName + " at position " + position);
