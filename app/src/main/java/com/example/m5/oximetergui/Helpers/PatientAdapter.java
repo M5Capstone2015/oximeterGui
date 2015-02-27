@@ -20,6 +20,18 @@ public class PatientAdapter extends BaseAdapter
     private LayoutInflater mInflater;
     private List<Patient> mPatients;
 
+    private boolean clickingEnabled;
+
+    public void DisableClicking()
+    {
+        this.clickingEnabled = false;
+    }
+
+    public void EnableClicking()
+    {
+        this.clickingEnabled = true;
+    }
+
     public PatientAdapter(Context context, List<Patient> patients){
         mInflater = LayoutInflater.from(context);
         mPatients = patients;
@@ -33,6 +45,13 @@ public class PatientAdapter extends BaseAdapter
     @Override
     public Object getItem(int position){
         return mPatients.get(position);
+    }
+
+    @Override
+    public boolean isEnabled(int position)
+    {
+        //return clickingEnabled;
+        return true;
     }
 
     @Override

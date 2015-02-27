@@ -1,4 +1,4 @@
-package com.example.m5.oximetergui.Activities.MainActivity;
+package com.example.m5.oximetergui.Activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,7 +14,6 @@ public class Info extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -33,6 +33,19 @@ public class SliderFragment extends Fragment {
     ArrayList<Patient> _patients = new ArrayList<Patient>();
     ListView _patientsList;
     PatientModel _model;
+    PatientAdapter adapter;
+
+    public void EnableClick()
+    {
+        if (adapter != null)
+            adapter.EnableClicking();
+    }
+
+    public void DisableClick()
+    {
+        if (adapter != null)
+            adapter.DisableClicking();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,8 +69,8 @@ public class SliderFragment extends Fragment {
             _patients.add(p);
 
         InitializeViews(v);
-        PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
-        _patientsList.setAdapter(pAdapter);
+        adapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
+        _patientsList.setAdapter(adapter);
 
         return v;
     }

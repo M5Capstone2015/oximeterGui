@@ -1,20 +1,16 @@
 package com.example.m5.oximetergui.Activities.MainActivity;
 
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Activities.Info;
 import com.example.m5.oximetergui.Data_Objects.Patient;
-import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
@@ -110,7 +106,8 @@ public class MainScreenFrag extends Fragment {
             return;
 
         Intent i = new Intent(_mainActivity, Info.class);
-        startActivity(i);
+        //startActivity(i, 1);
+        startActivityForResult(i, 1);  // We actually care about the req code, just wether user made mods or not.
     }
 
     private void StopRecording()
