@@ -35,7 +35,7 @@
             android:label="@string/title_activity_sql__sandbox" >
         </activity>
         <activity
-            android:name=".Activities.Info"
+            android:name=".Activities.PatientInfo"
             android:label="@string/title_activity_info"
             android:parentActivityName=".Activities.MainActivity.MainActivity" >
             <meta-data

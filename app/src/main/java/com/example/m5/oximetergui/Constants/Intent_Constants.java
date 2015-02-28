@@ -7,4 +7,6 @@ public class Intent_Constants {
     public static String NewPatientInfo = "NewPatientInfo";
     public static String NamePatient = "FullName";
     public static String ReadingDate = "Date";
+
+    public static String Patient_To_Edit = "PatientToEdit";
 }

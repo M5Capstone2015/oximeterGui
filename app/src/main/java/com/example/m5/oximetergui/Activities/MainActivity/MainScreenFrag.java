@@ -1,15 +1,18 @@
 package com.example.m5.oximetergui.Activities.MainActivity;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.m5.oximetergui.Activities.Info;
+import com.example.m5.oximetergui.Activities.PatientInfo;
+import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
@@ -94,10 +97,7 @@ public class MainScreenFrag extends Fragment {
         startButton.setVisibility(View.INVISIBLE);
         stopButton.setVisibility(View.VISIBLE);
 
-        // todo disable proper shit here
         _mainActivity.DisablePane();
-        // disable logout
-        // disable info button
     }
 
     private void PatientInfo()
@@ -105,9 +105,9 @@ public class MainScreenFrag extends Fragment {
         if (_recording) // todo just make button invisible instead.
             return;
 
-        Intent i = new Intent(_mainActivity, Info.class);
-        //startActivity(i, 1);
-        startActivityForResult(i, 1);  // We actually care about the req code, just wether user made mods or not.
+        Intent i = new Intent(_mainActivity, PatientInfo.class);
+        i.putExtra(Intent_Constants.Patient_To_Edit, _currentPatient);
+        startActivityForResult(i, 1);  // We actually care about the req code, just user was deleted or not.
     }
 
     private void StopRecording()
@@ -123,6 +123,23 @@ public class MainScreenFrag extends Fragment {
 
         //Reading newReading = _collector.GetReading();
         //_dataModel.AddNewReading(newReading); // TODO fix. Commented because currently crashing shit
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK)
+        {
+            Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
+            Log.d("PatientListSlider", patientData.FirstName);
+            Log.d("PatientListSlider", patientData.LastName);
+
+            //_patients.add(patientData); // TODO need to implement this for UPDATE as well.
+            //PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
+            //_patientsList.setAdapter(pAdapter);
+
+            //StringBuilder sb = new StringBuilder();
+            //_model.AddPatient(patientData, sb);
+        }
     }
 
     @Override
@@ -173,7 +190,6 @@ public class MainScreenFrag extends Fragment {
             switch (viewID) {
                 case R.id.patient_list:
                     _mainScreenFrag.PatientListClick();
-                    //_mainActivity._OpenPane();
                     break;
                 case R.id.start_reading:
                     _mainScreenFrag.StartRecording();

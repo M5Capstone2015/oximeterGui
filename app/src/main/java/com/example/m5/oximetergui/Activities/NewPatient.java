@@ -23,30 +23,28 @@ public class NewPatient extends Activity implements View.OnClickListener {
     ArrayList<String> mPatientInfo = new ArrayList<String>();
     Patient mPatient = new Patient();
     PatientInfoHelper _helper = new PatientInfoHelper(this, this);
-    boolean _editmode=false;
+    boolean _editmode = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
-        Bundle extras = i.getExtras();
-        if (extras!=null) {
-            mPatient = extras.getParcelable(Intent_Constants.NamePatient);
-            _helper.ConstructExistingLayout(mPatient);
-        }
-        else {
+        //Bundle extras = i.getExtras();
+        //if (extras!=null) {
+            //mPatient = extras.getParcelable(Intent_Constants.NamePatient);
+            //_helper.ConstructExistingLayout(mPatient);
+        //}
+        //else {
             _helper.ConstructMainLayout();
-        }
-
+        //}
     }
-
 
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.Edit:
-                break;
+            //case R.id.Edit:
+                //break;
             case R.id.save:
                 mPatient = _helper.ConstructPatient();
 
@@ -58,10 +56,8 @@ public class NewPatient extends Activity implements View.OnClickListener {
                 //If contains first and last name, exit screen
                 else
                 {
-                    mPatientInfo.add(mPatient.FirstName);
-                    mPatientInfo.add(mPatient.LastName);
                     Intent i = new Intent();
-                    i.putExtra(Intent_Constants.NewPatientInfo,mPatient);
+                    i.putExtra(Intent_Constants.NewPatientInfo, mPatient);
                     setResult(RESULT_OK, i);
                     finish();
                     break;
