@@ -139,8 +139,8 @@ public class Decoder{
             //return "Read:  " + readingData;
         }
         //return ":(";
-        return nuByte.convertBits(fakeList);
-        //return "";
+        //return nuByte.convertBits(fakeList);
+        return "";
     }
 
     private String convertBitsToString() {
