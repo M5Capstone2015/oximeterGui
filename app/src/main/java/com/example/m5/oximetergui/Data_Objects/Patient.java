@@ -48,6 +48,11 @@ public class Patient implements Parcelable {
         this.LastName = last;
     }
 
+    public String GetFullName()
+    {
+        return this.FirstName + " " + this.LastName;
+    }
+
     public boolean Validate() // TODO Finish this method. Do we want some these fields to be nullable?
     {
         return !FirstName.matches("") || LastName.matches("");

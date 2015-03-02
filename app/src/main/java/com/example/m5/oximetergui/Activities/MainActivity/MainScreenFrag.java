@@ -1,7 +1,9 @@
 package com.example.m5.oximetergui.Activities.MainActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.example.m5.oximetergui.Activities.PatientInfo;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
@@ -117,13 +120,51 @@ public class MainScreenFrag extends Fragment {
         stopButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(_mainActivity);
+        builder.setMessage("You want to save this here data?").setPositiveButton("Yea Bruh", dialogClickListener)
+                .setNegativeButton("Naw Bruh", dialogClickListener); //.show();
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
         _mainActivity.EnablePane();
 
-        // todo re enable proper shit here
-
-        //Reading newReading = _collector.GetReading();
-        //_dataModel.AddNewReading(newReading); // TODO fix. Commented because currently crashing shit
     }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+
+                    if (_currentPatient == null) {
+                        // set slider to select mode (button clicks will trigger a dialog confirming they want to save to this patient)
+                        SliderFragment sliderFrag = (SliderFragment) getFragmentManager().findFragmentById(R.id.fragment_firstpane);
+                        sliderFrag.SetSelectMode(true);
+                        _mainActivity._OpenPane();
+                        _mainActivity.DisablePane();
+                    }
+                    else
+                    {
+                        try
+                        {
+                            //Reading newReading = _collector.GetReading();
+                            //_dataModel.AddNewReading(newReading); // TODO fix. Commented because currently crashing shit
+                            Reading r = new Reading();
+                            _dataModel.AddNewReading(r);
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE: // Delete this reading.
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

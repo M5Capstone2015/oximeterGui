@@ -1,7 +1,9 @@
 package com.example.m5.oximetergui.Activities.MainActivity;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,7 @@ import com.example.m5.oximetergui.Activities.NewPatient;
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.PatientAdapter;
 import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.R;
@@ -34,18 +37,15 @@ public class SliderFragment extends Fragment {
     ListView _patientsList;
     PatientModel _model;
     PatientAdapter adapter;
+    private Patient _currentPatient = null;
 
-    public void EnableClick()
+    private boolean _selectMode = false;
+
+    public void SetSelectMode(boolean mode)
     {
-        if (adapter != null)
-            adapter.EnableClicking();
+        _selectMode = mode;
     }
 
-    public void DisableClick()
-    {
-        if (adapter != null)
-            adapter.DisableClicking();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,9 +97,48 @@ public class SliderFragment extends Fragment {
             Patient selectedItem = (Patient) list.getAdapter().getItem(position);
 
             Log.d("PatientList", "You clicked " + selectedItem.FirstName + " " + selectedItem.LastName + " at position " + position);
+
+            if (_selectMode)
+            {
+                _currentPatient = selectedItem;
+                // pop up dialog saying
+                AlertDialog.Builder builder = new AlertDialog.Builder(_mainActivity);
+                builder.setMessage("Save reading to " + selectedItem.GetFullName() + "?").setPositiveButton("Yea Bruh", dialogClickListener)
+                        .setNegativeButton("Naw Bruh", dialogClickListener).show();
+                return;
+            }
+
             MainScreenFrag mainScreen = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
             mainScreen.LogInPatient(selectedItem);
 
+        }
+    };
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+
+                    // save shit here.
+                    // if succesfull
+                    Reading r = new Reading();
+                    //_dataModel.AddNewReading(11);
+
+                    try {
+                        SetSelectMode(false);
+                        MainScreenFrag main = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
+                        main.LogInPatient(_currentPatient);
+                        _mainActivity.ClosePane();
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE: // Delete this reading.
+                    break;
+            }
         }
     };
 

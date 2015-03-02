@@ -53,6 +53,7 @@ public class Slider extends SlidingPaneLayout {
         if (!_activated) {
             // Careful here, view might be null
             getChildAt(1).dispatchTouchEvent(ev);
+            getChildAt(0).dispatchTouchEvent(ev);
             return true;
         }
         return super.onTouchEvent(ev);
