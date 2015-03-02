@@ -125,6 +125,7 @@ public class MainScreenFrag extends Fragment {
                 .setNegativeButton("Naw Bruh", dialogClickListener); //.show();
 
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
 
         _mainActivity.EnablePane();

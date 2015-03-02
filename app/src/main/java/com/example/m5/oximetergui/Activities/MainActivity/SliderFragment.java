@@ -89,27 +89,32 @@ public class SliderFragment extends Fragment {
 
     private AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> list, View view, int position, long i){
+        public void onItemClick(AdapterView<?> list, View view, int position, long i) {
 
             if (!_mainActivity.IsOpen()) // For some reason this click event fires when the pane is closed for somereason.
                 return;
 
-            Patient selectedItem = (Patient) list.getAdapter().getItem(position);
+            Patient selectedPatient = (Patient) list.getAdapter().getItem(position);
 
-            Log.d("PatientList", "You clicked " + selectedItem.FirstName + " " + selectedItem.LastName + " at position " + position);
+            Log.d("PatientList", "You clicked " + selectedPatient.FirstName + " " + selectedPatient.LastName + " at position " + position);
 
             if (_selectMode)
             {
-                _currentPatient = selectedItem;
-                // pop up dialog saying
+                _currentPatient = selectedPatient;
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(_mainActivity);
-                builder.setMessage("Save reading to " + selectedItem.GetFullName() + "?").setPositiveButton("Yea Bruh", dialogClickListener)
-                        .setNegativeButton("Naw Bruh", dialogClickListener).show();
+                builder.setMessage("Save reading to " + selectedPatient.GetFullName() + "?").setPositiveButton("Yea Bruh", dialogClickListener)
+                        .setNegativeButton("Naw Bruh", dialogClickListener); // .show();
+
+                AlertDialog dialog = builder.create();
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+
                 return;
             }
 
             MainScreenFrag mainScreen = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
-            mainScreen.LogInPatient(selectedItem);
+            mainScreen.LogInPatient(selectedPatient);
 
         }
     };
@@ -130,6 +135,7 @@ public class SliderFragment extends Fragment {
                         MainScreenFrag main = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
                         main.LogInPatient(_currentPatient);
                         _mainActivity.ClosePane();
+                        _mainActivity.EnablePane();
                     }
                     catch (Exception e)
                     {
