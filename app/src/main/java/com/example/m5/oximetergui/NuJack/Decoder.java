@@ -1,40 +1,20 @@
 package com.example.m5.oximetergui.NuJack;
 
-import com.example.m5.oximetergui.Constants.General_Constants;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Hunt on 2/3/2015.
+ * Created by Hunt on 1/28/2015.
  */
-public class Decoder {
+public class Decoder{
 
     int counter0 = 0;
     int counter1 = 0;
     int counter2 = 0;
     int startflag = 0;
-    boolean _foundData = false;
+    public List<Integer> bitlist = new ArrayList<Integer>();
 
-    public List<Integer> bitlist = new ArrayList<>();
-
-    public List<Integer> HandleData(List<Integer> freqs)
-    {
-        for (Integer i : freqs)
-            this.HandleBit(i);
-        if (_foundData)
-            return bitlist; // TODO change this return nullable Integer
-        else
-            return null;
-    }
-
-    public void Reset()
-    {
-        // reset all counters/flags
-        // reset sum average and avg frame
-    }
-
-    private void HandleBit(int transition)
+    public void HandleBit(int transition)
     {
         updateAverage(transition);
         float freq = checkFreq(_movingAverage);
@@ -63,6 +43,7 @@ public class Decoder {
             counter2 = 0;
             if (counter1 == 15)
             {
+                //bitlist.clear();
                 System.out.println("TWO_30");
                 counter1 = 0;
                 startflag = 1;
@@ -71,6 +52,7 @@ public class Decoder {
         else if (freq == 2) {
             counter0 = 0;
             counter1 = 0;
+
             counter2 = counter2 + 1;
             if (8 == counter2) {
                 if (startflag == 1) {
@@ -86,17 +68,88 @@ public class Decoder {
                 }
             }
         }
-        if (bitlist.size() == 8) {
+        if (bitlist.size() == 8)
+        {
             startflag = 0;
-            System.out.println("----WHOLE BIT----");
-            for (Integer i : bitlist)
-                System.out.println("\t" + i);
-            _foundData = true;
-            return; // TODO Think through what should happen to rest of reading.
-            // _listener.HandleData(data);
-            //bitlist.clear();
+
+            _readCount++;
+
+            /* ---------------------------------------- */
+            _readings.clear();
+            _foundBit = true;
+            readingData = convertBitsToString();
+            if (_foundBit)
+                return;
+            /* ---------------------------------------- */
+
+            String newReading = convertBitsToString();
+            _readings.add(newReading);
+
+            bitlist.clear();
+
+            if(_readings.size() < 3)
+                return;
+
+            _readings.remove(0);
+
+            String reading1 = _readings.get(0);
+            String reading2 = _readings.get(1);
+            String reading3 = _readings.get(2);
+
+            if (_readings.get(0).equals(_readings.get(1)) || _readings.get(0).equals(_readings.get(2)))
+            {
+                _foundBit = true;
+                readingData = reading1;
+            }
+            else if ( _readings.get(1).equals(_readings.get(2))) {
+//            do some shit here.
+                //   System.out.println("----WHOLE BIT----");
+                // for (Integer i : bitlist)
+                //   System.out.println("\t" + i);
+                _foundBit = true;
+                readingData = reading3;
+                _readCount = 0;
+                //bitlist.clear();
+            }
         }
     }
+
+    private String readingData = "";
+    private String reading1 = "";
+    private String reading2 = "";
+    private String reading3 = "";
+
+    boolean _foundBit = false;
+    public String HandleData(List<Integer> data)
+    {
+        List<Integer> fakeList = new ArrayList<Integer>();
+        fakeList.add(1);
+        fakeList.add(1);
+        fakeList.add(1);
+        fakeList.add(0);
+        fakeList.add(1);
+        fakeList.add(0);
+        fakeList.add(0);
+        fakeList.add(1);
+
+        for (Integer i : data) {
+            this.HandleBit(i);
+            if (_foundBit)
+                return nuByte.convertBits(bitlist);
+            //return "Read:  " + readingData;
+        }
+        //return ":(";
+        return nuByte.convertBits(fakeList);
+        //return "";
+    }
+
+    private String convertBitsToString() {
+        String accum = "";
+        for (Integer i : bitlist)
+            accum += String.valueOf(i);
+        return accum;
+    }
+
 
     private float checkFreq(float number)
     {
@@ -109,20 +162,27 @@ public class Decoder {
         return number;
     }
 
+    private List<String> _readings = new ArrayList<>();
+
+    private int _readCount = 0;
+
+
+    private int _count = 0;
     private int _sum = 0;
     private float _movingAverage = 0.0f;
-    private List<Integer> dataStack = new ArrayList<>();
+    private List<Integer> dataStack = new ArrayList<Integer>();
 
     private void updateAverage(int newNum)
     {
         dataStack.add(newNum);
 
-        if (dataStack.size() > General_Constants.DecoderRollingAvgLength)
+        if (dataStack.size() > 5)
         {
-            _sum -= dataStack.get(0); // Update the sum to no longer include the old head number
+            int firstNum = dataStack.get(0); // Get first number in stack
+            _sum -= firstNum; // Subtract it from sum
             dataStack.remove(0); // Remove first number from stack
         }
         _sum += newNum; // Add new tail to sum
-        _movingAverage = (float) _sum / (float) General_Constants.DecoderRollingAvgLength; // Recalc average
+        _movingAverage = (float) _sum / (float) 5; // Recalc average
     }
 }

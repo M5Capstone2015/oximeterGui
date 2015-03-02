@@ -20,6 +20,7 @@ import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
+import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
 
 /**
@@ -123,7 +124,6 @@ public class MainScreenFrag extends Fragment {
         ShowDialog();
 
         _mainActivity.EnablePane();
-
     }
 
     private void ShowDialog()
@@ -193,6 +193,15 @@ public class MainScreenFrag extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            _nuJack = new NuJack(_dataAvailableListner);
+            _nuJack.Start();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -225,6 +234,34 @@ public class MainScreenFrag extends Fragment {
 
         percent = (TextView) v.findViewById(R.id.percentView);
     }
+
+
+    OnDataAvailableListener _dataAvailableListner = new OnDataAvailableListener() {
+        @Override
+        public void DataAvailable(final String data) {
+            // do gui things here.
+
+            if (_recording)
+            {
+                // log stuff
+            }
+
+            try
+            {
+                _mainActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        percent.setText(data + "%");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    };
+
 
     private OnClickListener startButtonListener = new OnClickListener() {
 

@@ -1,11 +1,18 @@
 package com.example.m5.oximetergui.NuJack;
 
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Hunt on 2/9/2015.
  */
 public class NuJack {
+
+    private AudioRecord _aru;
 
     private AudioReceiver _audioReceiver;
     private AudioSender _audioSender;
@@ -22,6 +29,10 @@ public class NuJack {
         _audioSender = new AudioSender();
         _decoder = new Decoder();
         _listener = listener;
+        _aru = findAudioRecord();
+        int recBufferSize =
+                AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        buffer = new short[recBufferSize * 10];
     }
 
     public void Start()
@@ -40,8 +51,11 @@ public class NuJack {
 
         // Start power source
         _outputThread = new Thread(_outputProcessor);
-        _outputThread.start();
+        //_outputThread.start();
     }
+
+    short[] buffer = null;
+
 
     Runnable _inputProcessor = new Runnable() {
 
@@ -51,12 +65,20 @@ public class NuJack {
 
             while (_running)
             {
-                List<Integer> data = _audioReceiver.Read(1);
-                List<Integer> result = _decoder.HandleData(data);
+                int shortsRead = _aru.read(buffer, 0, buffer.length);
 
-                if (result != null && result.size() == 8) {  // TODO refactor this to Integer obj
-                    _listener.DataAvailable(convertBitsToString(result));
+                List<Short> rawData = new ArrayList<>();
+                for (int i = 0; i < shortsRead; i++) { // Copy data from buffer into stack.
+                    rawData.add(buffer[i]);
                 }
+
+                List<Integer> freqs = _audioReceiver.fakeAudioRead(rawData);
+
+                //List<Integer> data = _audioReceiver.Read(1);
+                String result = _decoder.HandleData(freqs);
+
+                if (result != null || result != "")
+                    _listener.DataAvailable(result);
             }
         }
 
@@ -100,6 +122,36 @@ public class NuJack {
         {
             e.printStackTrace();
         }
+    }
+
+    private static int[] mSampleRates = new int[] {44100, 22050, 11025, 8000};
+    private AudioRecord findAudioRecord()
+    {
+        for (int rate : mSampleRates)
+        {
+            for (short audioFormat : new short[] { AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_16BIT })
+            {
+                for (short channelConfig : new short[] { AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO })
+                {
+                    try {
+                        //Log.d(C.TAG, "Attempting rate " + rate + "Hz, bits: " + audioFormat + ", channel: "
+                        //+ channelConfig);
+                        int bufferSize = AudioRecord.getMinBufferSize(rate, channelConfig, audioFormat);
+
+                        if (bufferSize != AudioRecord.ERROR_BAD_VALUE) {
+                            // check if we can instantiate and have a success
+                            AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, rate, channelConfig, audioFormat, bufferSize);
+
+                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED)
+                                return recorder;
+                        }
+                    } catch (Exception e) {
+                        //Log.e(C.TAG, rate + "Exception, keep trying.",e);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public void RegisterListener(OnDataAvailableListener listener)

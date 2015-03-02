@@ -125,9 +125,7 @@ public class SliderFragment extends Fragment {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
 
-                    // save shit here.
-                    // if succesfull
-                    Reading r = new Reading();
+                    Reading r = new Reading();  // save new reading.
                     //_dataModel.AddNewReading(11);
 
                     try {
