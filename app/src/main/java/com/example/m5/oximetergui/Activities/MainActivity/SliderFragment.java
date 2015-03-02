@@ -30,7 +30,7 @@ import java.util.List;
 
 public class SliderFragment extends Fragment {
 
-    private MainScreenFrag _mainScreenFrag;
+    private MainScreenFrag _mainScreenFrag;  // todo organize these.
     private MainActivity _mainActivity;
     private View newPatientButton;
     ArrayList<Patient> _patients = new ArrayList<Patient>();

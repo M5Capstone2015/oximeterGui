@@ -19,25 +19,13 @@ import java.util.ArrayList;
 
 public class NewPatient extends Activity implements View.OnClickListener {
 
-    RelativeLayout mMainLayout = null;
-    ArrayList<String> mPatientInfo = new ArrayList<String>();
     Patient mPatient = new Patient();
     PatientInfoHelper _helper = new PatientInfoHelper(this, this);
-    boolean _editmode = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent i = getIntent();
-        //Bundle extras = i.getExtras();
-        //if (extras!=null) {
-            //mPatient = extras.getParcelable(Intent_Constants.NamePatient);
-            //_helper.ConstructExistingLayout(mPatient);
-        //}
-        //else {
-            _helper.ConstructMainLayout();
-        //}
+        _helper.ConstructMainLayout();
     }
 
     public void onClick(View v) {
@@ -49,11 +37,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
                 mPatient = _helper.ConstructPatient();
 
                 if (!mPatient.Validate())
-                {
                     _helper.createErrorMessage();
-                }
-
-                //If contains first and last name, exit screen
                 else
                 {
                     Intent i = new Intent();

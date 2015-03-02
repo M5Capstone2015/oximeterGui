@@ -67,7 +67,7 @@ public class MainScreenFrag extends Fragment {
     private void PatientListClick()
     {
         if (!_recording)
-            _mainActivity._OpenPane();
+            _mainActivity.OpenPane();
     }
 
     private void SetViewVisible(View v)
@@ -120,6 +120,14 @@ public class MainScreenFrag extends Fragment {
         stopButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
 
+        ShowDialog();
+
+        _mainActivity.EnablePane();
+
+    }
+
+    private void ShowDialog()
+    {
         AlertDialog.Builder builder = new AlertDialog.Builder(_mainActivity);
         builder.setMessage("You want to save this here data?").setPositiveButton("Yea Bruh", dialogClickListener)
                 .setNegativeButton("Naw Bruh", dialogClickListener); //.show();
@@ -127,9 +135,6 @@ public class MainScreenFrag extends Fragment {
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.show();
-
-        _mainActivity.EnablePane();
-
     }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -142,7 +147,7 @@ public class MainScreenFrag extends Fragment {
                         // set slider to select mode (button clicks will trigger a dialog confirming they want to save to this patient)
                         SliderFragment sliderFrag = (SliderFragment) getFragmentManager().findFragmentById(R.id.fragment_firstpane);
                         sliderFrag.SetSelectMode(true);
-                        _mainActivity._OpenPane();
+                        _mainActivity.OpenPane();
                         _mainActivity.DisablePane();
                     }
                     else
@@ -172,6 +177,7 @@ public class MainScreenFrag extends Fragment {
         if (resultCode == Activity.RESULT_OK)
         {
             Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
+
             Log.d("PatientListSlider", patientData.FirstName);
             Log.d("PatientListSlider", patientData.LastName);
 

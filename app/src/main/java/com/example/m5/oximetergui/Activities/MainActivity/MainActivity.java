@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
         return pane.isOpen();
     }
 
-    public void _OpenPane()
+    public void OpenPane()
     {
         pane.openPane();
     }
