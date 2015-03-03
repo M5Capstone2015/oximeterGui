@@ -25,6 +25,7 @@ public class Reading {
     }
 
     public int ID;
+    public int PatientID;
     public String StartDate = "";
     public String EndDate = "";
     public String DataString = "";

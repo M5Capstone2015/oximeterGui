@@ -65,35 +65,34 @@ public class NuJack {
 
             while (_running)
             {
-                _aru.startRecording();
-                int shortsRead = _aru.read(buffer, 0, buffer.length);
+                try
+                {
+                    _aru.startRecording();
+                    int shortsRead = _aru.read(buffer, 0, buffer.length);
 
-                List<Short> rawData = new ArrayList<>();
-                for (int i = 0; i < shortsRead; i++) { // Copy data from buffer into stack.
-                    rawData.add(buffer[i]);
-                }
+                    List<Short> rawData = new ArrayList<>();
+                    for (int i = 0; i < shortsRead; i++) { // Copy data from buffer into stack.
+                        rawData.add(buffer[i]);
+                    }
 
-                List<Integer> freqs = _audioReceiver.fakeAudioRead(rawData);
+                    List<Integer> freqs = _audioReceiver.fakeAudioRead(rawData);
 
-                Decoder dec = new Decoder();
+                    Decoder dec = new Decoder();
 
-                //List<Integer> data = _audioReceiver.Read(1);
-                StringBuilder sb = new StringBuilder();
-                //boolean result = _decoder.HandleData(freqs, sb);
-                boolean result = dec.HandleData(freqs, sb);
+                    //List<Integer> data = _audioReceiver.Read(1);
+                    StringBuilder sb = new StringBuilder();
+                    //boolean result = _decoder.HandleData(freqs, sb);
+                    boolean result = dec.HandleData(freqs, sb);
 
-                if (result)
-                    _listener.DataAvailable(sb.toString());
+                    if (result)
+                        _listener.DataAvailable(sb.toString());
 
-
-                try {
                     Thread.sleep(300); // Take a reading every 0.3 seconds.
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
-
             }
         }
 

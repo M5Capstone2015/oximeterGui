@@ -97,6 +97,7 @@ public class MainScreenFrag extends Fragment {
 
     public void StartRecording()
     {
+        _collector.Restart();
         _recording = true;
 
         startButton.setVisibility(View.INVISIBLE);
@@ -142,10 +143,12 @@ public class MainScreenFrag extends Fragment {
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
+            switch (which)
+            {
                 case DialogInterface.BUTTON_POSITIVE:
 
-                    if (_currentPatient == null) {
+                    if (_currentPatient == null)
+                    {
                         // set slider to select mode (button clicks will trigger a dialog confirming they want to save to this patient)
                         SliderFragment sliderFrag = (SliderFragment) getFragmentManager().findFragmentById(R.id.fragment_firstpane);
                         sliderFrag.SetSelectMode(true);
@@ -154,17 +157,7 @@ public class MainScreenFrag extends Fragment {
                     }
                     else
                     {
-                        try
-                        {
-                            //Reading newReading = _collector.GetReading();
-                            //_dataModel.AddNewReading(newReading); // TODO fix. Commented because currently crashing shit
-                            Reading r = new Reading();
-                            _dataModel.AddNewReading(r);
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
+                        SaveReading();
                     }
                     break;
 
@@ -173,6 +166,20 @@ public class MainScreenFrag extends Fragment {
             }
         }
     };
+
+    public void SaveReading()
+    {
+        Reading r = _collector.GetReading();
+        try
+        {
+            r.PatientID = _currentPatient.ID;
+            _dataModel.AddNewReading(r);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -191,9 +198,15 @@ public class MainScreenFrag extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
+        try
+        {
+            _dataModel = new DataModel(getActivity());
             _nuJack = new NuJack(_dataAvailableListner);
             _nuJack.Start();
+
+            Thread thread = new Thread(_fakeReader);
+            thread.start();
+            _collector = new ReadingCollector();
         }
         catch (Exception e)
         {
@@ -262,7 +275,6 @@ public class MainScreenFrag extends Fragment {
     };
 
     // Keeping the below uncommented for testing reader classes later on.
-    /*
     int count = 1;
 
     private Runnable _fakeReader = new Runnable() {
@@ -270,15 +282,19 @@ public class MainScreenFrag extends Fragment {
         public void run() {
             while (true) {
                 count++;
-                try {
+                try
+                {
+                    if (_recording)
+                        _collector.AddNewData(count);
+
                     _mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        percent.setText(count + "%");
+                        //percent.setText(count + "%");
                     }
                 });
                     //percent.setText(count + "%");
-                    Thread.sleep(500);
+                    Thread.sleep(50);
                 }
                 catch (Exception e)
                 {
@@ -287,7 +303,6 @@ public class MainScreenFrag extends Fragment {
             }
         }
     };
-    */
 
 
     private OnClickListener startButtonListener = new OnClickListener() {

@@ -107,6 +107,7 @@ public class DataModel {
         //values.put(SQL_Constants.DATA_ENDDATE_COLUMN, data.EndDate);
         values.put(SQL_Constants.DATA_READINGDATA_COLUMN, data.DataString);
         values.put(SQL_Constants.DATA_ISSYNCED_COLUMN, data.IsSynced ? 1 : 0);
+        values.put("patient_id", data.PatientID);
         db.insertOrThrow(SQL_Constants.DATA_TABLE_NAME, null, values);
 
         return true;

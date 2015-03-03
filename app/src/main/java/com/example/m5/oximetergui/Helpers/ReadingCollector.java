@@ -19,9 +19,12 @@ public class ReadingCollector {
         _averageCount++;
         _sum += newData;
 
-        _average = _sum / (General_Constants.baudRate * General_Constants.RollingAverageLength);
+        //_average = _sum / (General_Constants.baudRate * General_Constants.RollingAverageLength);
+        _average = _sum / (float) _averageCount;
 
-        if (_averageCount == General_Constants.baudRate * General_Constants.RollingAverageLength) {
+        //if (_averageCount == General_Constants.baudRate * General_Constants.RollingAverageLength) {
+        if (_averageCount == 33)
+        {
             dataString += ("\n" + _average);
             ResetAverages();
         }
