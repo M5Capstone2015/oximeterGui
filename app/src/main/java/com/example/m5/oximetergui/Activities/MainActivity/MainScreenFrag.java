@@ -183,12 +183,7 @@ public class MainScreenFrag extends Fragment {
             Log.d("PatientListSlider", patientData.FirstName);
             Log.d("PatientListSlider", patientData.LastName);
 
-            //_patients.add(patientData); // TODO need to implement this for UPDATE as well.
-            //PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
-            //_patientsList.setAdapter(pAdapter);
-
-            //StringBuilder sb = new StringBuilder();
-            //_model.AddPatient(patientData, sb);
+            //_patients.add(patientData); // TODO if patient name is updated or delete update GUI accordingly
         }
     }
 
