@@ -7,6 +7,11 @@ public final class General_Constants {
     public static int baudRate = 3; // Reads/second
     public static int RollingAverageLength = 10;  // # of seconds in rolling average
 
+    public static String AskUserToSaveData = "Save this reading?";
+    public static String ConfirmSaveToPatient = "Save data to patient %s?";
+    public static String Yes = "Yes";
+    public static String No = "No";
+
 
 
     public static final int MODIFY_PATIENT = 1;

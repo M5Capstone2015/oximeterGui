@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.m5.oximetergui.Activities.PatientInfo;
+import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
@@ -34,7 +35,7 @@ public class MainScreenFrag extends Fragment {
 
     // --- Helpers/Model --- //
     ReadingCollector _collector = null;  // TODO wrap all this (minus NuJack) in an object for easy serialization.
-    NuJack _nuJack = null; // TODO disable horizontal screen orientation
+    NuJack _nuJack = null;
     private DataModel _dataModel = null;
 
     // --- View state Objects --- //
@@ -106,12 +107,12 @@ public class MainScreenFrag extends Fragment {
 
     private void PatientInfo()
     {
-        if (_recording) // todo just make button invisible instead.
+        if (_recording) // todo add graphical que that this button is disabled.
             return;
 
         Intent i = new Intent(_mainActivity, PatientInfo.class);
         i.putExtra(Intent_Constants.Patient_To_Edit, _currentPatient);
-        startActivityForResult(i, 1);  // We actually care about the req code, just user was deleted or not.
+        startActivityForResult(i, 1);  // We only care about the req code, just if user was deleted or not.
     }
 
     private void StopRecording()
@@ -129,8 +130,9 @@ public class MainScreenFrag extends Fragment {
     private void ShowDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(_mainActivity);
-        builder.setMessage("You want to save this here data?").setPositiveButton("Yea Bruh", dialogClickListener)
-                .setNegativeButton("Naw Bruh", dialogClickListener); //.show();
+        builder.setMessage(General_Constants.AskUserToSaveData)
+                .setPositiveButton(General_Constants.Yes, dialogClickListener)
+                .setNegativeButton(General_Constants.No, dialogClickListener);
 
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
@@ -264,6 +266,7 @@ public class MainScreenFrag extends Fragment {
         }
     };
 
+    // Keeping the below uncommented for testing reader classes later on.
     /*
     int count = 1;
 

@@ -102,9 +102,11 @@ public class SliderFragment extends Fragment {
             {
                 _currentPatient = selectedPatient;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(_mainActivity);
-                builder.setMessage("Save reading to " + selectedPatient.GetFullName() + "?").setPositiveButton("Yea Bruh", dialogClickListener)
-                        .setNegativeButton("Naw Bruh", dialogClickListener); // .show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(_mainActivity); // todo move this to seperate function
+
+                builder.setMessage(String.format(General_Constants.ConfirmSaveToPatient, selectedPatient.GetFullName()))
+                       .setPositiveButton(General_Constants.Yes, dialogClickListener)
+                       .setNegativeButton(General_Constants.No, dialogClickListener);
 
                 AlertDialog dialog = builder.create();
                 dialog.setCanceledOnTouchOutside(false);
@@ -128,7 +130,8 @@ public class SliderFragment extends Fragment {
                     Reading r = new Reading();  // save new reading.
                     //_dataModel.AddNewReading(11);
 
-                    try {
+                    try
+                    {
                         SetSelectMode(false);
                         MainScreenFrag main = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
                         main.LogInPatient(_currentPatient);
