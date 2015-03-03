@@ -130,6 +130,7 @@ public class Decoder{
             }
         }
         //return ":(";
+        //res.append("Your beat!");
         return false;
     }
 

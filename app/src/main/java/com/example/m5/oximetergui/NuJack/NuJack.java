@@ -65,6 +65,7 @@ public class NuJack {
 
             while (_running)
             {
+                _aru.startRecording();
                 int shortsRead = _aru.read(buffer, 0, buffer.length);
 
                 List<Short> rawData = new ArrayList<>();
@@ -74,9 +75,12 @@ public class NuJack {
 
                 List<Integer> freqs = _audioReceiver.fakeAudioRead(rawData);
 
+                Decoder dec = new Decoder();
+
                 //List<Integer> data = _audioReceiver.Read(1);
                 StringBuilder sb = new StringBuilder();
-                boolean result = _decoder.HandleData(freqs, sb);
+                //boolean result = _decoder.HandleData(freqs, sb);
+                boolean result = dec.HandleData(freqs, sb);
 
                 if (result)
                     _listener.DataAvailable(sb.toString());

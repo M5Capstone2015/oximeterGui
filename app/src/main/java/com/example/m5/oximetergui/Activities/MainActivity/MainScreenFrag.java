@@ -238,7 +238,7 @@ public class MainScreenFrag extends Fragment {
 
     OnDataAvailableListener _dataAvailableListner = new OnDataAvailableListener() {
         @Override
-        public void DataAvailable(final String data) {
+        public void DataAvailable(String data) {
             // do gui things here.
 
             if (_recording)
@@ -248,12 +248,15 @@ public class MainScreenFrag extends Fragment {
 
             try
             {
+                percent.setText(data + "%");
+                /*
                 _mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         percent.setText(data + "%");
                     }
                 });
+                */
             }
             catch (Exception e)
             {
