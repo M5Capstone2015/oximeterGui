@@ -15,6 +15,7 @@ import com.example.m5.oximetergui.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
@@ -71,6 +72,13 @@ public class PatientInfo extends ActionBarActivity {
         lines.add(line);
 
         LineChartData data = new LineChartData(lines);
+        Axis axisX = new Axis();
+        Axis axisY = new Axis().setHasLines(true);
+        axisX.setName("Axis X");
+        axisY.setName("Axis Y");
+        data.setAxisXBottom(axisX);
+        data.setAxisYLeft(axisY);
+
         chart.setLineChartData(data);
     }
 
