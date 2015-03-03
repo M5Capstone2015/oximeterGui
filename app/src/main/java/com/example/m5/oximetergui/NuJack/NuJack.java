@@ -81,6 +81,7 @@ public class NuJack {
                 if (result)
                     _listener.DataAvailable(sb.toString());
 
+                /*
                 try {
                     Thread.sleep(3000);
                 }
@@ -88,6 +89,7 @@ public class NuJack {
                 {
                     e.printStackTrace();
                 }
+                */
             }
         }
 
