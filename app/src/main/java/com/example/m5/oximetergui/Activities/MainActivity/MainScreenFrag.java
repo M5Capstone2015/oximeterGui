@@ -236,10 +236,12 @@ public class MainScreenFrag extends Fragment {
     }
 
 
+    public String data = "";
     OnDataAvailableListener _dataAvailableListner = new OnDataAvailableListener() {
         @Override
-        public void DataAvailable(String data) {
-            // do gui things here.
+        public void DataAvailable(String _data) {
+
+            _mainScreenFrag.data = _data; // todo check if this sloppy shit is necessary.
 
             if (_recording)
             {
@@ -248,15 +250,12 @@ public class MainScreenFrag extends Fragment {
 
             try
             {
-                percent.setText(data + "%");
-                /*
                 _mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         percent.setText(data + "%");
                     }
                 });
-                */
             }
             catch (Exception e)
             {
@@ -264,6 +263,33 @@ public class MainScreenFrag extends Fragment {
             }
         }
     };
+
+    /*
+    int count = 1;
+
+    private Runnable _fakeReader = new Runnable() {
+        @Override
+        public void run() {
+            while (true) {
+                count++;
+                try {
+                    _mainActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        percent.setText(count + "%");
+                    }
+                });
+                    //percent.setText(count + "%");
+                    Thread.sleep(500);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+    */
 
 
     private OnClickListener startButtonListener = new OnClickListener() {

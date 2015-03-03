@@ -25,7 +25,7 @@ public class nuByte
             _count++;
         }
         float res = ((float) _value + 750 ) / 10;
-        return String.valueOf(res);
+        return String.format("%.1f", res);
     }
 
     public float intVal()
