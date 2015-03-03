@@ -56,10 +56,6 @@ public class SliderFragment extends Fragment {
         _selectMode = mode;
     }
 
-
-    // ----------------------------------------------------------------- //
-    // ------------------------ Activity Events ------------------------ //
-    // ----------------------------------------------------------------- //
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

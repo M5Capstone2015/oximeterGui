@@ -87,7 +87,7 @@ public class NuJack {
 
 
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(300); // Take a reading every 0.3 seconds.
                 }
                 catch(Exception e)
                 {
