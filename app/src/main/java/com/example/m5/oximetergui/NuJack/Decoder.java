@@ -120,27 +120,17 @@ public class Decoder{
     private String reading3 = "";
 
     boolean _foundBit = false;
-    public String HandleData(List<Integer> data)
+    public boolean HandleData(List<Integer> data, StringBuilder res)
     {
-        List<Integer> fakeList = new ArrayList<Integer>();
-        fakeList.add(1);
-        fakeList.add(1);
-        fakeList.add(1);
-        fakeList.add(0);
-        fakeList.add(1);
-        fakeList.add(0);
-        fakeList.add(0);
-        fakeList.add(1);
-
         for (Integer i : data) {
             this.HandleBit(i);
-            if (_foundBit)
-                return nuByte.convertBits(bitlist);
-            //return "Read:  " + readingData;
+            if (_foundBit) {
+                res.append(nuByte.convertBits(bitlist));
+                return true;
+            }
         }
         //return ":(";
-        //return nuByte.convertBits(fakeList);
-        return "";
+        return false;
     }
 
     private String convertBitsToString() {

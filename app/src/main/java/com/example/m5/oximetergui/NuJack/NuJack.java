@@ -75,10 +75,19 @@ public class NuJack {
                 List<Integer> freqs = _audioReceiver.fakeAudioRead(rawData);
 
                 //List<Integer> data = _audioReceiver.Read(1);
-                String result = _decoder.HandleData(freqs);
+                StringBuilder sb = new StringBuilder();
+                boolean result = _decoder.HandleData(freqs, sb);
 
-                if (result != null || result != "")
-                    _listener.DataAvailable(result);
+                if (result)
+                    _listener.DataAvailable(sb.toString());
+
+                try {
+                    Thread.sleep(3000);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
 
