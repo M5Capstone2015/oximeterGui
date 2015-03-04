@@ -62,7 +62,7 @@ public class PatientInfo extends ActionBarActivity {
             txt += (r.EndDate + "\n");
 
         dataVeiw.setText(txt);
-        //addChart();
+        addChart();
     }
 
     private LineChartView chart;
@@ -121,15 +121,36 @@ public class PatientInfo extends ActionBarActivity {
 
     public void slideDown(View v)
     {
-
         //addChart();
-        addChart();
-        chart.setVisibility(View.VISIBLE);
-        slide_down(this, chart);
+        if (chart.getVisibility() == View.GONE)
+        {
+            chart.setVisibility(View.VISIBLE);
+            slide_down(this, chart);
+        }
+        else
+        {
+            slide_up(this, chart);
+            chart.setVisibility(View.GONE);
+        }
+        //addChart();
     }
 
     public static void slide_down(Context ctx, View v) {
         Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
+        if (a != null)
+        {
+            a.reset();
+            if (v != null)
+            {
+                v.clearAnimation();
+                v.startAnimation(a);
+            }
+        }
+    }
+
+    public static void slide_up(Context ctx, View v)
+    {
+        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_up);
         if (a != null)
         {
             a.reset();
