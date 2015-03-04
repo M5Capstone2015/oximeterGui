@@ -29,15 +29,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="DATA HERE"
-        android:id="@+id/textView2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Age"
         android:id="@+id/agetextview"
         android:layout_below="@+id/name"
@@ -46,28 +37,21 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:id="@+id/graphContainer"
+        android:id="@+id/cont"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"></LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageView">
+        <ListView
+            android:id="@+id/readings"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"></ListView>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button"
-            android:onClick="slideDown"
-            android:layout_gravity="center_horizontal" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/dataView"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true" />
+        </LinearLayout>
 
 </RelativeLayout>

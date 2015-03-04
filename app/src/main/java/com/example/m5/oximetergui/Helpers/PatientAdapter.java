@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -20,24 +21,11 @@ public class PatientAdapter extends BaseAdapter
     private LayoutInflater mInflater;
     private List<Patient> mPatients;
 
-    private boolean clickingEnabled;
-
-    public void DisableClicking()
-    {
-        this.clickingEnabled = false;
-    }
-
-    public void EnableClicking()
-    {
-        this.clickingEnabled = true;
-    }
-
     public PatientAdapter(Context context, List<Patient> patients){
         mInflater = LayoutInflater.from(context);
         mPatients = patients;
     }
 
-    @Override
     public int getCount() {
         return mPatients.size();
     }
@@ -50,7 +38,6 @@ public class PatientAdapter extends BaseAdapter
     @Override
     public boolean isEnabled(int position)
     {
-        //return clickingEnabled;
         return true;
     }
 
