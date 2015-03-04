@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.Data_Objects.Reading;
+import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.R;
 
 import java.util.ArrayList;
@@ -36,11 +38,27 @@ public class PatientInfo extends ActionBarActivity {
         _name = (TextView) findViewById(R.id.name);
         _age = (TextView) findViewById(R.id.agetextview);
 
-        Patient patientData = getIntent().getParcelableExtra(Intent_Constants.Patient_To_Edit);
+        Patient patientData = null;
+        try {
+            patientData = getIntent().getParcelableExtra(Intent_Constants.Patient_To_Edit);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         _name.setText(patientData.FirstName + " " + patientData.LastName);
         _age.setText("Age: " + patientData.DateOfBirth);
 
-        addChart();
+        TextView dataVeiw = (TextView) findViewById(R.id.dataView);
+        DataModel _dataModel = new DataModel(this);
+        List<Reading> readings = _dataModel.GetDataByPatientID(patientData.ID);
+
+        String txt = "";
+        for (Reading r : readings)
+            txt += (r.EndDate + "\n");
+
+        dataVeiw.setText(txt);
+        //addChart();
     }
 
     private void addChart()

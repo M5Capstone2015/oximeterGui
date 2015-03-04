@@ -65,7 +65,8 @@ public class DataModel {
             int ID = cursor.getInt(0);
             String startTime = cursor.getString(1);
             String endTime = cursor.getString(2);
-            String dataString = cursor.getString(3);
+            int patientID = cursor.getInt(3);
+            String dataString = cursor.getString(4);
             readings.add(new Reading(ID, startTime, endTime, dataString));
         }
 
@@ -108,6 +109,7 @@ public class DataModel {
         values.put(SQL_Constants.DATA_READINGDATA_COLUMN, data.DataString);
         values.put(SQL_Constants.DATA_ISSYNCED_COLUMN, data.IsSynced ? 1 : 0);
         values.put("patient_id", data.PatientID);
+        values.put("end_date", data.EndDate);
         db.insertOrThrow(SQL_Constants.DATA_TABLE_NAME, null, values);
 
         return true;
