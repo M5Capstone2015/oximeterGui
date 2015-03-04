@@ -32,7 +32,7 @@ public class PatientInfo extends ActionBarActivity {
 
     TextView _name;
     TextView _age;
-
+    List<Reading> readings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,19 +49,20 @@ public class PatientInfo extends ActionBarActivity {
         {
             e.printStackTrace();
         }
+
         _name.setText(patientData.FirstName + " " + patientData.LastName);
         _age.setText("Age: " + patientData.DateOfBirth);
 
         TextView dataVeiw = (TextView) findViewById(R.id.dataView);
         DataModel _dataModel = new DataModel(this);
-        List<Reading> readings = _dataModel.GetDataByPatientID(patientData.ID);
+        readings = _dataModel.GetDataByPatientID(patientData.ID);
 
         String txt = "";
         for (Reading r : readings)
             txt += (r.EndDate + "\n");
 
         dataVeiw.setText(txt);
-        addChart();
+        //addChart();
     }
 
     private LineChartView chart;
@@ -72,19 +73,23 @@ public class PatientInfo extends ActionBarActivity {
         ViewGroup layout = (ViewGroup) findViewById(R.id.graphContainer);
         layout.addView(chart);
 
-        List<PointValue> values = new ArrayList<PointValue>();
+        //List<PointValue> values = new ArrayList<PointValue>();
+
+        List<PointValue> values = readings.get(1).ConvertData();
+        /*
         values.add(new PointValue(1,2));
         values.add(new PointValue(2,3));
         values.add(new PointValue(3,4));
         values.add(new PointValue(4,5));
         values.add(new PointValue(5,2));
         values.add(new PointValue(6,3));
+        */
 
         Line line = new Line(values);
 
         List<Line> lines = new ArrayList<Line>();
 
-        line.setColor(ChartUtils.COLORS[4]);
+        line.setColor(ChartUtils.COLORS[2]);
         line.setShape(ValueShape.CIRCLE);
         //line.setCubic(isCubic);
         line.setFilled(true);
@@ -106,6 +111,7 @@ public class PatientInfo extends ActionBarActivity {
         chart.setVisibility(View.GONE);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -115,16 +121,20 @@ public class PatientInfo extends ActionBarActivity {
 
     public void slideDown(View v)
     {
+
         //addChart();
+        addChart();
         chart.setVisibility(View.VISIBLE);
         slide_down(this, chart);
     }
 
     public static void slide_down(Context ctx, View v) {
         Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
-        if (a != null) {
+        if (a != null)
+        {
             a.reset();
-            if (v != null) {
+            if (v != null)
+            {
                 v.clearAnimation();
                 v.startAnimation(a);
             }

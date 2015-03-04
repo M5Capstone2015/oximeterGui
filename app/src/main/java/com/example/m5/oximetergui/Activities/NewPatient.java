@@ -41,6 +41,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
                 else
                 {
                     Intent i = new Intent();
+                    mPatient.ID = 0;
                     i.putExtra(Intent_Constants.NewPatientInfo, mPatient);
                     setResult(RESULT_OK, i);
                     finish();

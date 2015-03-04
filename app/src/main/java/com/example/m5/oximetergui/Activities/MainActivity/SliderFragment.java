@@ -89,7 +89,15 @@ public class SliderFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK)
         {
-            Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
+            Patient patientData = null;
+            try {
+                patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
             Log.d("PatientListSlider", patientData.FirstName);
             Log.d("PatientListSlider", patientData.LastName);
 

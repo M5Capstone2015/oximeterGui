@@ -1,6 +1,9 @@
 package com.example.m5.oximetergui.Data_Objects;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import lecho.lib.hellocharts.model.PointValue;
 
 /**
  * Created by Hunt on 2/2/2015.
@@ -31,13 +34,24 @@ public class Reading {
     public String DataString = "";
     public boolean IsSynced = false;
 
-    public int[][] dataPoints;
-
-    private void ParseDataString()
+    public List<PointValue> ConvertData()
     {
-        // split by , and trim white space
-        // loop through each and add to dataPoints.
-        // how we do this will be dependent on what graphing lib is used.
-        dataPoints = new int[6][7];
+        String lines[] = this.DataString.split("\\r?\\n");
+        List<PointValue> points = new ArrayList<>();
+
+        try {
+            for (int i = 0; i < lines.length; i++) {
+                if (lines[i].equals(""))
+                    continue;
+                float val = Float.parseFloat(lines[i]);
+                points.add(new PointValue(i, val));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return points;
     }
 }
