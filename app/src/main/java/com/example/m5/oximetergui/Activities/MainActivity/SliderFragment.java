@@ -149,6 +149,7 @@ public class SliderFragment extends Fragment {
                         SetSelectMode(false);
                         MainScreenFrag main = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
                         main.LogInPatient(_currentPatient);
+                        main.SaveReading();
                         _mainActivity.ClosePane();
                         _mainActivity.EnablePane();
                     }

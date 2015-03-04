@@ -280,7 +280,8 @@ public class MainScreenFrag extends Fragment {
     private Runnable _fakeReader = new Runnable() {
         @Override
         public void run() {
-            while (true) {
+            while (true)
+            {
                 count++;
                 try
                 {

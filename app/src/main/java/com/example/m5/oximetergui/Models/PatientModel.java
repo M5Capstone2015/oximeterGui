@@ -44,7 +44,7 @@ public class PatientModel {
             String lastName = cursor.getString(2);
             String dob = cursor.getString(3);
             Boolean isOpen = cursor.getInt(4) < 1 ? false : true;
-            Patient p = new Patient(String.valueOf(ID), firstName, lastName, dob, isOpen);
+            Patient p = new Patient(ID, firstName, lastName, dob, isOpen);
             patients.add(p);
         }
         return patients;

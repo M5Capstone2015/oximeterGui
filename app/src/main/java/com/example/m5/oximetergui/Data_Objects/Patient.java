@@ -34,8 +34,9 @@ public class Patient implements Parcelable {
         this.DateOfBirth = dateOfBirth;
     }
 
-    public Patient(String ID, String firstName, String lastName, String dateOfBirth, Boolean isOpen)
+    public Patient(int ID, String firstName, String lastName, String dateOfBirth, Boolean isOpen)
     {
+        this.ID = ID;
         this.FirstName = firstName;
         this.LastName = lastName;
         this.DateOfBirth = dateOfBirth;

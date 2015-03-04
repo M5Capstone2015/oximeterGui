@@ -31,7 +31,6 @@ public class Reading {
     public String DataString = "";
     public boolean IsSynced = false;
 
-    // TODO only passing Data String as constructor param then parsing into a List.
     public int[][] dataPoints;
 
     private void ParseDataString()
