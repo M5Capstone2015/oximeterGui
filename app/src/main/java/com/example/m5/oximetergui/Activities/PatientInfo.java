@@ -1,11 +1,14 @@
 package com.example.m5.oximetergui.Activities;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.example.m5.oximetergui.Constants.Intent_Constants;
@@ -58,12 +61,14 @@ public class PatientInfo extends ActionBarActivity {
             txt += (r.EndDate + "\n");
 
         dataVeiw.setText(txt);
-        //addChart();
+        addChart();
     }
+
+    private LineChartView chart;
 
     private void addChart()
     {
-        LineChartView chart = new LineChartView(this);
+        this.chart = new LineChartView(this);
         ViewGroup layout = (ViewGroup) findViewById(R.id.graphContainer);
         layout.addView(chart);
 
@@ -98,6 +103,7 @@ public class PatientInfo extends ActionBarActivity {
         data.setAxisYLeft(axisY);
 
         chart.setLineChartData(data);
+        chart.setVisibility(View.GONE);
     }
 
     @Override
@@ -105,6 +111,24 @@ public class PatientInfo extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_info, menu);
         return true;
+    }
+
+    public void slideDown(View v)
+    {
+        //addChart();
+        chart.setVisibility(View.VISIBLE);
+        slide_down(this, chart);
+    }
+
+    public static void slide_down(Context ctx, View v) {
+        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
+        if (a != null) {
+            a.reset();
+            if (v != null) {
+                v.clearAnimation();
+                v.startAnimation(a);
+            }
+        }
     }
 
     @Override

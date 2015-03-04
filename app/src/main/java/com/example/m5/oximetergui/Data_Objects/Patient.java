@@ -25,7 +25,7 @@ public class Patient implements Parcelable {
         this.FirstName = data[0];
         this.LastName = data[1];
         this.DateOfBirth = data[2];
-        this.ID= Integer.parseInt(data[3]);
+        this.ID = Integer.parseInt(data[3]);
     }
 
     public Patient(String firstName, String lastName, String dateOfBirth, Boolean isOpen) // TODO get these constructors under control.
