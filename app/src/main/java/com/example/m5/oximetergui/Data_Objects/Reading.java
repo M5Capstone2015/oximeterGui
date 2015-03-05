@@ -10,6 +10,14 @@ import lecho.lib.hellocharts.model.PointValue;
  */
 public class Reading {
 
+    public int ID;
+    public int PatientID;
+    public String StartDate = "";
+    public String EndDate = "";
+    public String DataString = "";
+    public boolean IsSynced = false;
+    public boolean IsDrawn = false;
+
     public Reading() {}
 
     public Reading(int id, String start, String end, String data)
@@ -26,14 +34,6 @@ public class Reading {
         EndDate = end;
         DataString = data;
     }
-
-    public int ID;
-    public int PatientID;
-    public String StartDate = "";
-    public String EndDate = "";
-    public String DataString = "";
-    public boolean IsSynced = false;
-    public boolean IsDrawn = false;
 
     public List<PointValue> ConvertData()
     {
