@@ -118,6 +118,13 @@ public class PatientInfo extends ActionBarActivity {
 
             LineChartView lcv = (LineChartView) continaer.findViewById(R.id.chart);
 
+            if (!selectedPatient.IsDrawn)
+            {
+                // set data here.
+                populateChart(lcv, selectedPatient);
+                selectedPatient.IsDrawn = true;
+            }
+
             if (lcv.isShown())
                 chartContainer.setVisibility(View.GONE);
             else
@@ -136,6 +143,37 @@ public class PatientInfo extends ActionBarActivity {
             //Toast.makeText(context, ("Reading: " + selectedPatient.EndDate.toString()), Toast.LENGTH_LONG).show();
         }
     };
+
+    private void populateChart(LineChartView lcv, Reading r)
+    {
+        List<PointValue> values = r.ConvertData();
+
+        Line line = new Line(values);
+
+        List<Line> lines = new ArrayList<Line>();
+
+        line.setColor(ChartUtils.COLORS[2]);
+        line.setShape(ValueShape.CIRCLE);
+        //line.setCubic(isCubic);
+        line.setFilled(true);
+        line.setHasLabels(true);
+        //line.setHasLabelsOnlyForSelected(hasLabelForSelected);
+        line.setHasLines(true);
+        line.setHasPoints(true);
+        lines.add(line);
+
+        LineChartData data = new LineChartData(lines);
+        Axis axisX = new Axis();
+        Axis axisY = new Axis().setHasLines(true);
+        axisX.setName("Axis X");
+        axisY.setName("Axis Y");
+        data.setAxisXBottom(axisX);
+        data.setAxisYLeft(axisY);
+
+        lcv.setLineChartData(data);
+        //chart.setVisibility(View.GONE);
+        //lcv.addView(chart)
+    }
 
     private void addChart()
     {

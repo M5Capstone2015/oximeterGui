@@ -33,6 +33,7 @@ public class Reading {
     public String EndDate = "";
     public String DataString = "";
     public boolean IsSynced = false;
+    public boolean IsDrawn = false;
 
     public List<PointValue> ConvertData()
     {

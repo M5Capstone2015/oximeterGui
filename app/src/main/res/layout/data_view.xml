@@ -15,11 +15,17 @@
         android:id="@+id/expandButton"
         android:layout_gravity="center_horizontal" />
         -->
-    <TextView
+    <!--<TextView
         android:text="Testing 123"
         android:id="@+id/expTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/expTextView" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
