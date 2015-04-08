@@ -29,5 +29,6 @@
     <string name="title_activity_sql__sandbox">SQL_Sandbox</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_info">Info</string>
+    <string name="title_activity_settings">Settings</string>
 
 </resources>

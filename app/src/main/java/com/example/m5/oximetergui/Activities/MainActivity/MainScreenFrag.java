@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.m5.oximetergui.Activities.PatientInfo;
@@ -47,7 +48,7 @@ public class MainScreenFrag extends Fragment {
     private View stopButton;
     private View selectPatientsButton;
     private View logOutButton;
-    private TextView infoTextView;
+    private Button infoTextView;
     private TextView percent;
 
     public void LogInPatient(Patient p)
@@ -106,7 +107,7 @@ public class MainScreenFrag extends Fragment {
         _mainActivity.DisablePane();
     }
 
-    private void PatientInfo()
+    public void PatientInfo()
     {
         if (_recording) // todo add graphical que that this button is disabled.
             return;
@@ -228,19 +229,19 @@ public class MainScreenFrag extends Fragment {
     private void InitializeButtons(View v)
     {
         selectPatientsButton = v.findViewById(R.id.patient_list);
-        selectPatientsButton.setOnClickListener(startButtonListener);
+        selectPatientsButton.setOnClickListener(_mainListener);
 
         startButton = v.findViewById(R.id.start_reading);
-        startButton.setOnClickListener(startButtonListener);
+        startButton.setOnClickListener(_mainListener);
 
         stopButton = v.findViewById(R.id.stop_reading_main);
-        stopButton.setOnClickListener(startButtonListener);
+        stopButton.setOnClickListener(_mainListener);
 
         logOutButton = v.findViewById(R.id.log_out_button);
-        logOutButton.setOnClickListener(startButtonListener);
+        logOutButton.setOnClickListener(_mainListener);
 
-        infoTextView = (TextView) v.findViewById(R.id.patient_name);
-        infoTextView.setOnClickListener(startButtonListener);
+        infoTextView = (Button) v.findViewById(R.id.patientButton);
+        infoTextView.setOnClickListener(_mainListener);
 
         percent = (TextView) v.findViewById(R.id.percentView);
     }
@@ -306,7 +307,7 @@ public class MainScreenFrag extends Fragment {
     };
 
 
-    private OnClickListener startButtonListener = new OnClickListener() {
+    private OnClickListener _mainListener = new OnClickListener() {
 
         @Override
         public void onClick(View v) {
@@ -325,7 +326,7 @@ public class MainScreenFrag extends Fragment {
                 case R.id.stop_reading_main:
                     _mainScreenFrag.StopRecording();
                     break;
-                case R.id.patient_name:
+                case R.id.patientButton:
                     _mainScreenFrag.PatientInfo();
                     break;
                 case R.id.log_out_button:

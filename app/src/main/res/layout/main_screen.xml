@@ -14,15 +14,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/patient_name"
         android:text="Billy Bob John"
-        android:visibility="invisible"
+        android:background="@drawable/startbutton"
+        android:visibility="gone"
         android:textSize="30dp"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:textColor="#FFFFFF"
         android:text="@string/patient_list_label"
         android:id="@+id/patient_list"
         android:layout_alignTop="@+id/patient_name"
+        android:background="@drawable/startbutton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -31,12 +35,16 @@
         android:layout_height="wrap_content"
         android:text="Start Reading"
         android:id="@+id/start_reading"
+        android:background="@drawable/startbutton"
+        android:textColor="#FFFFFF"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/startbutton"
         android:text="Stop Reading"
         android:id="@+id/stop_reading_main"
         android:layout_alignParentBottom="true"
@@ -52,14 +60,33 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="Log Out"
-        android:id="@+id/log_out_button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bobby $murda"
+            android:background="@drawable/startbutton"
+            android:visibility="gone"
+            android:id="@+id/patientButton"
+            android:textColor="#FFFFFF"
+            android:layout_below="@+id/patient_name"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/logout_theme"
+            android:visibility="gone"
+            android:textColor="#FFFFFF"
+            android:text="X"
+            android:id="@+id/log_out_button" />
+    </LinearLayout>
 
 </RelativeLayout>
