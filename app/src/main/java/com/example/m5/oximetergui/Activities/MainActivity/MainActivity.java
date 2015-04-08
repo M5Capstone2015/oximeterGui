@@ -78,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
             public void onPanelClosed(View panel) {
                 switch (panel.getId()) {
                     case R.id.fragment_secondpane:
-                        getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(true);
+                        getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(false);
                         getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(true);
                         break;
                     default:
@@ -91,8 +91,8 @@ public class MainActivity extends ActionBarActivity {
             public void onPanelOpened(View panel) {
                 switch (panel.getId()) {
                     case R.id.fragment_secondpane:
-                        getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(true);
-                        getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(true);
+                        getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(false);
+                        getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(false);
                         break;
                     default:
                         break;
