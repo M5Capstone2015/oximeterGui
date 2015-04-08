@@ -6,6 +6,22 @@
     <string name="action_settings">Settings</string>
     <string name="patient_list_label">Patient List</string>
 
+    <!-- Settings Baud Rate Spinner -->
+    <string-array name="planets_array">
+        <item>1 reads/s</item>
+        <item>2 reads/s</item>
+        <item>5 reads/s</item>
+        <item>10 reads/s</item>
+    </string-array>
+
+    <!-- Settings Baud Rate Spinner -->
+    <string-array name="record_rates_array">
+        <item>1 per second</item>
+        <item>2 per second</item>
+        <item>5 per second</item>
+        <item>10 per second</item>
+    </string-array>
+
     <!-- Patient List Activity -->
     <string name="title_activity_patient_list">patientList</string>
     <string name="new_patient_label">New Patient</string>
