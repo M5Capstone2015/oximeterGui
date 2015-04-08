@@ -64,6 +64,8 @@ public class MainScreenFrag extends Fragment {
         SetViewVisible(infoTextView);
         SetViewVisible(logOutButton);
 
+        _mainActivity.AddLoginButton();
+
         _mainActivity.ClosePane();
     }
 
@@ -85,7 +87,7 @@ public class MainScreenFrag extends Fragment {
 
     private void LogOut()
     {
-        if (_recording) // todo maybe just make this invisible.
+        if (_recording)
             return;
 
         _currentPatient = null;
@@ -93,6 +95,9 @@ public class MainScreenFrag extends Fragment {
         SetViewInvisible(infoTextView);
         SetViewVisible(selectPatientsButton);
         SetViewInvisible(logOutButton);
+
+        _mainActivity.RemoveLogoutButton();
+
         // TOOD udpate GUI here
     }
 

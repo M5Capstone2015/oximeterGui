@@ -27,6 +27,7 @@ import com.example.m5.oximetergui.R;
 public class MainActivity extends ActionBarActivity {
 
     Slider pane;
+    MenuItem logoutButton;
 
     public void ClosePane()
     {
@@ -53,6 +54,16 @@ public class MainActivity extends ActionBarActivity {
         pane.SetSlidable();
     }
 
+    public void AddLoginButton()
+    {
+        logoutButton.setVisible(true);
+    }
+
+    public void RemoveLogoutButton()
+    {
+        logoutButton.setVisible(false);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +78,7 @@ public class MainActivity extends ActionBarActivity {
             public void onPanelClosed(View panel) {
                 switch (panel.getId()) {
                     case R.id.fragment_secondpane:
-                        getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(false);
+                        getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(true);
                         getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(true);
                         break;
                     default:
@@ -81,7 +92,7 @@ public class MainActivity extends ActionBarActivity {
                 switch (panel.getId()) {
                     case R.id.fragment_secondpane:
                         getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(true);
-                        getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(false);
+                        getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(true);
                         break;
                     default:
                         break;
@@ -120,6 +131,8 @@ public class MainActivity extends ActionBarActivity {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+        this.logoutButton= menu.findItem(R.id.log_out);
 
         return super.onCreateOptionsMenu(menu);
     }

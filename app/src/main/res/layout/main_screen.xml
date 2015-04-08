@@ -21,7 +21,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:textColor="#FFFFFF"
         android:text="@string/patient_list_label"
         android:id="@+id/patient_list"
