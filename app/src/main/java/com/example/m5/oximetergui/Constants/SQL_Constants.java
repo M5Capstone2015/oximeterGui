@@ -61,7 +61,9 @@ public class SQL_Constants {
             " WHERE id = %s;";
 
     // Query first 10 patients with last or first name
-    public static String SEARCH_PATIENT_BY_NAME = "SELECT * FROM Readings WHERE first LIKE '%%%s%%' OR last LIKE '%%%s%%' LIMIT 10";
+    public static String SEARCH_PATIENT_BY_NAME = "SELECT * FROM Patients WHERE first_name "
+                                + "LIKE '%%%s%%' OR last_name LIKE '%%%s%%'"; //OR ";
+                                //+ "CONCAT(first, ' ', last) like '%%%s%%' LIMIT 10";
 
     // Readings query strings
     public static String SELECT_ALL_READINGS_= "SELECT * FROM Readings";

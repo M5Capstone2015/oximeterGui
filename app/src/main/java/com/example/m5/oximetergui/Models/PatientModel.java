@@ -109,8 +109,16 @@ public class PatientModel {
     {
         SQLiteDatabase db = _dal.getReadableDatabase();  // TODO Consider how to handle the patients AFTER the first 0 to 10. 'Load More' button to get next? Also consider handling a space in the middle and searching first and last name. AND clause instead of or.
 
-        String queryString = String.format(SQL_Constants.SEARCH_PATIENT_BY_NAME, searchString, searchString);
-        Cursor cursor = db.rawQuery(queryString, null);
+        Cursor cursor = null;
+        try
+        {
+            String queryString = String.format(SQL_Constants.SEARCH_PATIENT_BY_NAME, searchString, searchString, searchString);
+            cursor = db.rawQuery(queryString, null);
+        }
+        catch (Exception e)
+        {
+            String s = e.getMessage();
+        }
 
         List<Patient> patients = new ArrayList<>();  // TODO consider only having search and recents section?
 

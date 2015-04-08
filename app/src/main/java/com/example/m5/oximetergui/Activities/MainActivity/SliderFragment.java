@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.m5.oximetergui.Activities.NewPatient;
@@ -38,6 +41,7 @@ public class SliderFragment extends Fragment {
     // --- Views --- //
     private View newPatientButton;
     ListView _patientsList;
+    EditText _searchBar;
 
     // --- Adapter and Data --- //
     ArrayList<Patient> _patients = new ArrayList<>();
@@ -191,6 +195,45 @@ public class SliderFragment extends Fragment {
         }
     };
 
+    TextWatcher searchTextChanged = new TextWatcher() {
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start,
+        int count, int after) {
+        }
+
+        private void loadPatients()
+        {
+            List<Patient> patients = _model.LoadPatientNames();
+            _patients.clear();
+            for (Patient p : patients)
+                _patients.add(p);
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start,
+        int before, int count) {
+
+            String search = s.toString();
+            if(s.length() == 0 || search == "") {
+                this.loadPatients();
+                return;
+            }
+
+            List<Patient> searchREsults = _model.SearchPatients(search);
+
+            _patients.clear();
+            for (Patient p : searchREsults)
+                _patients.add(p);
+            adapter.notifyDataSetChanged();
+        }
+    };
+
+
     private void InitializeViews(View v)
     {
         Button b = (Button) v.findViewById(R.id.closeButton);
@@ -201,6 +244,9 @@ public class SliderFragment extends Fragment {
 
         _patientsList = (ListView) v.findViewById(R.id.patientList);
         _patientsList.setOnItemClickListener(itemListener);
+
+        _searchBar = (EditText) v.findViewById(R.id.search_bar);
+        _searchBar.addTextChangedListener(this.searchTextChanged);
     }
 
     private void ShowConfirmDialog(Patient selectedPatient)
