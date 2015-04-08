@@ -139,14 +139,31 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.settings:
                 startActivity(new Intent(this, Settings.class));
                 return true;
+            case R.id.log_out:
+                LogOut();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void LogOut()
+    {
+        try {
+            MainScreenFrag frag = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
+            frag.LogOut();
+        }
+        catch (Exception e)
+        {
+            String err = e.getMessage();
+        }
+
     }
 
 }

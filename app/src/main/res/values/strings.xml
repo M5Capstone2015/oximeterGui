@@ -22,6 +22,9 @@
         <item>10 per second</item>
     </string-array>
 
+    <!-- Main Screen -->
+    <string name="patient_name"><u>Bobby $murda:</u></string>
+
     <!-- Patient List Activity -->
     <string name="title_activity_patient_list">patientList</string>
     <string name="new_patient_label">New Patient</string>

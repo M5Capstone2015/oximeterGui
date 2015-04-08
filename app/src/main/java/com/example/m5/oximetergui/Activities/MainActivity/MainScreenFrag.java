@@ -85,7 +85,7 @@ public class MainScreenFrag extends Fragment {
         v.setVisibility(View.INVISIBLE);
     }
 
-    private void LogOut()
+    public void LogOut()
     {
         if (_recording)
             return;
