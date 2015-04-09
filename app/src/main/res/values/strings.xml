@@ -14,13 +14,21 @@
         <item>10 reads/s</item>
     </string-array>
 
-    <!-- Settings Baud Rate Spinner -->
+    <!-- Settings Record Rate Spinner -->
     <string-array name="record_rates_array">
-        <item>1 per second</item>
-        <item>2 per second</item>
-        <item>5 per second</item>
-        <item>10 per second</item>
+        <item>3 per minute</item>
+        <item>4 per minute</item>
+        <item>6 per minute</item>
+        <item>12 per minute</item>
+        <item>24 per minute</item>
     </string-array>
+
+    <!-- Settings Preference Save Strings -->
+    <string name="auto_sync_pref">auto_sync_pref</string>
+    <string name="baud_rate_pref">baud_rate_pref</string>
+    <string name="dropbox_pref">dropbox_pref</string>
+    <string name="google_pref">google_pref</string>
+    <string name="custom_pref">custom_pref</string>
 
     <!-- Main Screen -->
     <string name="patient_name"><u>Bobby $murda:</u></string>
