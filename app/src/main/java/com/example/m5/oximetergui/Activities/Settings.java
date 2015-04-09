@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,7 +28,10 @@ public class Settings extends ActionBarActivity {
     private CheckBox googleCheck;
     private CheckBox dropboxCheck;
     private CheckBox customCheck;
+    private Spinner baudSpinner;
+    private Spinner readSpinner;
     private Button saveButton;
+
 
     Resources resources;
     SharedPreferences prefs;
@@ -35,6 +39,7 @@ public class Settings extends ActionBarActivity {
     private boolean viewIsDirty = false;
 
     private CheckListener checkListener;
+    private OnSpinnerSelected spinnerListener;
 
 
     @Override
@@ -42,70 +47,73 @@ public class Settings extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // Initialize Preferences
         this.prefs = getPreferences(Context.MODE_PRIVATE);
 
-        this.InitializeControls();
+        // Load setting data
+        this.LoadSettingData();
     }
 
-    private void InitializeControls()
+    private void LoadSettingData()
     {
-        // Save button instance
+        // Get control instances
         this.saveButton = (Button) findViewById(R.id.saveSettingsButton);
+        this.baudSpinner = (Spinner) findViewById(R.id.baud_spinner);
+        this.readSpinner = (Spinner) findViewById(R.id.record_rate_spinner);
+        this.autoSyncCheck = (CheckBox) findViewById(R.id.auto_sync_checkbox);
+        this.dropboxCheck = (CheckBox) findViewById(R.id.dropBox_sync_check);
+        this.googleCheck = (CheckBox) findViewById(R.id.google_sync_check);
+        this.customCheck = (CheckBox) findViewById(R.id.customSyncCheck);
 
         // Initialize Baud Rate Spinner
-        Spinner spinner = (Spinner) findViewById(R.id.baud_spinner);
-
         this.adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
+        baudSpinner.setAdapter(adapter);
         this.resources = getResources();
-        String baud_pref = prefs.getString(resources.getString(R.string.baud_rate_pref), null);
-
-        // User hasn't changed this, so default is 5 reads/second
-        if (baud_pref == null)
-            spinner.setSelection(2);
 
         // Initialize Record Rate Spinner
-        Spinner rec_spinner = (Spinner) findViewById(R.id.record_rate_spinner);
-
         this.read_adapter= ArrayAdapter.createFromResource(this,
                 R.array.record_rates_array, android.R.layout.simple_spinner_item);
         read_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        rec_spinner.setAdapter(read_adapter);
-
-        String read_pref = prefs.getString("read_rate_pref", null);
-
-        // User hasn't changed this, so default is 12 per minute (once every 5 seconds)
-        if (read_pref == null)
-            rec_spinner.setSelection(3);
+        readSpinner.setAdapter(read_adapter);
 
         // Load preference form Shared Prefs
         Boolean auto_sync_pref = prefs.getBoolean(resources.getString(R.string.auto_sync_pref), true);
         Boolean dropbox_pref = prefs.getBoolean(resources.getString(R.string.dropbox_pref), false);
         Boolean google_pref = prefs.getBoolean(resources.getString(R.string.google_pref), false);
         Boolean custom_pref = prefs.getBoolean(resources.getString(R.string.google_pref), false);
+        int baud_pref = 0;
+        int read_pref = 0;
+        try {
+            baud_pref = prefs.getInt(resources.getString(R.string.baud_rate_pref), 0);
+            read_pref = prefs.getInt(resources.getString(R.string.read_rate_pref), 0);
+        }
+        catch (Exception e)
+        {
+            String striadsf = e.getMessage();
+        }
 
-        // Get and save CheckBox control instances
-        this.autoSyncCheck = (CheckBox) findViewById(R.id.auto_sync_checkbox);
-        this.dropboxCheck = (CheckBox) findViewById(R.id.dropBox_sync_check);
-        this.googleCheck = (CheckBox) findViewById(R.id.google_sync_check);
-        this.customCheck = (CheckBox) findViewById(R.id.customSyncCheck);
+        // Set spinners
+        this.baudSpinner.setSelection(baud_pref);
+        this.readSpinner.setSelection(read_pref);
 
         // Set checkboxes to appropriate values
-        autoSyncCheck.setChecked(auto_sync_pref);
-        dropboxCheck.setChecked(dropbox_pref);
-        googleCheck.setChecked(google_pref);
-        customCheck.setChecked(custom_pref);
+        this.autoSyncCheck.setChecked(auto_sync_pref);
+        this.dropboxCheck.setChecked(dropbox_pref);
+        this.googleCheck.setChecked(google_pref);
+        this.customCheck.setChecked(custom_pref);
 
-        // Attach event
-        // s
+        // Initialize and attach events
         this.checkListener = new CheckListener(this);
-        autoSyncCheck.setOnCheckedChangeListener(checkListener);
-        dropboxCheck.setOnCheckedChangeListener(checkListener);
-        googleCheck.setOnCheckedChangeListener(checkListener);
-        customCheck.setOnCheckedChangeListener(checkListener);
+        this.spinnerListener = new OnSpinnerSelected(this);
+
+        this.baudSpinner.setOnItemSelectedListener(spinnerListener);
+        this.readSpinner.setOnItemSelectedListener(spinnerListener);
+        this.autoSyncCheck.setOnCheckedChangeListener(checkListener);
+        this.dropboxCheck.setOnCheckedChangeListener(checkListener);
+        this.googleCheck.setOnCheckedChangeListener(checkListener);
+        this.customCheck.setOnCheckedChangeListener(checkListener);
     }
 
     private void setPref(String pref_name, Boolean val)
@@ -115,12 +123,26 @@ public class Settings extends ActionBarActivity {
         editor.commit();
     }
 
+    private void setPref(String pref_name, int val)
+    {
+        SharedPreferences.Editor editor = this.prefs.edit();
+        editor.putInt(pref_name, val);
+        editor.commit();
+    }
+
     private void SavePrefs()
     {
+        // Save auto-sync
         setPref(this.resources.getString(R.string.auto_sync_pref), this.autoSyncCheck.isChecked());
-        setPref(this.resources.getString(R.string.dropbox_pref), this.customCheck.isChecked());
+
+        // Save sync options
+        setPref(this.resources.getString(R.string.dropbox_pref), this.dropboxCheck.isChecked());
         setPref(this.resources.getString(R.string.google_pref), this.googleCheck.isChecked());
         setPref(this.resources.getString(R.string.custom_pref), this.customCheck.isChecked());
+
+        // Save baud/read rate
+        setPref(this.resources.getString(R.string.baud_rate_pref), this.baudSpinner.getSelectedItemPosition());
+        setPref(this.resources.getString(R.string.read_rate_pref), this.readSpinner.getSelectedItemPosition());
     }
 
     private class CheckListener implements OnCheckedChangeListener
@@ -134,52 +156,50 @@ public class Settings extends ActionBarActivity {
 
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
         {
-            if (settingsActivity.viewIsDirty)
-                return;
-
-            settingsActivity.viewIsDirty = true;
-
-            Button savebutton = (Button) settingsActivity.findViewById(R.id.saveSettingsButton);
-            savebutton.setEnabled(true);
-
-            // set button to active state
-
-            /*
-            Resources res = getApplicationContext().getResources();
-
-            switch (buttonView.getId())
-            {
-                case R.id.auto_sync_checkbox:
-                    setPref(res.getString(R.string.auto_sync_pref), isChecked);
-                    break;
-                case R.id.dropBox_sync_check:
-                    break;
-                case R.id.google_sync_check:
-                    break;
-                case R.id.customSyncCheck:
-                    break;
-            }
-            */
+            settingsActivity.MakeDirty();
         }
     };
 
+    class OnSpinnerSelected implements AdapterView.OnItemSelectedListener {
 
-    private void InitializeSettingsData()
+        private Settings settingsActivity;
+
+        public OnSpinnerSelected(Settings settings)
+        {
+            settingsActivity = settings;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            settingsActivity.MakeDirty();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parentView) {
+            // your code here
+        }
+
+    };
+
+    public void MakeDirty()
     {
-        String baudRate = "";
-        try
-        {
-            this.adapter.getPosition(baudRate);
-        }
-        catch (Exception e)
-        {
-            String s = e.getMessage();
-        }
+        if (this.viewIsDirty)
+                return;
+
+        this.viewIsDirty = true;
+        this.saveButton.setEnabled(true);
+    }
+
+    public void CleanView()
+    {
+        this.viewIsDirty = false;
+        this.saveButton.setEnabled(false);
     }
 
     public void saveSettingsClick(View v)
     {
         SavePrefs();
+        CleanView();
     }
 
 

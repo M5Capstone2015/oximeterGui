@@ -26,6 +26,7 @@
     <!-- Settings Preference Save Strings -->
     <string name="auto_sync_pref">auto_sync_pref</string>
     <string name="baud_rate_pref">baud_rate_pref</string>
+    <string name="read_rate_pref">read_rate_pref</string>
     <string name="dropbox_pref">dropbox_pref</string>
     <string name="google_pref">google_pref</string>
     <string name="custom_pref">custom_pref</string>
