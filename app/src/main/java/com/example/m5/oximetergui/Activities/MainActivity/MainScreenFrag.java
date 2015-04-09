@@ -6,6 +6,9 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +51,8 @@ public class MainScreenFrag extends Fragment {
     private View stopButton;
     private View selectPatientsButton;
     private View logOutButton;
-    private Button infoTextView;
+    //private Button infoTextView;
+    private TextView infoTextView;
     private TextView percent;
 
     public void LogInPatient(Patient p)
@@ -60,7 +64,10 @@ public class MainScreenFrag extends Fragment {
 
         SetViewInvisible(selectPatientsButton);
 
-        infoTextView.setText(p.FirstName + " " + p.LastName);
+        String name = p.FirstName + " " + p.LastName + ":";
+        Spanned formated = Html.fromHtml("<u>" + name + "</u>");
+        infoTextView.setText(formated);
+
         SetViewVisible(infoTextView);
         SetViewVisible(logOutButton);
 
@@ -245,7 +252,7 @@ public class MainScreenFrag extends Fragment {
         logOutButton = v.findViewById(R.id.log_out_button);
         logOutButton.setOnClickListener(_mainListener);
 
-        infoTextView = (Button) v.findViewById(R.id.patientButton);
+        infoTextView = (TextView) v.findViewById(R.id.patient_name);
         infoTextView.setOnClickListener(_mainListener);
 
         percent = (TextView) v.findViewById(R.id.percentView);
@@ -266,7 +273,7 @@ public class MainScreenFrag extends Fragment {
 
             try
             {
-                _mainActivity.runOnUiThread(new Runnable() {
+                _mainActivity.runOnUiThread(new Runnable() { // UI update must be on main UI thread.
                     @Override
                     public void run() {
                         percent.setText(data + "%");
@@ -331,7 +338,7 @@ public class MainScreenFrag extends Fragment {
                 case R.id.stop_reading_main:
                     _mainScreenFrag.StopRecording();
                     break;
-                case R.id.patientButton:
+                case R.id.patient_name:
                     _mainScreenFrag.PatientInfo();
                     break;
                 case R.id.log_out_button:
