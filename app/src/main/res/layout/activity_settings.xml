@@ -129,6 +129,7 @@
 
         <EditText
             android:hint="URL..."
+            android:id="@+id/custom_server_editbox"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
 

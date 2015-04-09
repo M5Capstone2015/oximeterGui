@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.m5.oximetergui.R;
@@ -24,6 +25,7 @@ public class Settings extends ActionBarActivity {
     private ArrayAdapter adapter;
     private ArrayAdapter read_adapter;
 
+    private EditText customServer;
     private CheckBox autoSyncCheck;
     private CheckBox googleCheck;
     private CheckBox dropboxCheck;
@@ -64,6 +66,7 @@ public class Settings extends ActionBarActivity {
         this.dropboxCheck = (CheckBox) findViewById(R.id.dropBox_sync_check);
         this.googleCheck = (CheckBox) findViewById(R.id.google_sync_check);
         this.customCheck = (CheckBox) findViewById(R.id.customSyncCheck);
+        this.customServer = (EditText) findViewById((R.id.custom_server_editbox));
 
         // Initialize Baud Rate Spinner
         this.adapter = ArrayAdapter.createFromResource(this,
@@ -83,16 +86,12 @@ public class Settings extends ActionBarActivity {
         Boolean dropbox_pref = prefs.getBoolean(resources.getString(R.string.dropbox_pref), false);
         Boolean google_pref = prefs.getBoolean(resources.getString(R.string.google_pref), false);
         Boolean custom_pref = prefs.getBoolean(resources.getString(R.string.google_pref), false);
-        int baud_pref = 0;
-        int read_pref = 0;
-        try {
-            baud_pref = prefs.getInt(resources.getString(R.string.baud_rate_pref), 0);
-            read_pref = prefs.getInt(resources.getString(R.string.read_rate_pref), 0);
-        }
-        catch (Exception e)
-        {
-            String striadsf = e.getMessage();
-        }
+
+        int baud_pref = prefs.getInt(resources.getString(R.string.baud_rate_pref), 0);
+        int read_pref = prefs.getInt(resources.getString(R.string.read_rate_pref), 0);
+
+        String serverURL = prefs.getString(resources.getString(R.string.custom_server_url), "");
+        this.customServer.setText(serverURL);
 
         // Set spinners
         this.baudSpinner.setSelection(baud_pref);
@@ -130,6 +129,13 @@ public class Settings extends ActionBarActivity {
         editor.commit();
     }
 
+    private void setPref(String pref_name, String val)
+    {
+        SharedPreferences.Editor editor = this.prefs.edit();
+        editor.putString(pref_name, val);
+        editor.commit();
+    }
+
     private void SavePrefs()
     {
         // Save auto-sync
@@ -143,6 +149,9 @@ public class Settings extends ActionBarActivity {
         // Save baud/read rate
         setPref(this.resources.getString(R.string.baud_rate_pref), this.baudSpinner.getSelectedItemPosition());
         setPref(this.resources.getString(R.string.read_rate_pref), this.readSpinner.getSelectedItemPosition());
+
+        // Save custom server URL
+        setPref(this.resources.getString(R.string.custom_server_url), this.customServer.getText().toString());
     }
 
     private class CheckListener implements OnCheckedChangeListener
