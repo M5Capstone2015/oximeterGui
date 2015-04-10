@@ -58,7 +58,7 @@
         android:layout_height="200dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:background="@drawable/percent_circle"
-        android:text="56%"
+        android:text="97%"
         android:textSize="80dp"
         android:textStyle="italic"
         android:textColor="#FFFFFF"

@@ -51,7 +51,6 @@ public class MainScreenFrag extends Fragment {
     private View stopButton;
     private View selectPatientsButton;
     private View logOutButton;
-    //private Button infoTextView;
     private TextView infoTextView;
     private TextView percent;
 

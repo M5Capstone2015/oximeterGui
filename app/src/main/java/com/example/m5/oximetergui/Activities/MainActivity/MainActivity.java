@@ -21,7 +21,10 @@ import com.example.m5.oximetergui.Activities.PatientInfo;
 import com.example.m5.oximetergui.Activities.Settings;
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
+import com.example.m5.oximetergui.Helpers.BackupBuilder;
 import com.example.m5.oximetergui.Helpers.Slider;
+import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.R;
 
 
@@ -149,9 +152,18 @@ public class MainActivity extends ActionBarActivity {
             case R.id.log_out:
                 LogOut();
                 return true;
+            case R.id.syncButton:
+                FileTest();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void FileTest()
+    {
+        BackupBuilder bb = new BackupBuilder(new PatientModel(this), new DataModel(this));
+        bb.GenerateFile();
     }
 
     private void LogOut()

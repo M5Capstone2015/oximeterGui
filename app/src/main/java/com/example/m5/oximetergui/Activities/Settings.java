@@ -182,14 +182,13 @@ public class Settings extends ActionBarActivity {
         }
 
         @Override
-        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+        {
             settingsActivity.MakeDirty();
         }
 
         @Override
-        public void onNothingSelected(AdapterView<?> parentView) {
-            // your code here
-        }
+        public void onNothingSelected(AdapterView<?> parentView) { }
 
     };
 

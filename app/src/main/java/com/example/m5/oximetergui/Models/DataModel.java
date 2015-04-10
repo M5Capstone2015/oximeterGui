@@ -87,7 +87,7 @@ public class DataModel {
             int patient_id = cursor.getInt(3);
             String dataString = cursor.getString(4);
             Boolean synced = cursor.getInt(5) > 0 ? true : false;
-            readings.add(new Reading(ID, startTime, endTime, dataString));
+            readings.add(new Reading(ID, startTime, endTime, dataString, patient_id));
         }
 
         return readings;

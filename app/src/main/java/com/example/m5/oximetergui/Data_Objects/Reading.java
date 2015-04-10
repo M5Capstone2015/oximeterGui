@@ -22,17 +22,26 @@ public class Reading {
 
     public Reading(int id, String start, String end, String data)
     {
-        ID = id;
-        StartDate = start;
-        EndDate = end;
-        DataString = data;
+        this.ID = id;
+        this.StartDate = start;
+        this.EndDate = end;
+        this.DataString = data;
+    }
+
+    public Reading(int id, String start, String end, String data, int patientID)
+    {
+        this.ID = id;
+        this.StartDate = start;
+        this.EndDate = end;
+        this.DataString = data;
+        this.PatientID = patientID;
     }
 
     public Reading(String start, String end, String data)
     {
-        StartDate = start;
-        EndDate = end;
-        DataString = data;
+        this.StartDate = start;
+        this.EndDate = end;
+        this.DataString = data;
     }
 
     public List<PointValue> ConvertData()
