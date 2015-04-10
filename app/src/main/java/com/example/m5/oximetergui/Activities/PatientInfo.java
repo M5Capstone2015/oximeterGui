@@ -1,6 +1,12 @@
 package com.example.m5.oximetergui.Activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,10 +16,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
@@ -22,6 +30,7 @@ import com.example.m5.oximetergui.Helpers.GraphicsUtils;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.R;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +49,7 @@ public class PatientInfo extends ActionBarActivity {
     List<Reading> readings;
     DataViewAdapter adapter;
     ListView _listView;
+    ImageView _imageView;
     Context context;
     LinearLayout container;
 
@@ -77,6 +87,50 @@ public class PatientInfo extends ActionBarActivity {
         _listView.setOnItemClickListener(adapterClickListener);
         adapter = new DataViewAdapter(this, readings);
         _listView.setAdapter(adapter);
+
+        _imageView = (ImageView) findViewById(R.id.imageView);
+        _imageView.setOnClickListener(imageViewListener);
+    }
+
+    private ImageView.OnClickListener imageViewListener = new ImageView.OnClickListener() {
+
+        @Override
+        public void onClick(View dialog)
+        {
+            dispatchChoosePictureIntent();
+        }
+    };
+
+
+    private void dispatchChoosePictureIntent() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, Intent_Constants.SELECT_PHOTO);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case Intent_Constants.SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getContentResolver().query(
+                            selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String filePath = cursor.getString(columnIndex);
+                    cursor.close();
+
+
+                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
+                    _imageView.setImageBitmap(yourSelectedImage);
+                }
+        }
     }
 
     private LineChartView chart;
