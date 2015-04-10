@@ -24,6 +24,7 @@ import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
 import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
@@ -41,6 +42,7 @@ public class MainScreenFrag extends Fragment {
     ReadingCollector _collector = null;  // TODO wrap all this (minus NuJack) in an object for easy serialization.
     NuJack _nuJack = null;
     private DataModel _dataModel = null;
+    PatientModel _model = null;
 
     // --- View state Objects --- //
     private boolean _recording = false;
@@ -126,7 +128,7 @@ public class MainScreenFrag extends Fragment {
 
         Intent i = new Intent(_mainActivity, PatientInfo.class);
         i.putExtra(Intent_Constants.Patient_To_Edit, _currentPatient);
-        startActivityForResult(i, 1);  // We only care about the req code, just if user was deleted or not.
+        startActivityForResult(i, General_Constants.EDIT_PATIENT_REQUEST);  // We only care about the req code, just if user was deleted or not.
     }
 
     private void StopRecording()
@@ -196,14 +198,28 @@ public class MainScreenFrag extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d("PatientListSlider", Integer.toString(requestCode));
         if (resultCode == Activity.RESULT_OK)
         {
-            Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
+            if (requestCode==General_Constants.NEW_PATIENT_REQUEST) {
+                Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
 
-            Log.d("PatientListSlider", patientData.FirstName);
-            Log.d("PatientListSlider", patientData.LastName);
+                Log.d("PatientListSlider", patientData.FirstName);
+                Log.d("PatientListSlider", patientData.LastName);
 
-            //_patients.add(patientData); // TODO if patient name is updated or delete update GUI accordingly
+                //_patients.add(patientData); // TODO if patient name is updated or delete update GUI accordingly
+            }
+            if (requestCode==General_Constants.EDIT_PATIENT_REQUEST){
+                Patient patientData = data.getParcelableExtra(Intent_Constants.Patient_To_Edit);
+
+                Log.d("PatientListSlider", patientData.FirstName);
+                Log.d("PatientListSlider", patientData.LastName);
+
+                _model.UpdatePatient(patientData,null);
+                //_patients.add(patientData); // TODO if patient name is updated or delete update GUI accordingly
+
+            }
         }
     }
 
@@ -214,6 +230,7 @@ public class MainScreenFrag extends Fragment {
         try
         {
             _dataModel = new DataModel(getActivity());
+            _model = new PatientModel(_mainActivity);
             _nuJack = new NuJack(_dataAvailableListner);
             _nuJack.Start();
 

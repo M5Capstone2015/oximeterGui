@@ -33,7 +33,7 @@ public class PatientModel {
     {
         SQLiteDatabase db = _dal.getReadableDatabase();
         Cursor cursor = db.query(SQL_Constants.PATIENT_TABLE_NAME,
-                                 SQL_Constants.FROM, null, null, null, null, ""); // TODO add ORDERBY param later.
+                                 SQL_Constants.FROM, null, null, null, null, "", null); // TODO add ORDERBY param later.
 
         List<Patient> patients = new ArrayList<>();  // TODO consider only having search and recents section?
 
@@ -44,7 +44,8 @@ public class PatientModel {
             String lastName = cursor.getString(2);
             String dob = cursor.getString(3);
             Boolean isOpen = cursor.getInt(4) < 1 ? false : true;
-            Patient p = new Patient(ID, firstName, lastName, dob, isOpen);
+            String filePath = cursor.getString(5);
+            Patient p = new Patient(ID, firstName, lastName, dob, isOpen, filePath);
             patients.add(p);
         }
         return patients;
@@ -65,6 +66,7 @@ public class PatientModel {
             values.put(SQL_Constants.PATIENT_LASTNAME_COLUMN, patient.LastName);
             values.put(SQL_Constants.PATIENT_DOB_COLUMN, patient.DateOfBirth);
             values.put(SQL_Constants.PATIENT_ISOPEN_COLUMN, patient.IsOpen ? 1 : 0);
+            values.put(SQL_Constants.PATIENT_FILEPATH_COLUMN, patient.imageFilePath);
             db.insertOrThrow(SQL_Constants.PATIENT_TABLE_NAME, null, values);
         }
         catch (Exception e)
@@ -152,7 +154,8 @@ public class PatientModel {
                                                 patient.LastName,
                                                 patient.DateOfBirth,
                                                 patient.IsOpen ? 1 : 0,
-                                                patient.ID
+                                                patient.ID,
+                                                patient.imageFilePath
             );
 
             db.execSQL(updateString);

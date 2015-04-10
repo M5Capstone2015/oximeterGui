@@ -18,6 +18,7 @@ public final class General_Constants {
 
     public static final int NEW_PATIENT_REQUEST = 1;
     public static final int NEW_READING_REQUEST = 2;
+    public static final int EDIT_PATIENT_REQUEST = 4;
 
     public static final int PATIENT_REQUEST = 3;
 

@@ -13,19 +13,31 @@ public class Patient implements Parcelable {
     public String LastName = "";
     public String DateOfBirth = "";
     public boolean IsOpen;
+    public String imageFilePath = "";
 
     public Patient() { }
 
     // Parcelling part
     public Patient(Parcel in)
     {
-        String[] data = new String[4];
+        String[] data = new String[5];
 
         in.readStringArray(data);
         this.FirstName = data[0];
         this.LastName = data[1];
         this.DateOfBirth = data[2];
         this.ID = Integer.parseInt(data[3]);
+        this.imageFilePath = data[4];
+    }
+
+
+    public Patient(int ID, String firstName, String lastName, String dateOfBirth, Boolean isOpen, String filePath) // TODO get these constructors under control.
+    {
+        this.ID = ID;
+        this.FirstName = firstName;
+        this.LastName = lastName;
+        this.DateOfBirth = dateOfBirth;
+        this.imageFilePath = filePath;
     }
 
     public Patient(String firstName, String lastName, String dateOfBirth, Boolean isOpen) // TODO get these constructors under control.
@@ -66,7 +78,14 @@ public class Patient implements Parcelable {
         this.FirstName = p.FirstName;
         this.DateOfBirth = p.DateOfBirth;
         this.IsOpen = p.IsOpen;
+        this.imageFilePath = p.imageFilePath;
     }
+
+    public void UpdateImageFilePath(String filepath)
+    {
+        this.imageFilePath = filepath;
+    }
+
 
     @Override
     public void writeToParcel(Parcel dest, int flags)
@@ -74,7 +93,8 @@ public class Patient implements Parcelable {
         dest.writeStringArray(new String[] {this.FirstName,
                 this.LastName,
                 this.DateOfBirth,
-                String.valueOf(this.ID)
+                String.valueOf(this.ID),
+                this.imageFilePath
         });
     }
 

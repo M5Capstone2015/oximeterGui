@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +29,7 @@ import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.DataViewAdapter;
 import com.example.m5.oximetergui.Helpers.GraphicsUtils;
 import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.R;
 
 import java.io.InputStream;
@@ -52,7 +54,10 @@ public class PatientInfo extends ActionBarActivity {
     ImageView _imageView;
     Context context;
     LinearLayout container;
-
+    Patient _patientData = null;
+    Button _editButton;
+    PatientModel _model;
+    boolean edit=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,21 +72,20 @@ public class PatientInfo extends ActionBarActivity {
         _name = (TextView) findViewById(R.id.name);
         _age = (TextView) findViewById(R.id.agetextview);
 
-        Patient patientData = null;
         try {
-            patientData = getIntent().getParcelableExtra(Intent_Constants.Patient_To_Edit);
+            _patientData = getIntent().getParcelableExtra(Intent_Constants.Patient_To_Edit);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        _name.setText(patientData.FirstName + " " + patientData.LastName);
-        _age.setText("Age: " + patientData.DateOfBirth);
+        _name.setText(_patientData.FirstName + " " + _patientData.LastName);
+        _age.setText("Age: " + _patientData.DateOfBirth);
 
         //TextView dataVeiw = (TextView) findViewById(R.);
         DataModel _dataModel = new DataModel(this);
-        readings = _dataModel.GetDataByPatientID(patientData.ID);
+        readings = _dataModel.GetDataByPatientID(_patientData.ID);
 
         _listView = (ListView) findViewById(R.id.readings);
         _listView.setOnItemClickListener(adapterClickListener);
@@ -90,14 +94,39 @@ public class PatientInfo extends ActionBarActivity {
 
         _imageView = (ImageView) findViewById(R.id.imageView);
         _imageView.setOnClickListener(imageViewListener);
+
+        _editButton = (Button) findViewById(R.id.edit);
+        _editButton.setOnClickListener(editButton);
     }
+
+    private Button.OnClickListener editButton = new Button.OnClickListener(){
+
+        @Override
+        public void onClick(View dialog)
+        {
+            if(edit==true)
+            {
+                Intent i = new Intent();
+                i.putExtra(Intent_Constants.Patient_To_Edit, _patientData);
+                setResult(RESULT_OK, i);
+                finish();
+            }
+            if(edit==false)
+            {
+                _editButton.setText("Save");
+                edit=true;
+            }
+        }
+    };
 
     private ImageView.OnClickListener imageViewListener = new ImageView.OnClickListener() {
 
         @Override
         public void onClick(View dialog)
         {
-            dispatchChoosePictureIntent();
+            if(edit==true) {
+                dispatchChoosePictureIntent();
+            }
         }
     };
 
@@ -129,6 +158,7 @@ public class PatientInfo extends ActionBarActivity {
 
                     Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
                     _imageView.setImageBitmap(yourSelectedImage);
+                    _patientData.UpdateImageFilePath(filePath);
                 }
         }
     }

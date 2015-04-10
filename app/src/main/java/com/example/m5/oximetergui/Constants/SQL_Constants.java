@@ -14,6 +14,7 @@ public class SQL_Constants {
     public static String PATIENT_LASTNAME_COLUMN = "last_name";
     public static String PATIENT_DOB_COLUMN = "date_of_birth";
     public static String PATIENT_ISOPEN_COLUMN = "is_open";
+    public static String PATIENT_FILEPATH_COLUMN = "filepath";
     public static String PATIENT_ID_COLUMN = "id";
 
     // Readings column names
@@ -29,7 +30,8 @@ public class SQL_Constants {
                     "first_name TEXT," +
                     "last_name TEXT," +
                     "date_of_birth TEXT," +
-                    "is_open INT" +
+                    "is_open INT," +
+                    "filepath TEXT" +
             ");"; //+
 
     public static String CREATE_READING =
@@ -48,7 +50,8 @@ public class SQL_Constants {
             PATIENT_FIRSTNAME_COLUMN,
             PATIENT_LASTNAME_COLUMN,
             PATIENT_DOB_COLUMN,
-            PATIENT_ISOPEN_COLUMN
+            PATIENT_ISOPEN_COLUMN,
+            PATIENT_FILEPATH_COLUMN
     };
 
     // Patient query strings
@@ -58,6 +61,7 @@ public class SQL_Constants {
             " last_name = '%s'," +
             " date_of_birth = '%s'," +
             " is_open = %s" +
+            " filepath = %s " +
             " WHERE id = %s;";
 
     // Query first 10 patients with last or first name
