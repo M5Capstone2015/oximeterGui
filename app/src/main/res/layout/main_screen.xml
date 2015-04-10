@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/logout_theme"
         android:visibility="gone"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:text="X"
         android:id="@+id/log_out_button"
         android:layout_alignTop="@+id/patient_name"

@@ -22,9 +22,11 @@ import static android.widget.CompoundButton.*;
 
 public class Settings extends ActionBarActivity {
 
+    // --- Adapters --- //
     private ArrayAdapter adapter;
     private ArrayAdapter read_adapter;
 
+    // --- Views --- //
     private EditText customServer;
     private CheckBox autoSyncCheck;
     private CheckBox googleCheck;
@@ -34,12 +36,14 @@ public class Settings extends ActionBarActivity {
     private Spinner readSpinner;
     private Button saveButton;
 
-
+    // --- Activity Resources --- //
     Resources resources;
     SharedPreferences prefs;
 
+    // --- View State --- //
     private boolean viewIsDirty = false;
 
+    // --- Events --- //
     private CheckListener checkListener;
     private OnSpinnerSelected spinnerListener;
 
@@ -81,15 +85,13 @@ public class Settings extends ActionBarActivity {
         read_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         readSpinner.setAdapter(read_adapter);
 
-        // Load preference form Shared Prefs
+        // Load preference from Shared Prefs
         Boolean auto_sync_pref = prefs.getBoolean(resources.getString(R.string.auto_sync_pref), true);
         Boolean dropbox_pref = prefs.getBoolean(resources.getString(R.string.dropbox_pref), false);
         Boolean google_pref = prefs.getBoolean(resources.getString(R.string.google_pref), false);
         Boolean custom_pref = prefs.getBoolean(resources.getString(R.string.google_pref), false);
-
         int baud_pref = prefs.getInt(resources.getString(R.string.baud_rate_pref), 0);
         int read_pref = prefs.getInt(resources.getString(R.string.read_rate_pref), 0);
-
         String serverURL = prefs.getString(resources.getString(R.string.custom_server_url), "");
         this.customServer.setText(serverURL);
 
@@ -103,10 +105,11 @@ public class Settings extends ActionBarActivity {
         this.googleCheck.setChecked(google_pref);
         this.customCheck.setChecked(custom_pref);
 
-        // Initialize and attach events
+        // Initialize events
         this.checkListener = new CheckListener(this);
         this.spinnerListener = new OnSpinnerSelected(this);
 
+        // Attach 'em
         this.baudSpinner.setOnItemSelectedListener(spinnerListener);
         this.readSpinner.setOnItemSelectedListener(spinnerListener);
         this.autoSyncCheck.setOnCheckedChangeListener(checkListener);
