@@ -84,6 +84,7 @@ public class MainActivity extends ActionBarActivity {
                     case R.id.fragment_secondpane:
                         getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(false);
                         getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(true);
+                        ((SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_firstpane)).EnbleSearchBar(true);
                         break;
                     default:
                         break;
@@ -97,6 +98,8 @@ public class MainActivity extends ActionBarActivity {
                     case R.id.fragment_secondpane:
                         getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(false);
                         getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(false);
+                        ((SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_firstpane)).EnbleSearchBar(true);
+
                         break;
                     default:
                         break;
@@ -153,7 +156,16 @@ public class MainActivity extends ActionBarActivity {
                 LogOut();
                 return true;
             case R.id.syncButton:
+                MainScreenFrag frag = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
+                frag.startSync();
                 FileTest();
+                //try
+                //{
+                    //Thread.sleep(2000);
+                //}
+                //catch (Exception e)
+                //{
+                //}
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

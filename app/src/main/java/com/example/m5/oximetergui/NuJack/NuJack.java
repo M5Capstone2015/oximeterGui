@@ -87,7 +87,7 @@ public class NuJack {
                     if (result)
                         _listener.DataAvailable(sb.toString());
 
-                    Thread.sleep(300); // Take a reading every 0.3 seconds.
+                    //Thread.sleep(300); // Take a reading every 0.3 seconds.
                 }
                 catch (Exception e)
                 {

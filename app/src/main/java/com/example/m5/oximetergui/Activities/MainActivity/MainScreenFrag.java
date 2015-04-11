@@ -3,9 +3,13 @@ package com.example.m5.oximetergui.Activities.MainActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -15,7 +19,10 @@ import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.m5.oximetergui.Activities.PatientInfo;
 import com.example.m5.oximetergui.Constants.General_Constants;
@@ -27,6 +34,27 @@ import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
 import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Created by Hunt on 2/23/2015.
@@ -53,6 +81,63 @@ public class MainScreenFrag extends Fragment {
     private View logOutButton;
     private TextView infoTextView;
     private TextView percent;
+
+    private Handler mHandler = new Handler();
+    private RequestTask requestTask = new RequestTask();
+
+    public void startSync()
+    {
+        final ProgressBar pb = (ProgressBar) _mainActivity.findViewById(R.id.progressBar);
+        LinearLayout syncCont = (LinearLayout) _mainActivity.findViewById(R.id.syncContainer);
+
+        syncCont.setVisibility(View.VISIBLE);
+        pb.setVisibility(View.VISIBLE);
+
+        //requestTask.doInBackground("http://www.fakethang.com");
+        requestTask.execute("");
+
+        for (int i = 0; i < 101; i++)
+        {
+            pb.setProgress(i);
+            new Thread(new Runnable() {
+                public void run()
+                {
+                    int mProgressStatus = 0;
+                    while (mProgressStatus < 100)
+                    {
+                        mProgressStatus++;
+
+                        try {
+                            Thread.sleep(100);
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        final int s = mProgressStatus;
+
+                        mHandler.post(new Runnable() {
+                            public void run() {
+                                pb.setProgress(s);
+                                //pb.incrementProgressBy(1);
+                                //pb.setProgress(pb.getProgress() * 100);
+                            }
+                        });
+
+                    }
+
+                    mHandler.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getActivity(), "Sync successful!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }).start();
+
+
+
+        }
+    }
 
     public void LogInPatient(Patient p)
     {
@@ -234,6 +319,7 @@ public class MainScreenFrag extends Fragment {
         _mainActivity = (MainActivity) getActivity();
         View v = inflater.inflate(R.layout.main_screen, container, false);
         InitializeButtons(v);
+        //WriteToFile("fuck yo couch boi", "dump.csv");
         return v;
     }
 
@@ -257,13 +343,56 @@ public class MainScreenFrag extends Fragment {
         percent = (TextView) v.findViewById(R.id.percentView);
     }
 
+    public void WriteToFile(String content, String filename)
+    {
+        OutputStream fos;
+        try {
+            fos = _mainActivity.openFileOutput(filename, Context.MODE_WORLD_READABLE);
+            fos.write(content.getBytes());
+            fos.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
 
+        }
+    }
+
+
+    private int counter = 0;
     public String data = "";
+    public String recData = "";
+    private boolean done = false;
+
     OnDataAvailableListener _dataAvailableListner = new OnDataAvailableListener() {
         @Override
         public void DataAvailable(String _data) {
 
-            _mainScreenFrag.data = _data; // todo check if this sloppy shit is necessary.
+            _mainScreenFrag.data = _data;
+            recData += (_data + ", ");
+
+            counter++;
+            if (counter > 1000 && !done) {
+                WriteToFile(recData, "dump.csv");
+                done = true;
+                recData = "";
+                // wrote file
+                _mainActivity.runOnUiThread(new Runnable() { // UI update must be on main UI thread.
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), "Wrote the file!!!!", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
 
             if (_recording)
             {
@@ -276,6 +405,7 @@ public class MainScreenFrag extends Fragment {
                     @Override
                     public void run() {
                         percent.setText(data + "%");
+                        //percent.setText(counter + "%");
                     }
                 });
             }
@@ -285,6 +415,50 @@ public class MainScreenFrag extends Fragment {
             }
         }
     };
+
+    private void fireRequest()
+    {
+    }
+
+    //
+    //  Thread to perform HTTP request in background
+    //
+    class RequestTask extends AsyncTask<String, String, String>
+    {
+
+        @Override
+        protected String doInBackground(String... uri)
+        {
+            try {
+                int TIMEOUT_MILLISEC = 10000;  // = 10 seconds
+                HttpParams httpParams = new BasicHttpParams();
+                HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
+                HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
+                HttpClient client = new DefaultHttpClient(httpParams);
+
+                String data = "{\"json\": \"thang\"";
+
+                //HttpPost request = new HttpPost("http://ip.jsontest.com/");
+                //HttpPost request = new HttpPost("76.24.0.235");
+                HttpPost request = new HttpPost();
+                request.setEntity(new ByteArrayEntity(data.getBytes("UTF8")));
+                HttpResponse response = client.execute(request);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            super.onPostExecute(result);
+            // Do stuff with response...
+            //appendTextView(result);
+        }
+    }
 
     // Keeping the below uncommented for testing reader classes later on.
     int count = 1;

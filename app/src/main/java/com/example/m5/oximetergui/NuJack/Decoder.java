@@ -68,56 +68,19 @@ public class Decoder{
                 }
             }
         }
-        if (bitlist.size() == 8)
+        if (bitlist.size() == 9)
         {
             startflag = 0;
 
             _readCount++;
+            //readData.add();
 
             /* ---------------------------------------- */
             _readings.clear();
             _foundBit = true;
-            readingData = convertBitsToString();
-            if (_foundBit)
-                return;
-            /* ---------------------------------------- */
-
-            String newReading = convertBitsToString();
-            _readings.add(newReading);
-
-            bitlist.clear();
-
-            if(_readings.size() < 3)
-                return;
-
-            _readings.remove(0);
-
-            String reading1 = _readings.get(0);
-            String reading2 = _readings.get(1);
-            String reading3 = _readings.get(2);
-
-            if (_readings.get(0).equals(_readings.get(1)) || _readings.get(0).equals(_readings.get(2)))
-            {
-                _foundBit = true;
-                readingData = reading1;
-            }
-            else if ( _readings.get(1).equals(_readings.get(2))) {
-//            do some shit here.
-                //   System.out.println("----WHOLE BIT----");
-                // for (Integer i : bitlist)
-                //   System.out.println("\t" + i);
-                _foundBit = true;
-                readingData = reading3;
-                _readCount = 0;
-                //bitlist.clear();
-            }
+            //readingData = convertBitsToString();
         }
     }
-
-    private String readingData = "";
-    private String reading1 = "";
-    private String reading2 = "";
-    private String reading3 = "";
 
     boolean _foundBit = false;
     public boolean HandleData(List<Integer> data, StringBuilder res)
@@ -134,12 +97,14 @@ public class Decoder{
         return false;
     }
 
+    /*
     private String convertBitsToString() {
         String accum = "";
         for (Integer i : bitlist)
             accum += String.valueOf(i);
         return accum;
     }
+    */
 
 
     private float checkFreq(float number)
@@ -156,7 +121,6 @@ public class Decoder{
     private List<String> _readings = new ArrayList<>();
 
     private int _readCount = 0;
-
 
     private int _count = 0;
     private int _sum = 0;

@@ -247,6 +247,14 @@ public class SliderFragment extends Fragment {
 
         _searchBar = (EditText) v.findViewById(R.id.search_bar);
         _searchBar.addTextChangedListener(this.searchTextChanged);
+        _searchBar.setFocusable(false);
+        //_searchBar.setSelected(false);
+    }
+
+    public void EnbleSearchBar(boolean setting)
+    {
+        //this._searchBar.setEnabled(setting);
+        this._searchBar.setFocusable(true);
     }
 
     private void ShowConfirmDialog(Patient selectedPatient)

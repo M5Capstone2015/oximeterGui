@@ -16,16 +16,23 @@ public class nuByte
     {
         int _count = 0;
         int _value = 0;
-        for (Integer i : bits)
+        //for (Integer i : bits)
+        for (int i = 1; i < 9; i++)
         {
+            int val = bits.get(i);
             if (_count > 0) // We don't need to shift to set first bit
                 _value <<= 1;
 
-            _value += i;
+            _value += val;
             _count++;
         }
-        float res = ((float) _value + 750 ) / 10;
-        return String.format("%.1f", res);
+        //float res = ((float) _value + 750 ) / 10;
+        //float res = ((float) _value) + 70;
+        int res =  _value + 70;
+        String s = "";
+        s += res;
+        return s;
+        //return String.format("%.1f", res);
     }
 
     public float intVal()
