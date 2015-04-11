@@ -2,6 +2,7 @@ package com.example.m5.oximetergui.Helpers;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;

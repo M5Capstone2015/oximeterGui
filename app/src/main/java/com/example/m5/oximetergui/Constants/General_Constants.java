@@ -14,6 +14,7 @@ public final class General_Constants {
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+    public static final int REQUEST_IMAGE_CAPTURE = 1;
 
     public static final int MODIFY_PATIENT = 1;
 
