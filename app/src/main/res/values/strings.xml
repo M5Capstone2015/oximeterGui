@@ -48,6 +48,9 @@
     <string name="patient_info_label">Patient Info</string>
     <string name="first_name_label">First</string>
     <string name="last_name_label">Last</string>
+    <string name="age_label">Age</string>
+    <string name="address_label">Address</string>
+    <string name="notes_label">Notes</string>
     <string name="save_label">Save</string>
 
     <!-- Patient History -->
