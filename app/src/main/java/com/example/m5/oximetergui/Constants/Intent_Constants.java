@@ -9,4 +9,5 @@ public class Intent_Constants {
     public static String ReadingDate = "Date";
     public static final int SELECT_PHOTO = 100;
     public static String Patient_To_Edit = "PatientToEdit";
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 }

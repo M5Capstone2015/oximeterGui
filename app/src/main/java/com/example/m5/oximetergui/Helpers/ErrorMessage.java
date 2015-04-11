@@ -26,9 +26,9 @@ public class ErrorMessage {
         mTv = (TextView) mActivity.getLayoutInflater().inflate(R.layout.textview_error_message, null);
         final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
-        mTv.setText(mErrorText);
-        params.addRule(RelativeLayout.BELOW, id);
-        mTv.setLayoutParams(params);
+        //mTv.setText(mErrorText);
+        /*params.addRule(RelativeLayout.BELOW, id);
+        mTv.setLayoutParams(params);*/
         return mTv;
     }
 }

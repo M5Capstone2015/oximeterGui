@@ -57,7 +57,7 @@ public class Patient implements Parcelable {
 
     public boolean Validate() // TODO Finish this method. Do we want some these fields to be nullable?
     {
-        return !FirstName.matches("") || LastName.matches("");
+        return !(FirstName.matches("") || LastName.matches(""));
     }
 
     public void Update(Patient p)

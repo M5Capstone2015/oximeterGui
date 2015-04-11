@@ -46,8 +46,8 @@
     <!-- New Patient Activity -->
     <string name="title_activity_new_patient">New Patient</string>
     <string name="patient_info_label">Patient Info</string>
-    <string name="first_name_label">First</string>
-    <string name="last_name_label">Last</string>
+    <string name="first_name_label">First (Required)</string>
+    <string name="last_name_label">Last (Required)</string>
     <string name="age_label">Age</string>
     <string name="address_label">Address</string>
     <string name="notes_label">Notes</string>

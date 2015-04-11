@@ -27,6 +27,8 @@ public class PatientInfoHelper {
         _main.setContentView(R.layout.activity_new_patient);
         View savebutton = _main.findViewById(R.id.save);
         savebutton.setOnClickListener(_v);
+        View cameraButton = _main.findViewById(R.id.cameraButton);
+        cameraButton.setOnClickListener(_v);
     }
 
     public void createErrorMessage()
@@ -34,11 +36,9 @@ public class PatientInfoHelper {
         RelativeLayout mMainLayout = (RelativeLayout) _main.findViewById(R.id.relativeNewPatient);
 
         //If we have yet to display an error message, display message
-        TextView oldMessage = (TextView)_main.findViewById(R.id.error_message);
-        if (oldMessage == null) {
-            ErrorMessage em = new ErrorMessage("Please Fill out all required fields", _main);
-            TextView message = em.CreateErrorBelow(R.id.save);
-            mMainLayout.addView(message);
+        TextView message = (TextView)_main.findViewById(R.id.errorTxt);
+        if (message.getText().equals("")) {
+            message.setText("Please Fill out all required fields");
         }
     }
 

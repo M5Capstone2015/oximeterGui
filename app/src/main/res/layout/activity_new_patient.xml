@@ -61,25 +61,29 @@
         android:id="@+id/editText"
         android:layout_below="@+id/imageView2"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/agetextview"
+        android:layout_alignEnd="@+id/agetextview" />
 
     <EditText
         android:layout_width="fill_parent"
-        android:layout_height="300dp"
+        android:layout_height="150dp"
         android:hint="@string/notes_label"
         android:inputType="textMultiLine"
         android:id="@+id/editText2"
         android:layout_below="@+id/editText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/save" />
+        android:layout_above="@+id/save"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/save_label"
         android:id="@+id/save"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/errorTxt"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -90,6 +94,24 @@
         android:src="@drawable/placeholder"
         android:id="@+id/imageView2"
         android:layout_below="@+id/patientInfo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/errorTxt"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:id="@+id/cameraButton"
+        android:src="@drawable/camera"
+        android:layout_below="@+id/imageView2"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

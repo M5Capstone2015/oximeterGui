@@ -12,7 +12,8 @@ public final class General_Constants {
     public static String Yes = "Yes";
     public static String No = "No";
 
-
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
 
     public static final int MODIFY_PATIENT = 1;
 
