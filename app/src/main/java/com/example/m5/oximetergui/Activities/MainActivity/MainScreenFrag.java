@@ -404,11 +404,12 @@ public class MainScreenFrag extends Fragment {
             recData += (_data + ", ");
 
             counter++;
-            if (counter > 1000 && !done) {
+            if (counter > 1000 && !done)
+            {
                 WriteToFile(recData, "dump.csv");
                 done = true;
                 recData = "";
-                // wrote file
+
                 _mainActivity.runOnUiThread(new Runnable() { // UI update must be on main UI thread.
                     @Override
                     public void run() {
@@ -428,8 +429,8 @@ public class MainScreenFrag extends Fragment {
                 _mainActivity.runOnUiThread(new Runnable() { // UI update must be on main UI thread.
                     @Override
                     public void run() {
-                        percent.setText(data + "%");
-                        //percent.setText(counter + "%");
+                        //percent.setText(data + "%");
+                        percent.setText(counter + "%");
                     }
                 });
             }

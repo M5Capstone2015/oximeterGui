@@ -133,7 +133,8 @@ public class NewPatient extends Activity implements View.OnClickListener {
         this.sendBroadcast(mediaScanIntent);
     }
 
-    private void setPic() {
+    private void setPic()
+    {
         // Get the dimensions of the View
         int targetW = thumbnail.getWidth();
         int targetH = thumbnail.getHeight();
