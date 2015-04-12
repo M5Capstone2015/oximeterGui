@@ -101,7 +101,7 @@ public class MainScreenFrag extends Fragment {
         pb.setVisibility(View.VISIBLE);
 
         if (this._dataSync != null)
-            this._dataSync.Run();
+            this._dataSync.Run("fake data here!");
 
         //requestTask.execute("");
 

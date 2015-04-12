@@ -17,7 +17,7 @@ public class DataSync {
         this._preferences = p;
     }
 
-    public void Run()
+    public void Run(String data)
     {
         if (this.checkSyncCustom())
             SyncDropbox();
