@@ -290,7 +290,7 @@ public class MainScreenFrag extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK)
+        if (resultCode == Activity.RESULT_OK && requestCode == General_Constants.NEW_PATIENT_REQUEST)
         {
             Patient patientData = data.getParcelableExtra(Intent_Constants.NewPatientInfo);
 
@@ -299,6 +299,16 @@ public class MainScreenFrag extends Fragment {
 
             //_patients.add(patientData); // TODO if patient name is updated or delete update GUI accordingly
         }
+        if (requestCode == General_Constants.REQUEST_LINK_TO_DBX) {
+            if (resultCode == Activity.RESULT_OK) {
+                // ... Start using Dropbox files.
+            } else {
+                // ... Link failed or was cancelled by the user.
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
 
     @Override
