@@ -1,11 +1,6 @@
 package com.example.m5.oximetergui.Activities.MainActivity;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -14,13 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 
-import com.example.m5.oximetergui.Activities.NewPatient;
-import com.example.m5.oximetergui.Activities.PatientInfo;
 import com.example.m5.oximetergui.Activities.Settings;
-import com.example.m5.oximetergui.Constants.General_Constants;
-import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Helpers.BackupBuilder;
 import com.example.m5.oximetergui.Helpers.Slider;
 import com.example.m5.oximetergui.Models.DataModel;
@@ -157,7 +147,7 @@ public class MainActivity extends ActionBarActivity {
                 return true;
             case R.id.syncButton:
                 MainScreenFrag frag = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
-                frag.startSync();
+                frag.StartSync();
                 FileTest();
                 //try
                 //{

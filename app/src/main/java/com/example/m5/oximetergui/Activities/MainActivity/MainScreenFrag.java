@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
+import com.example.m5.oximetergui.Helpers.DataSync;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
@@ -55,20 +57,23 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.prefs.Preferences;
 
 /**
  * Created by Hunt on 2/23/2015.
  */
 public class MainScreenFrag extends Fragment {
 
-    // --- Activities and Fragments --- //
+    // --- API Objects --- ///
+    private SharedPreferences prefs;
     private MainScreenFrag _mainScreenFrag;
     private MainActivity _mainActivity;
 
     // --- Helpers/Model --- //
-    ReadingCollector _collector = null;  // TODO wrap all this (minus NuJack) in an object for easy serialization.
-    NuJack _nuJack = null;
+    private ReadingCollector _collector = null;  // TODO wrap all this (minus NuJack) in an object for easy serialization.
+    private NuJack _nuJack = null;
     private DataModel _dataModel = null;
+    private DataSync _dataSync = null;
 
     // --- View state Objects --- //
     private boolean _recording = false;
@@ -82,19 +87,23 @@ public class MainScreenFrag extends Fragment {
     private TextView infoTextView;
     private TextView percent;
 
+    // --- Async Workers --- //
     private Handler mHandler = new Handler();
     private RequestTask requestTask = new RequestTask();
 
-    public void startSync()
+
+    public void StartSync()
     {
         final ProgressBar pb = (ProgressBar) _mainActivity.findViewById(R.id.progressBar);
-        LinearLayout syncCont = (LinearLayout) _mainActivity.findViewById(R.id.syncContainer);
+        final LinearLayout syncCont = (LinearLayout) _mainActivity.findViewById(R.id.syncContainer);
 
         syncCont.setVisibility(View.VISIBLE);
         pb.setVisibility(View.VISIBLE);
 
-        //requestTask.doInBackground("http://www.fakethang.com");
-        requestTask.execute("");
+        if (this._dataSync != null)
+            this._dataSync.Run();
+
+        //requestTask.execute("");
 
         for (int i = 0; i < 101; i++)
         {
@@ -128,7 +137,8 @@ public class MainScreenFrag extends Fragment {
 
                     mHandler.post(new Runnable() {
                         public void run() {
-                            Toast.makeText(getActivity(), "Sync successful!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Sync successful!", Toast.LENGTH_SHORT).show();
+                            syncCont.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -317,9 +327,13 @@ public class MainScreenFrag extends Fragment {
     {
         _mainScreenFrag = this;
         _mainActivity = (MainActivity) getActivity();
+
         View v = inflater.inflate(R.layout.main_screen, container, false);
         InitializeButtons(v);
-        //WriteToFile("fuck yo couch boi", "dump.csv");
+
+        this.prefs = _mainActivity.getPreferences(Context.MODE_PRIVATE);
+        this._dataSync = new DataSync(_mainActivity, prefs);
+
         return v;
     }
 
