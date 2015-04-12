@@ -24,6 +24,7 @@ import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Helpers.ErrorMessage;
+import com.example.m5.oximetergui.Helpers.ImageHelper;
 import com.example.m5.oximetergui.Helpers.PatientInfoHelper;
 import com.example.m5.oximetergui.R;
 
@@ -41,6 +42,8 @@ public class NewPatient extends Activity implements View.OnClickListener {
     private Uri fileUri;
     ImageView thumbnail;
     String _currentPhotoPath;
+    ImageHelper _imageHelper = new ImageHelper(this);
+
 
 
     @Override
@@ -48,7 +51,17 @@ public class NewPatient extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         _helper.ConstructMainLayout();
         thumbnail = (ImageView) findViewById(R.id.thumbnail);
+        thumbnail.setOnClickListener(imageViewListener);
     }
+
+    private ImageView.OnClickListener imageViewListener = new ImageView.OnClickListener() {
+
+        @Override
+        public void onClick(View dialog)
+        {
+            _imageHelper.dispatchChoosePictureIntent();
+        }
+    };
 
     public void onClick(View v) {
         switch (v.getId())
@@ -99,6 +112,12 @@ public class NewPatient extends Activity implements View.OnClickListener {
             if (requestCode == General_Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 this.galleryAddPic();
                 this.setPic();
+
+            }
+            else if (requestCode == Intent_Constants.SELECT_PHOTO && resultCode == RESULT_OK)
+            {
+                Uri selectedImage = data.getData();
+                _imageHelper.setImage(selectedImage, thumbnail);
 
             }
             else if (resultCode == RESULT_CANCELED) {

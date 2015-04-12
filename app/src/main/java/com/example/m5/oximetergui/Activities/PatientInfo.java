@@ -27,6 +27,7 @@ import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
 import com.example.m5.oximetergui.Helpers.DataViewAdapter;
 import com.example.m5.oximetergui.Helpers.GraphicsUtils;
+import com.example.m5.oximetergui.Helpers.ImageHelper;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.R;
 
@@ -52,6 +53,7 @@ public class PatientInfo extends ActionBarActivity {
     ImageView _imageView;
     Context context;
     LinearLayout container;
+    ImageHelper _imageHelper = new ImageHelper(this);
 
 
     @Override
@@ -97,16 +99,9 @@ public class PatientInfo extends ActionBarActivity {
         @Override
         public void onClick(View dialog)
         {
-            dispatchChoosePictureIntent();
+            _imageHelper.dispatchChoosePictureIntent();
         }
     };
-
-
-    private void dispatchChoosePictureIntent() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, Intent_Constants.SELECT_PHOTO);
-    }
 
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent imageReturnedIntent) {
@@ -116,19 +111,7 @@ public class PatientInfo extends ActionBarActivity {
             case Intent_Constants.SELECT_PHOTO:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                    Cursor cursor = getContentResolver().query(
-                            selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
-
-
-                    Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-                    _imageView.setImageBitmap(yourSelectedImage);
+                    _imageHelper.setImage(selectedImage, _imageView);
                 }
         }
     }
