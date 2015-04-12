@@ -13,6 +13,7 @@ public class Patient implements Parcelable {
     public String LastName = "";
     public String DateOfBirth = "";
     public boolean IsOpen;
+    public String imageFilePath = "";
 
     public Patient() { }
 

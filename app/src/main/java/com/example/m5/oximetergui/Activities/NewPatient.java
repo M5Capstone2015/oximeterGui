@@ -1,55 +1,47 @@
 package com.example.m5.oximetergui.Activities;
 
 import android.app.Activity;
-import android.content.ContentValues;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.hardware.camera2.CameraCaptureSession;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
-import com.example.m5.oximetergui.Helpers.ErrorMessage;
 import com.example.m5.oximetergui.Helpers.ImageHelper;
 import com.example.m5.oximetergui.Helpers.PatientInfoHelper;
 import com.example.m5.oximetergui.R;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 
 public class NewPatient extends Activity implements View.OnClickListener {
 
-    Patient mPatient = new Patient();
-    PatientInfoHelper _helper = new PatientInfoHelper(this, this);
-    private Uri fileUri;
-    ImageView thumbnail;
-    String _currentPhotoPath;
-    ImageHelper _imageHelper = new ImageHelper(this);
+    private Patient mPatient = new Patient();
+    private PatientInfoHelper _helper = new PatientInfoHelper(this, this);
+    private ImageView thumbnail;
+    private ImageHelper _imageHelper = new ImageHelper(this);
+    private Bitmap _currentImage = null;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         _helper.ConstructMainLayout();
+
         thumbnail = (ImageView) findViewById(R.id.thumbnail);
         thumbnail.setOnClickListener(imageViewListener);
     }
@@ -66,8 +58,6 @@ public class NewPatient extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId())
         {
-            //case R.id.Edit:
-                //break;
             case R.id.save:
                 mPatient = _helper.ConstructPatient();
 
@@ -77,6 +67,25 @@ public class NewPatient extends Activity implements View.OnClickListener {
                 }
                 else
                 {
+                    //
+                    // DAN
+                    // The below is commented out because it will throw an error because mPatient's ID is NULL.
+                    // After you save the patient here and get the patient unique ID we can save the image.
+                    //
+
+                    /*
+                    if (_currentImage != null) // Save JPEG if user took a picture
+                        mPatient.imageFilePath = this.SaveFile(this._currentImage, mPatient);
+                    */
+
+                    //
+                    //  DAN
+                    //  Lets do the SQL save here. Then we can return RESULT_OK
+                    //  just to tell the Slider to refresh the patient list with the new patient.
+                    //
+                    //  Also use the LoadPicture() method I wrote to Load the picture in patient INFO.
+                    //
+
                     Intent i = new Intent();
                     mPatient.ID = 0;
                     i.putExtra(Intent_Constants.NewPatientInfo, mPatient);
@@ -86,45 +95,99 @@ public class NewPatient extends Activity implements View.OnClickListener {
                 }
 
             case R.id.cameraButton:
-
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        // Error occurred while creating the File
-                    }
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                Uri.fromFile(photoFile));
-                        startActivityForResult(takePictureIntent, General_Constants.REQUEST_IMAGE_CAPTURE);
-                    }
-                    break;
-                }
+                dispatchTakePictureIntent();
         }
     }
+
+
+    private void dispatchTakePictureIntent()
+    {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+    }
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (requestCode == General_Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                this.galleryAddPic();
-                this.setPic();
+        if (requestCode == General_Constants.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+        {
+            Bundle extras = data.getExtras();
+            this._currentImage = (Bitmap) extras.get("data"); // Save current image.
 
-            }
-            else if (requestCode == Intent_Constants.SELECT_PHOTO && resultCode == RESULT_OK)
-            {
-                Uri selectedImage = data.getData();
-                _imageHelper.setImage(selectedImage, thumbnail);
+            ImageView imageView = (ImageView) findViewById(R.id.thumbnail);
+            imageView.setImageBitmap(_currentImage);
+        }
+        else if (resultCode == RESULT_CANCELED) {
+            // User cancelled the image capture so do nothing.
+        }
+    }
 
-            }
-            else if (resultCode == RESULT_CANCELED) {
-                // User cancelled the image capture
-            }
+    private String SaveFile(Bitmap bitmap, Patient patient)
+    {
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+
+        String fileName = patient.ID + "_image.jp";
+        File mypath = new File(directory, fileName);
+
+        FileOutputStream out;
+        try
+        {
+            out = new FileOutputStream(mypath);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return mypath.toString();
+    }
+
+    private void LoadPicture(Context context, Patient patient)
+    {
+        ContextWrapper cw;
+        File directory;
+
+        try {
+            cw = new ContextWrapper(context);
+            directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        String filename = patient.ID.toString() + "_image.jpg";
+        File filePath = new File(directory, filename);
+
+        int size = (int) filePath.length();
+        byte[] bytes = new byte[size];
+
+        try
+        {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(filePath));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+            Bitmap iamge = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            this.thumbnail.setImageBitmap(iamge);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
     }
+
+    /*
 
     public File createImageFile() throws IOException {
         // Create an image file name
@@ -133,16 +196,16 @@ public class NewPatient extends Activity implements View.OnClickListener {
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
-        _currentPhotoPath = "file:" + image.getAbsolutePath();
+    // Save a file: path for use with ACTION_VIEW intents
+    _currentPhotoPath = "file:" + image.getAbsolutePath();
 
-        return image;
-    }
+    return image;
+
 
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -151,9 +214,10 @@ public class NewPatient extends Activity implements View.OnClickListener {
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
     }
+     */
 
-    private void setPic()
-    {
+    /*
+    private void setPic() {
         // Get the dimensions of the View
         int targetW = thumbnail.getWidth();
         int targetH = thumbnail.getHeight();
@@ -166,7 +230,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
         int photoH = bmOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
@@ -176,7 +240,6 @@ public class NewPatient extends Activity implements View.OnClickListener {
         Bitmap bitmap = BitmapFactory.decodeFile(_currentPhotoPath, bmOptions);
         thumbnail.setImageBitmap(bitmap);
     }
-
-
+    */
 
 }
