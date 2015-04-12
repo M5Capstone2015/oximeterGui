@@ -127,7 +127,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
         }
     }
 
-    private String SaveFile(Bitmap bitmap, Patient patient)
+    private String SaveImage(Bitmap bitmap, Patient patient)
     {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
@@ -147,7 +147,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
         return mypath.toString();
     }
 
-    private void LoadPicture(Context context, Patient patient)
+    private void LoadImage(Context context, Patient patient)
     {
         ContextWrapper cw;
         File directory;
