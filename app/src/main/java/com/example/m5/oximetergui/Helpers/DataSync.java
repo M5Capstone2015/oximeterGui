@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.dropbox.sync.android.DbxAccountManager;
+import com.dropbox.sync.android.DbxFile;
+import com.dropbox.sync.android.DbxFileSystem;
+import com.dropbox.sync.android.DbxPath;
 import com.example.m5.oximetergui.Constants.General_Constants;
 
 import java.util.prefs.Preferences;
@@ -41,6 +44,22 @@ public class DataSync {
     private void SyncDropbox()
     {
         mDbxAcctMgr.startLink(this._context, General_Constants.REQUEST_LINK_TO_DBX);
+        try
+        {
+            DbxFileSystem dbxFs = DbxFileSystem.forAccount(mDbxAcctMgr.getLinkedAccount());
+            DbxFile testFile = dbxFs.create(new DbxPath("heyyyyyy.txt"));
+
+            try {
+                testFile.writeString("ey bay bay");
+            }
+            finally {
+                testFile.close();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 

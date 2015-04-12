@@ -105,6 +105,7 @@ public class MainScreenFrag extends Fragment {
 
         //requestTask.execute("");
 
+        /*
         for (int i = 0; i < 101; i++)
         {
             pb.setProgress(i);
@@ -147,6 +148,7 @@ public class MainScreenFrag extends Fragment {
 
 
         }
+        */
     }
 
     public void LogInPatient(Patient p)
