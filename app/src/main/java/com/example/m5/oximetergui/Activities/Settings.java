@@ -89,7 +89,7 @@ public class Settings extends ActionBarActivity {
         Boolean auto_sync_pref = prefs.getBoolean(resources.getString(R.string.auto_sync_pref), true);
         Boolean dropbox_pref = prefs.getBoolean(resources.getString(R.string.dropbox_pref), false);
         Boolean google_pref = prefs.getBoolean(resources.getString(R.string.google_pref), false);
-        Boolean custom_pref = prefs.getBoolean(resources.getString(R.string.google_pref), false);
+        Boolean custom_pref = prefs.getBoolean(resources.getString(R.string.custom_pref), false);
         int baud_pref = prefs.getInt(resources.getString(R.string.baud_rate_pref), 0);
         int read_pref = prefs.getInt(resources.getString(R.string.read_rate_pref), 0);
         String serverURL = prefs.getString(resources.getString(R.string.custom_server_url), "");
@@ -122,21 +122,21 @@ public class Settings extends ActionBarActivity {
     {
         SharedPreferences.Editor editor = this.prefs.edit();
         editor.putBoolean(pref_name, val);
-        editor.commit();
+        editor.apply();
     }
 
     private void setPref(String pref_name, int val)
     {
         SharedPreferences.Editor editor = this.prefs.edit();
         editor.putInt(pref_name, val);
-        editor.commit();
+        editor.apply();
     }
 
     private void setPref(String pref_name, String val)
     {
         SharedPreferences.Editor editor = this.prefs.edit();
         editor.putString(pref_name, val);
-        editor.commit();
+        editor.apply();
     }
 
     private void SavePrefs()
@@ -144,6 +144,7 @@ public class Settings extends ActionBarActivity {
         // Save auto-sync
         setPref(this.resources.getString(R.string.auto_sync_pref), this.autoSyncCheck.isChecked());
 
+        boolean drp = this.dropboxCheck.isChecked();
         // Save sync options
         setPref(this.resources.getString(R.string.dropbox_pref), this.dropboxCheck.isChecked());
         setPref(this.resources.getString(R.string.google_pref), this.googleCheck.isChecked());

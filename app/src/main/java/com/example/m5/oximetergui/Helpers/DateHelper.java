@@ -29,6 +29,25 @@ public final class DateHelper {
         return ft.format(date);
     }
 
+    public static String GetBackupDate()
+    {
+        Calendar c = Calendar.getInstance();
+        //int seconds = c.get(Calendar.SECOND);
+        int minutes = c.get(Calendar.MINUTE);
+        int hours = c.get(Calendar.HOUR_OF_DAY);
+        int day = c.get(Calendar.DATE);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+
+        Date date = new Date(year, month, day);
+        date.setMinutes(minutes);
+        date.setHours(hours);
+
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyyMMdd_hhmm"); // TODO move this to constants
+
+        return ft.format(date);
+    }
+
     public static String DateToString(Date d) // TODO implement
     {
         return "";

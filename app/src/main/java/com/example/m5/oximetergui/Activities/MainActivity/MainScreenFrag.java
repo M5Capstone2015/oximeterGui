@@ -3,10 +3,12 @@ package com.example.m5.oximetergui.Activities.MainActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.backup.FileBackupHelper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,9 +32,11 @@ import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Data_Objects.Reading;
+import com.example.m5.oximetergui.Helpers.BackupBuilder;
 import com.example.m5.oximetergui.Helpers.DataSync;
 import com.example.m5.oximetergui.Helpers.ReadingCollector;
 import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.NuJack.NuJack;
 import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
@@ -68,11 +72,13 @@ public class MainScreenFrag extends Fragment {
     private SharedPreferences prefs;
     private MainScreenFrag _mainScreenFrag;
     private MainActivity _mainActivity;
+    private Resources _resources;
 
     // --- Helpers/Model --- //
     private ReadingCollector _collector = null;  // TODO wrap all this (minus NuJack) in an object for easy serialization.
     private NuJack _nuJack = null;
     private DataModel _dataModel = null;
+    private PatientModel _patientModel = null;
     private DataSync _dataSync = null;
 
     // --- View state Objects --- //
@@ -100,8 +106,10 @@ public class MainScreenFrag extends Fragment {
         syncCont.setVisibility(View.VISIBLE);
         pb.setVisibility(View.VISIBLE);
 
+        BackupBuilder backupBuilder = new BackupBuilder(this._patientModel, this._dataModel);
+
         if (this._dataSync != null)
-            this._dataSync.Run("fake data here!");
+            this._dataSync.Run(backupBuilder.GenerateFile());
 
         //requestTask.execute("");
 
@@ -320,6 +328,7 @@ public class MainScreenFrag extends Fragment {
         try
         {
             _dataModel = new DataModel(getActivity());
+            _patientModel = new PatientModel(getActivity());
             _nuJack = new NuJack(_dataAvailableListner);
             _nuJack.Start();
 
@@ -337,14 +346,16 @@ public class MainScreenFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        _mainScreenFrag = this;
-        _mainActivity = (MainActivity) getActivity();
+        this._mainScreenFrag = this;
+        this._mainActivity = (MainActivity) getActivity();
+
+        this._resources = getResources();
 
         View v = inflater.inflate(R.layout.main_screen, container, false);
         InitializeButtons(v);
 
         this.prefs = _mainActivity.getPreferences(Context.MODE_PRIVATE);
-        this._dataSync = new DataSync(_mainActivity, prefs);
+        this._dataSync = new DataSync(_mainActivity, prefs, _resources);
 
         return v;
     }
