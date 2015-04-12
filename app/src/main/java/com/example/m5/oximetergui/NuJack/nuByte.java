@@ -28,7 +28,7 @@ public class nuByte
         }
         //float res = ((float) _value + 750 ) / 10;
         //float res = ((float) _value) + 70;
-        int res =  _value + 70;
+        int res =  _value + 700;
         String s = "";
         s += res;
         return s;
