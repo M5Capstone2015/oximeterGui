@@ -3,6 +3,9 @@ package com.example.m5.oximetergui.Activities.MainActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.app.backup.FileBackupHelper;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,14 +19,17 @@ import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.SpannedString;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -312,9 +318,12 @@ public class MainScreenFrag extends Fragment {
         if (requestCode == General_Constants.REQUEST_LINK_TO_DBX) {
             if (resultCode == Activity.RESULT_OK) {
                 // ... Start using Dropbox files.
+                Toast.makeText(getActivity(), "DropBox sync succeded! :-)", Toast.LENGTH_LONG).show();
             } else {
                 // ... Link failed or was cancelled by the user.
+                Toast.makeText(getActivity(), "DropBox sync failed :(", Toast.LENGTH_LONG).show();
             }
+            // make thingy go up
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
@@ -362,23 +371,80 @@ public class MainScreenFrag extends Fragment {
 
     private void InitializeButtons(View v)
     {
-        selectPatientsButton = v.findViewById(R.id.patient_list);
-        selectPatientsButton.setOnClickListener(_mainListener);
+        this.selectPatientsButton = v.findViewById(R.id.patient_list);
+        this.selectPatientsButton.setOnClickListener(_mainListener);
 
-        startButton = v.findViewById(R.id.start_reading);
-        startButton.setOnClickListener(_mainListener);
+        this.startButton = v.findViewById(R.id.start_reading);
+        this.startButton.setOnClickListener(_mainListener);
 
-        stopButton = v.findViewById(R.id.stop_reading_main);
-        stopButton.setOnClickListener(_mainListener);
+        this.stopButton = v.findViewById(R.id.stop_reading_main);
+        this.stopButton.setOnClickListener(_mainListener);
 
-        logOutButton = v.findViewById(R.id.log_out_button);
-        logOutButton.setOnClickListener(_mainListener);
+        this.logOutButton = v.findViewById(R.id.log_out_button);
+        this.logOutButton.setOnClickListener(_mainListener);
 
-        infoTextView = (TextView) v.findViewById(R.id.patient_name);
-        infoTextView.setOnClickListener(_mainListener);
+        this.infoTextView = (TextView) v.findViewById(R.id.patient_name);
+        this.infoTextView.setOnClickListener(_mainListener);
 
-        percent = (TextView) v.findViewById(R.id.percentView);
+        this.tv = v.findViewById(R.id.circle_2);
+        this.tv2 = (TextView) v.findViewById(R.id.circle_3);
+
+        this.smallCircle = v.findViewById(R.id.smallGreen);
+        this.percent = (TextView) v.findViewById(R.id.percentView2);
     }
+
+    View tv;
+    TextView tv2;
+    View smallCircle;
+    private boolean _set = false;
+
+    public void moveTv()
+    {
+        int sh = smallCircle.getHeight();
+        int sw = smallCircle.getWidth();
+
+        float sx = smallCircle.getX();
+        float sy = smallCircle.getY();
+
+        int height = this.tv.getHeight();
+        int width = this.tv.getWidth();
+
+        // Move bar to the center of
+        if (!_set) {
+            smallCircle.setX(sx + width / 2 - sw / 2);
+            smallCircle.setY(sy + height / 2 - sh / 2);
+            _set = true;
+        }
+
+        int bigRadius = this.percent.getHeight();
+
+        float bigCircle_Y = this.percent.getY();
+        float bigCircle_X = this.percent.getX();
+
+        this.tv.setY(bigCircle_Y);
+        this.tv.setX(bigCircle_X+ bigRadius);
+
+        this.tv2.setY(bigCircle_Y+ bigRadius - height);
+        this.tv2.setX(bigCircle_X + bigRadius);
+    }
+
+    private void setView()
+    {
+        tv.post(new Runnable() {
+            @Override
+            public void run() {
+                tv.getHeight(); //height is ready
+            }
+        });
+    }
+
+
+    public int pxToDp(int px) {
+        DisplayMetrics displayMetrics = _mainActivity.getResources().getDisplayMetrics();
+        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
+    }
+
 
     public void WriteToFile(String content, String filename)
     {
@@ -443,7 +509,7 @@ public class MainScreenFrag extends Fragment {
                     @Override
                     public void run() {
                         //percent.setText(data + "%");
-                        percent.setText(counter + "%");
+                        //percent.setText(counter + "%");
                     }
                 });
             }
@@ -453,10 +519,6 @@ public class MainScreenFrag extends Fragment {
             }
         }
     };
-
-    private void fireRequest()
-    {
-    }
 
     //
     //  Thread to perform HTTP request in background
@@ -558,4 +620,5 @@ public class MainScreenFrag extends Fragment {
             }
         }
     };
+
 }
