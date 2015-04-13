@@ -16,6 +16,7 @@ import com.example.m5.oximetergui.Constants.Intent_Constants;
 import com.example.m5.oximetergui.Data_Objects.Patient;
 import com.example.m5.oximetergui.Helpers.ImageHelper;
 import com.example.m5.oximetergui.Helpers.PatientInfoHelper;
+import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.R;
 
 import java.io.BufferedInputStream;
@@ -33,6 +34,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
     private ImageView thumbnail;
     private ImageHelper _imageHelper = new ImageHelper(this);
     private Bitmap _currentImage = null;
+    private PatientModel _pModel = null;
 
 
 
@@ -44,6 +46,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
 
         thumbnail = (ImageView) findViewById(R.id.thumbnail);
         thumbnail.setOnClickListener(imageViewListener);
+        _pModel = new PatientModel(this);
     }
 
     private ImageView.OnClickListener imageViewListener = new ImageView.OnClickListener() {
@@ -73,10 +76,11 @@ public class NewPatient extends Activity implements View.OnClickListener {
                     // After you save the patient here and get the patient unique ID we can save the image.
                     //
 
-                    /*
+                    mPatient.ID = _pModel.FindMaxPatientID();
+
                     if (_currentImage != null) // Save JPEG if user took a picture
-                        mPatient.imageFilePath = this.SaveFile(this._currentImage, mPatient);
-                    */
+                        mPatient.imageFilePath = this.SaveImage(this._currentImage, mPatient);
+
 
                     //
                     //  DAN
@@ -87,7 +91,6 @@ public class NewPatient extends Activity implements View.OnClickListener {
                     //
 
                     Intent i = new Intent();
-                    mPatient.ID = 0;
                     i.putExtra(Intent_Constants.NewPatientInfo, mPatient);
                     setResult(RESULT_OK, i);
                     finish();

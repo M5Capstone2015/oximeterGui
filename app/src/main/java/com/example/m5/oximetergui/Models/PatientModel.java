@@ -164,4 +164,22 @@ public class PatientModel {
         }
         return true;
     }
+
+    public int FindMaxPatientID()
+    {
+        Cursor cursor = null;
+
+        SQLiteDatabase db = _dal.getReadableDatabase();
+
+        String queryString = String.format(SQL_Constants.SELECT_MAX_ID);
+
+        cursor = db.rawQuery(queryString, null);
+        int ID=0;
+        while (cursor.moveToNext()) {
+            ID = cursor.getInt(0);
+        }
+        return ID;
+
+    }
+
 }

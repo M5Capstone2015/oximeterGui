@@ -60,6 +60,8 @@ public class SQL_Constants {
             " is_open = %s" +
             " WHERE id = %s;";
 
+    public static String SELECT_MAX_ID = "SELECT MAX(ID) FROM Patients";
+
     // Query first 10 patients with last or first name
     public static String SEARCH_PATIENT_BY_NAME = "SELECT * FROM Patients WHERE first_name "
                                 + "LIKE '%%%s%%' OR last_name LIKE '%%%s%%'"; //OR ";
