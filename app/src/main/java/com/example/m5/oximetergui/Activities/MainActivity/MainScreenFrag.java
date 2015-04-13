@@ -67,6 +67,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Random;
 import java.util.prefs.Preferences;
 
 /**
@@ -393,6 +394,19 @@ public class MainScreenFrag extends Fragment {
         this.percent = (TextView) v.findViewById(R.id.percentView2);
     }
 
+    private void SetBar(int val)
+    {
+        if (this.smallCircle == null)
+            return;
+
+        //int height = smallCircle.getHeight();
+        //smallCircle.getBackground().setBounds(0, 0, 0, 1000);
+        //smallCircle.requestLayout();
+
+        smallCircle.getLayoutParams().height = val;
+        smallCircle.requestLayout();
+    }
+
     View tv;
     TextView tv2;
     View smallCircle;
@@ -578,10 +592,16 @@ public class MainScreenFrag extends Fragment {
                     @Override
                     public void run() {
                         //percent.setText(count + "%");
+                        Random r = new Random();
+                        int high = 50;
+                        int low = 10;
+                        int R = r.nextInt(high-low) + low;
+
+                        //SetBar(R);
                     }
                 });
                     //percent.setText(count + "%");
-                    Thread.sleep(50);
+                    Thread.sleep(500);
                 }
                 catch (Exception e)
                 {
@@ -603,6 +623,7 @@ public class MainScreenFrag extends Fragment {
             int viewID = v.getId();
             switch (viewID) {
                 case R.id.patient_list:
+                    //_mainScreenFrag.SetBar(20);
                     _mainScreenFrag.PatientListClick();
                     break;
                 case R.id.start_reading:
