@@ -108,9 +108,6 @@ public class SliderFragment extends Fragment {
             _patients.add(patientData); // TODO need to implement this for UPDATE as well.
             PatientAdapter pAdapter = new PatientAdapter(getActivity().getBaseContext(), _patients);
             _patientsList.setAdapter(pAdapter);
-
-            StringBuilder sb = new StringBuilder();
-            _model.AddPatient(patientData, sb);
         }
     }
 

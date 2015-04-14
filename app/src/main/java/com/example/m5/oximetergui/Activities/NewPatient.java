@@ -76,6 +76,11 @@ public class NewPatient extends Activity implements View.OnClickListener {
                     // After you save the patient here and get the patient unique ID we can save the image.
                     //
 
+
+                    StringBuilder sb = new StringBuilder();
+                    _pModel.AddPatient(mPatient, sb);
+
+                    //Find last patient ID which will be the newly made patient
                     mPatient.ID = _pModel.FindMaxPatientID();
 
                     if (_currentImage != null) // Save JPEG if user took a picture
@@ -135,7 +140,7 @@ public class NewPatient extends Activity implements View.OnClickListener {
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
 
-        String fileName = patient.ID + "_image.jp";
+        String fileName = patient.ID + "_image.jpg";
         File mypath = new File(directory, fileName);
 
         FileOutputStream out;
