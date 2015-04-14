@@ -15,6 +15,7 @@ public class SQL_Constants {
     public static String PATIENT_DOB_COLUMN = "date_of_birth";
     public static String PATIENT_ISOPEN_COLUMN = "is_open";
     public static String PATIENT_ID_COLUMN = "id";
+    public static String PATIENT_IMAGEPATH_COLUMN = "image_path";
 
     // Readings column names
     public static String DATA_STARTDATE_COLUMN = "start_date";
@@ -29,7 +30,8 @@ public class SQL_Constants {
                     "first_name TEXT," +
                     "last_name TEXT," +
                     "date_of_birth TEXT," +
-                    "is_open INT" +
+                    "is_open INT," +
+                    "image_path TEXT" +
             ");"; //+
 
     public static String CREATE_READING =
@@ -48,7 +50,8 @@ public class SQL_Constants {
             PATIENT_FIRSTNAME_COLUMN,
             PATIENT_LASTNAME_COLUMN,
             PATIENT_DOB_COLUMN,
-            PATIENT_ISOPEN_COLUMN
+            PATIENT_ISOPEN_COLUMN,
+            PATIENT_IMAGEPATH_COLUMN
     };
 
     // Patient query strings
