@@ -18,10 +18,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
@@ -56,6 +58,7 @@ public class PatientInfo extends ActionBarActivity {
     TextView _age;
     TextView _location;
     TextView _notes;
+    EditText _nameFirstEdit;
     List<Reading> readings;
     DataViewAdapter adapter;
     ListView _listView;
@@ -63,6 +66,9 @@ public class PatientInfo extends ActionBarActivity {
     Context context;
     LinearLayout container;
     ImageHelper _imageHelper = new ImageHelper(this);
+    Boolean _editmode = false;
+    ViewSwitcher viewSwitcher;
+    Animation slide_in_left, slide_out_right;
 
 
     @Override
@@ -70,15 +76,19 @@ public class PatientInfo extends ActionBarActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
-
         context = this;
-
         container = (LinearLayout) findViewById(R.id.cont);
 
         _name = (TextView) findViewById(R.id.name);
         _age = (TextView) findViewById(R.id.agetextview);
         _location = (TextView) findViewById(R.id.location);
         _notes = (TextView) findViewById(R.id.notesBody);
+        _nameFirstEdit = (EditText) findViewById(R.id.firstName);
+        viewSwitcher = (ViewSwitcher) findViewById(R.id.viewswitcher);
+        slide_in_left = AnimationUtils.loadAnimation(this,
+                android.R.anim.slide_in_left);
+        slide_out_right = AnimationUtils.loadAnimation(this,
+                android.R.anim.slide_out_right);
 
         Patient patientData = null;
         try {
@@ -90,6 +100,7 @@ public class PatientInfo extends ActionBarActivity {
         }
 
         _name.setText(patientData.FirstName + " " + patientData.LastName);
+        _nameFirstEdit.setText(patientData.FirstName);
         _age.setText("Age: " + patientData.DateOfBirth);
         _location.setText("Location: " + patientData.Location);
         _notes.setText(patientData.Notes);
@@ -299,7 +310,18 @@ public class PatientInfo extends ActionBarActivity {
                 startActivity(new Intent(this, Settings.class));
                 return true;
             case R.id.edit:
-                Log.d("PatientInfo","Edit button pressed");
+                Log.d("PatientInfo", "Edit button pressed");
+                if (this._editmode == false) {
+                    item.setIcon(R.drawable.floppydisk);
+                    this._editmode = true;
+                    viewSwitcher.showNext();
+                }
+                else {
+                    item.setIcon(R.drawable.pencil2);
+                    this._editmode = false;
+                    viewSwitcher.showPrevious();
+                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
