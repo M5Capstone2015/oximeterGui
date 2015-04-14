@@ -76,8 +76,11 @@ public class PatientAdapter extends BaseAdapter
 
         Patient p = mPatients.get(position);
         holder.name.setText(p.FirstName + " " + p.LastName);
-        if (p.imageFilePath!="") {
+        if (p.imageFilePath.matches("")) {
             LoadImage(parent.getContext(), p, holder.placeholder);
+        }
+        else {
+            holder.placeholder.setImageResource(R.drawable.placeholder);
         }
         return view;
     }
