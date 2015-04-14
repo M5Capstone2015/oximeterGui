@@ -54,19 +54,31 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class PatientInfo extends ActionBarActivity {
 
+    //Display View Objects
     TextView _name;
     TextView _age;
     TextView _location;
     TextView _notes;
-    EditText _nameFirstEdit;
     List<Reading> readings;
     DataViewAdapter adapter;
     ListView _listView;
     ImageView _imageView;
-    Context context;
     LinearLayout container;
+
+    //Edit View Objects
+    EditText _nameFirstEdit;
+    EditText _nameLastEdit;
+    EditText _ageEdit;
+    EditText _locationEdit;
+    EditText _notesEdit;
+    ImageView _imageViewEdit;
+
+    //Shared View Objects
+    Context context;
     ImageHelper _imageHelper = new ImageHelper(this);
     Boolean _editmode = false;
+
+    //View Switcher objects
     ViewSwitcher viewSwitcher;
     Animation slide_in_left, slide_out_right;
 
@@ -84,6 +96,11 @@ public class PatientInfo extends ActionBarActivity {
         _location = (TextView) findViewById(R.id.location);
         _notes = (TextView) findViewById(R.id.notesBody);
         _nameFirstEdit = (EditText) findViewById(R.id.firstName);
+        _nameLastEdit = (EditText) findViewById(R.id.lastName);
+        _ageEdit = (EditText) findViewById(R.id.ageeditview);
+        _locationEdit = (EditText) findViewById(R.id.address);
+        _notesEdit = (EditText) findViewById(R.id.notes);
+        _imageViewEdit = (ImageView) findViewById(R.id.thumbnail);
         viewSwitcher = (ViewSwitcher) findViewById(R.id.viewswitcher);
         slide_in_left = AnimationUtils.loadAnimation(this,
                 android.R.anim.slide_in_left);
@@ -99,13 +116,12 @@ public class PatientInfo extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        //Set display objects
         _name.setText(patientData.FirstName + " " + patientData.LastName);
-        _nameFirstEdit.setText(patientData.FirstName);
         _age.setText("Age: " + patientData.DateOfBirth);
         _location.setText("Location: " + patientData.Location);
         _notes.setText(patientData.Notes);
 
-        //TextView dataVeiw = (TextView) findViewById(R.);
         DataModel _dataModel = new DataModel(this);
         readings = _dataModel.GetDataByPatientID(patientData.ID);
 
@@ -122,7 +138,20 @@ public class PatientInfo extends ActionBarActivity {
         else {
             _imageView.setImageResource(R.drawable.placeholder);
         }
-        _imageView.setOnClickListener(imageViewListener);
+
+        //Set edit objects
+        _nameFirstEdit.setText(patientData.FirstName);
+        _nameLastEdit.setText(patientData.LastName);
+        _ageEdit.setText(patientData.DateOfBirth);
+        _locationEdit.setText(patientData.Location);
+        _notesEdit.setText(patientData.Notes);
+        if (!patientData.imageFilePath.matches("")) {
+            LoadImage(this, patientData, _imageViewEdit);
+        }
+        else {
+            _imageViewEdit.setImageResource(R.drawable.placeholder);
+        }
+
     }
 
     private void LoadImage(Context context, Patient patient, ImageView view)
