@@ -33,7 +33,7 @@ public class PatientModel {
     {
         SQLiteDatabase db = _dal.getReadableDatabase();
         Cursor cursor = db.query(SQL_Constants.PATIENT_TABLE_NAME,
-                                 SQL_Constants.FROM, null, null, null, null, "", null); // TODO add ORDERBY param later.
+                                 SQL_Constants.FROM, null, null, null, null, ""); // TODO add ORDERBY param later.
 
         List<Patient> patients = new ArrayList<>();  // TODO consider only having search and recents section?
 
@@ -45,7 +45,9 @@ public class PatientModel {
             String dob = cursor.getString(3);
             Boolean isOpen = cursor.getInt(4) < 1 ? false : true;
             String imagepath =cursor.getString(5);
-            Patient p = new Patient(ID, firstName, lastName, dob, isOpen,imagepath);
+            String location = cursor.getString(6);
+            String notes = cursor.getString(7);
+            Patient p = new Patient(ID, firstName, lastName, dob, isOpen,imagepath, location, notes);
             patients.add(p);
         }
         return patients;
@@ -154,6 +156,7 @@ public class PatientModel {
                                                 patient.LastName,
                                                 patient.DateOfBirth,
                                                 patient.IsOpen ? 1 : 0,
+                                                patient.imageFilePath,
                                                 patient.ID
             );
 

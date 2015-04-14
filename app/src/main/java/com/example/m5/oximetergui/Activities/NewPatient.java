@@ -81,12 +81,14 @@ public class NewPatient extends Activity implements View.OnClickListener {
                     StringBuilder sb = new StringBuilder();
                     _pModel.AddPatient(mPatient, sb);
 
-                    //Find last patient ID which will be the newly made patient
-                    mPatient.ID = _pModel.FindMaxPatientID();
 
                     if (_currentImage != null) // Save JPEG if user took a picture
+                    {
+                        //Find last patient ID which will be the newly made patient
+                        mPatient.ID = _pModel.FindMaxPatientID();
                         mPatient.imageFilePath = this.SaveImage(this._currentImage, mPatient);
-
+                        _pModel.UpdatePatient(mPatient,null);
+                    }
 
                     //
                     //  DAN

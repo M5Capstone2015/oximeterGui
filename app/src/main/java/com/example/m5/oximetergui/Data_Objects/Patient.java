@@ -14,6 +14,8 @@ public class Patient implements Parcelable {
     public String DateOfBirth = "";
     public boolean IsOpen;
     public String imageFilePath = "";
+    public String Location = "";
+    public String Notes = "";
 
     public Patient() { }
 
@@ -46,13 +48,15 @@ public class Patient implements Parcelable {
         this.DateOfBirth = dateOfBirth;
     }
 
-    public Patient(int ID, String firstName, String lastName, String dateOfBirth, Boolean isOpen, String imageFilePath)
+    public Patient(int ID, String firstName, String lastName, String dateOfBirth, Boolean isOpen, String imageFilePath, String location, String notes)
     {
         this.ID = ID;
         this.FirstName = firstName;
         this.LastName = lastName;
         this.DateOfBirth = dateOfBirth;
         this.imageFilePath = imageFilePath;
+        this.Location = location;
+        this.Notes = notes;
     }
 
     public Patient(int Id, String first, String last)

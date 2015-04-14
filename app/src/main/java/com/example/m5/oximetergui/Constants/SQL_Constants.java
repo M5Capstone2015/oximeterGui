@@ -16,6 +16,8 @@ public class SQL_Constants {
     public static String PATIENT_ISOPEN_COLUMN = "is_open";
     public static String PATIENT_ID_COLUMN = "id";
     public static String PATIENT_IMAGEPATH_COLUMN = "image_path";
+    public static String PATIENT_LOCATION_COLUMN = "image_path";
+    public static String PATIENT_NOTES_COLUMN = "image_path";
 
     // Readings column names
     public static String DATA_STARTDATE_COLUMN = "start_date";
@@ -31,7 +33,9 @@ public class SQL_Constants {
                     "last_name TEXT," +
                     "date_of_birth TEXT," +
                     "is_open INT," +
-                    "image_path TEXT" +
+                    "image_path TEXT," +
+                    "location TEXT," +
+                    "notes TEXT" +
             ");"; //+
 
     public static String CREATE_READING =
@@ -51,7 +55,9 @@ public class SQL_Constants {
             PATIENT_LASTNAME_COLUMN,
             PATIENT_DOB_COLUMN,
             PATIENT_ISOPEN_COLUMN,
-            PATIENT_IMAGEPATH_COLUMN
+            PATIENT_IMAGEPATH_COLUMN,
+            PATIENT_LOCATION_COLUMN,
+            PATIENT_NOTES_COLUMN
     };
 
     // Patient query strings
@@ -60,7 +66,8 @@ public class SQL_Constants {
             " SET first_name = '%s'," +
             " last_name = '%s'," +
             " date_of_birth = '%s'," +
-            " is_open = %s" +
+            " is_open = %s," +
+            " image_path = '%s'" +
             " WHERE id = %s;";
 
     public static String SELECT_MAX_ID = "SELECT MAX(ID) FROM Patients";
