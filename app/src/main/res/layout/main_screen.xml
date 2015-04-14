@@ -90,7 +90,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <TextView
+
+     <TextView
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -100,9 +101,47 @@
         android:textStyle="italic"
         android:textColor="#FFFFFF"
         android:gravity="center"
-        android:id="@+id/percentView"
+        android:id="@+id/percentView2"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <FrameLayout
+        android:id="@+id/circle_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:textStyle="italic"
+        android:textColor="#FFFFFF"
+        android:src="@drawable/green_circle"
+        android:gravity="center"
+        android:background="@drawable/green_circle"
+        android:layout_width="75dp"
+        android:layout_height="75dp"/>
+
+    <ImageView
+        android:gravity="center"
+        android:id="@+id/smallGreen"
+        android:background="@drawable/bar_theme"
+        android:src="@drawable/bar_theme"
+        android:layout_width="15dp"
+        android:layout_height="50dp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:text="180 b/m"
+        android:textSize="20dp"
+        android:textStyle="italic"
+        android:textColor="#FFFFFF"
+        android:id="@+id/circle_3"
+        android:gravity="center"
+        android:background="@drawable/red_circle"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        />
+
 
 
     <Button
@@ -116,29 +155,6 @@
         android:layout_alignTop="@+id/patient_name"
         android:layout_alignRight="@+id/start_reading"
         android:layout_alignEnd="@+id/start_reading" />
-
-    <!--
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bobby $murda"
-            android:background="@drawable/startbutton"
-            android:visibility="gone"
-            android:id="@+id/patientButton"
-            android:textColor="#FFFFFF"
-            android:layout_below="@+id/patient_name"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-    </LinearLayout>
-    -->
 
 </RelativeLayout>
 </LinearLayout>

@@ -106,6 +106,16 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        // Tell main screen frag that view is loaded so we can properly position circles
+        MainScreenFrag frag = (MainScreenFrag) getFragmentManager().findFragmentById(R.id.fragment_secondpane);
+        frag.moveTv();
+    }
+
+
 
     @Override
     public void onResume()  // TODO load percent/patient selected/and rolling average data
