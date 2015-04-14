@@ -22,7 +22,7 @@ public class Patient implements Parcelable {
     // Parcelling part
     public Patient(Parcel in)
     {
-        String[] data = new String[5];
+        String[] data = new String[7];
 
         in.readStringArray(data);
         this.FirstName = data[0];
@@ -30,6 +30,8 @@ public class Patient implements Parcelable {
         this.DateOfBirth = data[2];
         this.ID = Integer.parseInt(data[3]);
         this.imageFilePath = data[4];
+        this.Location = data[5];
+        this.Notes = data[6];
     }
 
     public Patient(String firstName, String lastName, String dateOfBirth, Boolean isOpen) // TODO get these constructors under control.
@@ -91,7 +93,9 @@ public class Patient implements Parcelable {
                 this.LastName,
                 this.DateOfBirth,
                 String.valueOf(this.ID),
-                String.valueOf(this.imageFilePath)
+                String.valueOf(this.imageFilePath),
+                this.Location,
+                this.Notes
         });
     }
 

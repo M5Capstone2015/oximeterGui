@@ -48,11 +48,15 @@ public class PatientInfoHelper {
         EditText firstName = (EditText) _main.findViewById(R.id.firstName);
         EditText lastName = (EditText) _main.findViewById(R.id.lastName);
         EditText age = (EditText) _main.findViewById(R.id.agetextview);
+        EditText address = (EditText) _main.findViewById(R.id.address);
+        EditText notes  = (EditText) _main.findViewById(R.id.notes);
 
         Patient p = new Patient();
         p.FirstName = firstName.getText().toString();
         p.LastName = lastName.getText().toString();
         p.DateOfBirth = age.getText().toString();
+        p.Location = address.getText().toString();
+        p.Notes = notes.getText().toString();
         return p;
     }
 
