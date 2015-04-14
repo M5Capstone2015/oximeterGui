@@ -6,6 +6,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -128,6 +129,14 @@ public class NewPatient extends Activity implements View.OnClickListener {
             this._currentImage = (Bitmap) extras.get("data"); // Save current image.
 
             ImageView imageView = (ImageView) findViewById(R.id.thumbnail);
+
+            //Rotate Image so it is stored in the correct angle
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(_currentImage,_currentImage.getWidth(),_currentImage.getHeight(),true);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+            _currentImage = rotatedBitmap;
+
             imageView.setImageBitmap(_currentImage);
         }
         else if (resultCode == RESULT_CANCELED) {
