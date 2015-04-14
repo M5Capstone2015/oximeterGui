@@ -16,8 +16,8 @@ public class SQL_Constants {
     public static String PATIENT_ISOPEN_COLUMN = "is_open";
     public static String PATIENT_ID_COLUMN = "id";
     public static String PATIENT_IMAGEPATH_COLUMN = "image_path";
-    public static String PATIENT_LOCATION_COLUMN = "image_path";
-    public static String PATIENT_NOTES_COLUMN = "image_path";
+    public static String PATIENT_LOCATION_COLUMN = "location";
+    public static String PATIENT_NOTES_COLUMN = "notes";
 
     // Readings column names
     public static String DATA_STARTDATE_COLUMN = "start_date";

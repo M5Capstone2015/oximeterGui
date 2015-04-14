@@ -69,6 +69,8 @@ public class PatientModel {
             values.put(SQL_Constants.PATIENT_DOB_COLUMN, patient.DateOfBirth);
             values.put(SQL_Constants.PATIENT_ISOPEN_COLUMN, patient.IsOpen ? 1 : 0);
             values.put(SQL_Constants.PATIENT_IMAGEPATH_COLUMN, patient.imageFilePath);
+            values.put(SQL_Constants.PATIENT_LOCATION_COLUMN, patient.Location);
+            values.put(SQL_Constants.PATIENT_NOTES_COLUMN, patient.Notes);
             db.insertOrThrow(SQL_Constants.PATIENT_TABLE_NAME, null, values);
         }
         catch (Exception e)
