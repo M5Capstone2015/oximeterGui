@@ -2,7 +2,6 @@ package com.example.m5.oximetergui.Helpers;
 
 import android.app.Activity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,7 +48,7 @@ public class PatientInfoHelper {
         EditText lastName = (EditText) _main.findViewById(R.id.lastName);
         EditText age = (EditText) _main.findViewById(R.id.agetextview);
         EditText address = (EditText) _main.findViewById(R.id.address);
-        EditText notes  = (EditText) _main.findViewById(R.id.notes);
+        EditText notes  = (EditText) _main.findViewById(R.id.notesHeader);
 
         Patient p = new Patient();
         p.FirstName = firstName.getText().toString();

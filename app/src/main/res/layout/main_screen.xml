@@ -65,7 +65,7 @@
         android:text="@string/patient_list_label"
         android:id="@+id/patient_list"
         android:layout_alignTop="@+id/patient_name"
-        android:background="@drawable/startbutton"
+        android:background="@drawable/button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -75,7 +75,7 @@
         android:text="Start Reading"
         android:textStyle="italic"
         android:id="@+id/start_reading"
-        android:background="@drawable/startbutton"
+        android:background="@drawable/button"
         android:textColor="#FFFFFF"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:visibility="invisible"
         android:textColor="#FFFFFF"
-        android:background="@drawable/startbutton"
+        android:background="@drawable/button"
         android:text="Stop Reading"
         android:id="@+id/stop_reading_main"
         android:layout_alignParentBottom="true"

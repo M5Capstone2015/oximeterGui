@@ -1,6 +1,7 @@
 package com.example.m5.oximetergui.Activities;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +33,11 @@ import com.example.m5.oximetergui.Helpers.ImageHelper;
 import com.example.m5.oximetergui.Models.DataModel;
 import com.example.m5.oximetergui.R;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +54,8 @@ public class PatientInfo extends ActionBarActivity {
 
     TextView _name;
     TextView _age;
+    TextView _location;
+    TextView _notes;
     List<Reading> readings;
     DataViewAdapter adapter;
     ListView _listView;
@@ -68,6 +77,8 @@ public class PatientInfo extends ActionBarActivity {
 
         _name = (TextView) findViewById(R.id.name);
         _age = (TextView) findViewById(R.id.agetextview);
+        _location = (TextView) findViewById(R.id.location);
+        _notes = (TextView) findViewById(R.id.notesBody);
 
         Patient patientData = null;
         try {
@@ -80,6 +91,8 @@ public class PatientInfo extends ActionBarActivity {
 
         _name.setText(patientData.FirstName + " " + patientData.LastName);
         _age.setText("Age: " + patientData.DateOfBirth);
+        _location.setText("Location: " + patientData.Location);
+        _notes.setText(patientData.Notes);
 
         //TextView dataVeiw = (TextView) findViewById(R.);
         DataModel _dataModel = new DataModel(this);
@@ -91,7 +104,54 @@ public class PatientInfo extends ActionBarActivity {
         _listView.setAdapter(adapter);
 
         _imageView = (ImageView) findViewById(R.id.imageView);
+
+        if (!patientData.imageFilePath.matches("")) {
+            LoadImage(this, patientData, _imageView);
+        }
+        else {
+            _imageView.setImageResource(R.drawable.placeholder);
+        }
         _imageView.setOnClickListener(imageViewListener);
+    }
+
+    private void LoadImage(Context context, Patient patient, ImageView view)
+    {
+        ContextWrapper cw;
+        File directory;
+
+        try {
+            cw = new ContextWrapper(context);
+            directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        String filename = patient.ID.toString() + "_image.jpg";
+        File filePath = new File(directory, filename);
+
+        int size = (int) filePath.length();
+        byte[] bytes = new byte[size];
+
+        try
+        {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(filePath));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+            Bitmap iamge = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            view.setImageBitmap(iamge);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     private ImageView.OnClickListener imageViewListener = new ImageView.OnClickListener() {
@@ -232,13 +292,17 @@ public class PatientInfo extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.settings:
+                startActivity(new Intent(this, Settings.class));
+                return true;
+            case R.id.edit:
+                Log.d("PatientInfo","Edit button pressed");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }

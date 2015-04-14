@@ -1,6 +1,8 @@
 package com.example.m5.oximetergui.Helpers;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,6 +12,13 @@ import android.provider.MediaStore;
 import android.widget.ImageView;
 
 import com.example.m5.oximetergui.Constants.Intent_Constants;
+import com.example.m5.oximetergui.Data_Objects.Patient;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Created by danabeled on 4/12/2015.

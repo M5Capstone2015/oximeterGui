@@ -2,6 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.m5.oximetergui.Activities.PatientInfo">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item
+        android:id="@+id/edit"
+        android:title="Edit Patient Info"
+        android:icon="@drawable/pencil2"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settings"
+        android:title="@string/action_settings"
+        android:icon="@drawable/settings6"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
 </menu>

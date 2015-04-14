@@ -180,7 +180,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        android:background="@drawable/startbutton"
+        android:background="@drawable/button"
         android:text="Save"
         android:enabled="false"
         android:onClick="saveSettingsClick"
