@@ -104,6 +104,7 @@ public class MainScreenFrag extends Fragment {
         if (this._dataSync != null) {
             this._dataSync.Run(backupBuilder.GenerateFile());
         }
+        syncCont.setVisibility(View.GONE);
         pb.setVisibility(View.GONE);
 
         //requestTask.execute("", "");

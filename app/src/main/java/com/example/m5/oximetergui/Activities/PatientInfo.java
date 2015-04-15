@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +35,10 @@ import com.example.m5.oximetergui.Helpers.DataViewAdapter;
 import com.example.m5.oximetergui.Helpers.GraphicsUtils;
 import com.example.m5.oximetergui.Helpers.ImageHelper;
 import com.example.m5.oximetergui.Models.DataModel;
+import com.example.m5.oximetergui.Models.PatientModel;
 import com.example.m5.oximetergui.R;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -52,7 +57,7 @@ import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 
-public class PatientInfo extends ActionBarActivity {
+public class PatientInfo extends ActionBarActivity implements TextWatcher {
 
     //Display View Objects
     TextView _name;
@@ -64,6 +69,8 @@ public class PatientInfo extends ActionBarActivity {
     ListView _listView;
     ImageView _imageView;
     LinearLayout container;
+    Patient patientData = null;
+    private PatientModel _pModel = null;
 
     //Edit View Objects
     EditText _nameFirstEdit;
@@ -78,10 +85,20 @@ public class PatientInfo extends ActionBarActivity {
     ImageHelper _imageHelper = new ImageHelper(this);
     Boolean _editmode = false;
 
+    // --- View State --- //
+    private boolean viewIsDirty = false;
+    private Menu menu;
+
     //View Switcher objects
     ViewSwitcher viewSwitcher;
     Animation slide_in_left, slide_out_right;
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_info, menu);
+        this.menu = menu;
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -107,7 +124,7 @@ public class PatientInfo extends ActionBarActivity {
         slide_out_right = AnimationUtils.loadAnimation(this,
                 android.R.anim.slide_out_right);
 
-        Patient patientData = null;
+
         try {
             patientData = getIntent().getParcelableExtra(Intent_Constants.Patient_To_Edit);
         }
@@ -145,13 +162,42 @@ public class PatientInfo extends ActionBarActivity {
         _ageEdit.setText(patientData.DateOfBirth);
         _locationEdit.setText(patientData.Location);
         _notesEdit.setText(patientData.Notes);
+        _nameFirstEdit.addTextChangedListener(this);
+        _nameLastEdit.addTextChangedListener(this);
+        _ageEdit.addTextChangedListener(this);
+        _locationEdit.addTextChangedListener(this);
+        _notesEdit.addTextChangedListener(this);
         if (!patientData.imageFilePath.matches("")) {
             LoadImage(this, patientData, _imageViewEdit);
         }
         else {
             _imageViewEdit.setImageResource(R.drawable.placeholder);
         }
+        _pModel = new PatientModel(this);
+    }
 
+    public void MakeDirty()
+    {
+        if (this.viewIsDirty)
+            return;
+
+        MenuItem bedMenuItem = menu.findItem(R.id.edit);
+        bedMenuItem.setEnabled(true);
+        this.viewIsDirty = true;
+    }
+
+
+    @Override
+    public void afterTextChanged(Editable arg0) {
+        this.MakeDirty();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
     }
 
     private void LoadImage(Context context, Patient patient, ImageView view)
@@ -276,13 +322,6 @@ public class PatientInfo extends ActionBarActivity {
         lcv.setLineChartData(data);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_info, menu);
-        return true;
-    }
-
     public void slideDown(View v)
     {
         //addChart();
@@ -343,12 +382,26 @@ public class PatientInfo extends ActionBarActivity {
                 if (this._editmode == false) {
                     item.setIcon(R.drawable.floppydisk);
                     this._editmode = true;
+                    MenuItem bedMenuItem = menu.findItem(R.id.edit);
+                    bedMenuItem.setEnabled(false);
                     viewSwitcher.showNext();
                 }
                 else {
                     item.setIcon(R.drawable.pencil2);
+                    patientData.FirstName = _nameFirstEdit.getText().toString();
+                    patientData.LastName = _nameLastEdit.getText().toString();
+                    patientData.DateOfBirth = _ageEdit.getText().toString();
+                    patientData.Location = _locationEdit.getText().toString();
+                    patientData.Notes = _notesEdit.getText().toString();
+                    _pModel.UpdatePatient(patientData,null);
+                    this.viewIsDirty = false;
                     this._editmode = false;
                     viewSwitcher.showPrevious();
+
+                    _name.setText(patientData.FirstName + " " + patientData.LastName);
+                    _age.setText("Age: " + patientData.DateOfBirth);
+                    _location.setText("Location: " + patientData.Location);
+                    _notes.setText(patientData.Notes);
                 }
 
                 return true;
