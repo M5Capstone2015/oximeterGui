@@ -1,35 +1,27 @@
 package com.example.m5.oximetergui.Activities.MainActivity;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.app.backup.FileBackupHelper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.SpannedString;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,28 +39,20 @@ import com.example.m5.oximetergui.NuJack.NuJack;
 import com.example.m5.oximetergui.NuJack.OnDataAvailableListener;
 import com.example.m5.oximetergui.R;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.prefs.Preferences;
 
 /**
  * Created by Hunt on 2/23/2015.
@@ -118,7 +102,7 @@ public class MainScreenFrag extends Fragment {
         if (this._dataSync != null)
             this._dataSync.Run(backupBuilder.GenerateFile());
 
-        //requestTask.execute("");
+        requestTask.execute("", "");
 
         /*
         for (int i = 0; i < 101; i++)
@@ -388,7 +372,7 @@ public class MainScreenFrag extends Fragment {
         this.infoTextView.setOnClickListener(_mainListener);
 
         this.tv = v.findViewById(R.id.circle_2);
-        this.tv2 = (TextView) v.findViewById(R.id.circle_3);
+        this.bpmCirlce = (TextView) v.findViewById(R.id.circle_3);
 
         this.smallCircle = v.findViewById(R.id.smallGreen);
         this.percent = (TextView) v.findViewById(R.id.percentView2);
@@ -408,7 +392,7 @@ public class MainScreenFrag extends Fragment {
     }
 
     View tv;
-    TextView tv2;
+    TextView bpmCirlce;
     View smallCircle;
     private boolean _set = false;
 
@@ -438,8 +422,8 @@ public class MainScreenFrag extends Fragment {
         this.tv.setY(bigCircle_Y);
         this.tv.setX(bigCircle_X+ bigRadius);
 
-        this.tv2.setY(bigCircle_Y+ bigRadius - height);
-        this.tv2.setX(bigCircle_X + bigRadius);
+        this.bpmCirlce.setY(bigCircle_Y+ bigRadius - height);
+        this.bpmCirlce.setX(bigCircle_X + bigRadius);
     }
 
     private void setView()
@@ -497,19 +481,22 @@ public class MainScreenFrag extends Fragment {
             recData += (_data + ", ");
 
             counter++;
-            if (counter > 1000 && !done)
+            if (counter > 300 && !done)
             {
                 WriteToFile(recData, "dump.csv");
                 done = true;
                 recData = "";
 
+                /*
                 _mainActivity.runOnUiThread(new Runnable() { // UI update must be on main UI thread.
                     @Override
                     public void run() {
                         Toast.makeText(getActivity(), "Wrote the file!!!!", Toast.LENGTH_LONG).show();
                     }
                 });
+                */
             }
+
 
 
             if (_recording)
@@ -522,8 +509,23 @@ public class MainScreenFrag extends Fragment {
                 _mainActivity.runOnUiThread(new Runnable() { // UI update must be on main UI thread.
                     @Override
                     public void run() {
+                        //if (done) {
+                            //percent.setText("Done!");
+                            //return;
+                        //}
                         //percent.setText(data + "%");
                         //percent.setText(counter + "%");
+
+                        int parsed = Integer.parseInt(data);
+                        animate(parsed);
+
+                        int res = PeakDetection(parsed);
+
+                        if (res > 0)
+                            bpmCirlce.setText(res + " b/m");
+
+                        //percent.setText(parsed);
+                        percent.setText(data);
                     }
                 });
             }
@@ -534,15 +536,92 @@ public class MainScreenFrag extends Fragment {
         }
     };
 
+
+    private ArrayList<Integer> buffer = new ArrayList<>();
+    private ArrayList<Integer> peeks = new ArrayList<>();
+
+    public int PeakDetection(int data)
+    {
+        // here if smaller than size fuck this shit below just add an return
+        //
+        buffer.add(data);
+        if (buffer.size() < 15)
+            return -1;
+
+
+        int prev = buffer.get(buffer.size()-2);
+        int second_pre = buffer.get(buffer.size()-3);
+
+        int prev_deriv = prev - second_pre;
+        int second_deriv = data - prev;
+        int sample_between_beat;
+
+        if (prev_deriv >= 0 && second_deriv < 0)
+        {
+            peeks.add(data);
+            if(peeks.size() < 4) { return -1; }
+            peeks.remove(0);
+            int psize = peeks.size();
+
+            if((peeks.get(psize-2) > peeks.get(psize-1)) && (peeks.get(psize-2) > peeks.get(psize-3))) {
+                // This means the previous peak is a beat
+                if(buffer.size() < 10) {
+                    // This isn't a real beat, just a double detection
+                    return -1;
+                }
+
+                else {
+                    // Delete everything before the beat
+                    int size = buffer.size();
+                    printLst(buffer);
+                    //System.out.printf("Numbe of elements before %d%n", buffer.size());
+                    deleteAllButLast(buffer);
+//					printLst(buffer);
+                    //System.out.printf("Numbe of elements after %d%n", buffer.size());
+                    return size;
+                }
+
+            }
+
+        }
+        return -1;
+    }
+
+    public static void printLst(ArrayList<Integer> lst)
+    {
+        for (int i = 0; i < lst.size()-2; i++)
+        {
+            int item = lst.get(i);
+            //System.out.printf("element: %s%n", item);
+        }
+    }
+
+    public static void deleteAllButLast(ArrayList<Integer> lst)
+    {
+        final int size = lst.size() -2;
+        try {
+            for (int i = 0; i < size; i++) {
+                lst.remove(0);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     //
     //  Thread to perform HTTP request in background
     //
     class RequestTask extends AsyncTask<String, String, String>
     {
-
         @Override
         protected String doInBackground(String... uri)
         {
+            //String url = uri[0];
+            //String data = uri[1];
+            // Third one uneccesary.
+
             try {
                 int TIMEOUT_MILLISEC = 10000;  // = 10 seconds
                 HttpParams httpParams = new BasicHttpParams();
@@ -598,10 +677,11 @@ public class MainScreenFrag extends Fragment {
                         int R = r.nextInt(high-low) + low;
 
                         //SetBar(R);
+                        //animate();
                     }
                 });
                     //percent.setText(count + "%");
-                    Thread.sleep(500);
+                    Thread.sleep(50);
                 }
                 catch (Exception e)
                 {
@@ -610,6 +690,111 @@ public class MainScreenFrag extends Fragment {
             }
         }
     };
+
+    private int[] intArray = new int[] {1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2};
+    private int pos = 0;
+    private float last = 0f;
+
+    private int _emptyCount = 0;
+    private int _nonEmptyCount = 0;
+
+
+
+    private void animate(int data)
+    {
+
+        /*
+        ObjectAnimator animX = ObjectAnimator.ofFloat(this.smallCircle, "x", 50f);
+        ObjectAnimator animY = ObjectAnimator.ofFloat(this.smallCircle, "y", 100f);
+        AnimatorSet animSetXY = new AnimatorSet();
+        animSetXY.playTogether(animX, animY);
+        animSetXY.start();
+        */
+
+        //View myView=(View) findViewById(R.id.heightView);
+        //ObjectAnimator scaleXIn = ObjectAnimator.ofFloat(smallCircle, "scaleX", 0f, 1f);
+
+        /*
+        if (data < 705)
+            _emptyCount++;
+        else
+        {
+            if (_emptyCount > 0)
+                _emptyCount--;
+        }
+
+        if (_emptyCount > 10 && smallCircle.getVisibility() == View.VISIBLE)
+        {
+            this.SetViewInvisible(smallCircle);
+        }
+        else if (smallCircle.getVisibility() == View.INVISIBLE)
+            this.SetViewVisible(smallCircle);
+        */
+
+        /*
+        if (data < 705) {
+            this.SetViewInvisible(smallCircle);
+            return;
+        }
+        else
+        {
+            if (smallCircle.getVisibility() == View.INVISIBLE)
+                this.SetViewVisible(smallCircle);
+        }
+        */
+
+        pos++;
+
+        if (pos > intArray.length - 1)
+            pos = 0;
+
+        float scale = ((float) intArray[pos]) / 10f;
+
+        /*
+        Random r = new Random();
+        int high = 50;
+        int low = 10;
+        int R = r.nextInt(high-low) + low;
+        */
+
+        int upperLimit = 950;
+        if (data > upperLimit)
+        {
+            data = upperLimit;
+        }
+
+        int lowerLimit = 800;
+        if (data < lowerLimit)
+        {
+            data = lowerLimit;
+        }
+
+        int d2 = 1000 - data;
+
+        float s2 = ((float) d2) / 150f;
+
+
+        //ObjectAnimator scaleYIn = ObjectAnimator.ofFloat(smallCircle, "scaleY", 0f, 1f);
+        //ObjectAnimator scaleYIn = ObjectAnimator.ofFloat(smallCircle, "scaleY", this.last, scale);
+
+        ObjectAnimator scaleYIn = ObjectAnimator.ofFloat(smallCircle, "scaleY", this.last, s2);
+        //ObjectAnimator scaleYIn = ObjectAnimator.ofFloat(smallCircle, "scaleY", s2, this.last);
+
+        //this.last = scale;
+        this.last = s2;
+
+        scaleYIn.setDuration(50);
+        scaleYIn.start();
+
+
+        //AnimatorSet set = new AnimatorSet();
+
+        //set.play(scaleXIn).with(scaleYIn);
+        //set.setDuration(2000);
+        //set.start();
+
+
+    }
 
 
     private OnClickListener _mainListener = new OnClickListener() {
@@ -624,7 +809,8 @@ public class MainScreenFrag extends Fragment {
             switch (viewID) {
                 case R.id.patient_list:
                     //_mainScreenFrag.SetBar(20);
-                    _mainScreenFrag.PatientListClick();
+                    //_mainScreenFrag.animate();
+                    //_mainScreenFrag.PatientListClick();
                     break;
                 case R.id.start_reading:
                     _mainScreenFrag.StartRecording();
