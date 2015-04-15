@@ -74,7 +74,6 @@ public class MainActivity extends ActionBarActivity {
                     case R.id.fragment_secondpane:
                         getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(false);
                         getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(true);
-                        ((SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_firstpane)).EnbleSearchBar(true);
                         break;
                     default:
                         break;
@@ -88,7 +87,6 @@ public class MainActivity extends ActionBarActivity {
                     case R.id.fragment_secondpane:
                         getFragmentManager().findFragmentById(R.id.fragment_firstpane).setHasOptionsMenu(false);
                         getFragmentManager().findFragmentById(R.id.fragment_secondpane).setHasOptionsMenu(false);
-                        ((SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_firstpane)).EnbleSearchBar(true);
 
                         break;
                     default:

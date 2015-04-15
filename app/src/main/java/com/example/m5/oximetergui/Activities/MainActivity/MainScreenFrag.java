@@ -25,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dropbox.sync.android.DbxFile;
+import com.dropbox.sync.android.DbxFileStatus;
 import com.example.m5.oximetergui.Activities.PatientInfo;
 import com.example.m5.oximetergui.Constants.General_Constants;
 import com.example.m5.oximetergui.Constants.Intent_Constants;
@@ -83,6 +85,7 @@ public class MainScreenFrag extends Fragment {
     private View logOutButton;
     private TextView infoTextView;
     private TextView percent;
+    private LinearLayout syncCont;
 
     // --- Async Workers --- //
     private Handler mHandler = new Handler();
@@ -92,15 +95,17 @@ public class MainScreenFrag extends Fragment {
     public void StartSync()
     {
         final ProgressBar pb = (ProgressBar) _mainActivity.findViewById(R.id.progressBar);
-        final LinearLayout syncCont = (LinearLayout) _mainActivity.findViewById(R.id.syncContainer);
+        syncCont = (LinearLayout) _mainActivity.findViewById(R.id.syncContainer);
 
         syncCont.setVisibility(View.VISIBLE);
         pb.setVisibility(View.VISIBLE);
 
         BackupBuilder backupBuilder = new BackupBuilder(this._patientModel, this._dataModel);
 
-        if (this._dataSync != null)
+        if (this._dataSync != null) {
             this._dataSync.Run(backupBuilder.GenerateFile());
+        }
+        pb.setVisibility(View.GONE);
 
         requestTask.execute("", "");
 
@@ -643,9 +648,10 @@ public class MainScreenFrag extends Fragment {
         @Override
         protected void onPostExecute(String result)
         {
-            super.onPostExecute(result);
-            // Do stuff with response...
-            //appendTextView(result);
+            Log.d("AsyncTask","Finished");
+            syncCont.setVisibility(View.GONE);
+
+
         }
     }
 

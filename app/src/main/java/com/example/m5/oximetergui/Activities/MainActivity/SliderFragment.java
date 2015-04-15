@@ -41,7 +41,7 @@ public class SliderFragment extends Fragment {
     // --- Views --- //
     private View newPatientButton;
     ListView _patientsList;
-    EditText _searchBar;
+    //EditText _searchBar;
 
     // --- Adapter and Data --- //
     ArrayList<Patient> _patients = new ArrayList<>();
@@ -192,7 +192,7 @@ public class SliderFragment extends Fragment {
         }
     };
 
-    TextWatcher searchTextChanged = new TextWatcher() {
+    /*TextWatcher searchTextChanged = new TextWatcher() {
 
         @Override
         public void afterTextChanged(Editable s) {}
@@ -228,7 +228,7 @@ public class SliderFragment extends Fragment {
                 _patients.add(p);
             adapter.notifyDataSetChanged();
         }
-    };
+    };*/
 
 
     private void InitializeViews(View v)
@@ -242,17 +242,17 @@ public class SliderFragment extends Fragment {
         _patientsList = (ListView) v.findViewById(R.id.patientList);
         _patientsList.setOnItemClickListener(itemListener);
 
-        _searchBar = (EditText) v.findViewById(R.id.search_bar);
+        /*_searchBar = (EditText) v.findViewById(R.id.search_bar);
         _searchBar.addTextChangedListener(this.searchTextChanged);
         _searchBar.setFocusable(false);
-        //_searchBar.setSelected(false);
+        //_searchBar.setSelected(false);*/
     }
 
-    public void EnbleSearchBar(boolean setting)
+    /*public void EnbleSearchBar(boolean setting)
     {
         //this._searchBar.setEnabled(setting);
         this._searchBar.setFocusable(true);
-    }
+    }*/
 
     private void ShowConfirmDialog(Patient selectedPatient)
     {

@@ -29,10 +29,8 @@ public class Settings extends ActionBarActivity {
     // --- Views --- //
     private EditText customServer;
     private CheckBox autoSyncCheck;
-    private CheckBox googleCheck;
     private CheckBox dropboxCheck;
     private CheckBox customCheck;
-    private Spinner baudSpinner;
     private Spinner readSpinner;
     private Button saveButton;
 
@@ -64,11 +62,9 @@ public class Settings extends ActionBarActivity {
     {
         // Get control instances
         this.saveButton = (Button) findViewById(R.id.saveSettingsButton);
-        this.baudSpinner = (Spinner) findViewById(R.id.baud_spinner);
         this.readSpinner = (Spinner) findViewById(R.id.record_rate_spinner);
         this.autoSyncCheck = (CheckBox) findViewById(R.id.auto_sync_checkbox);
         this.dropboxCheck = (CheckBox) findViewById(R.id.dropBox_sync_check);
-        this.googleCheck = (CheckBox) findViewById(R.id.google_sync_check);
         this.customCheck = (CheckBox) findViewById(R.id.customSyncCheck);
         this.customServer = (EditText) findViewById((R.id.custom_server_editbox));
 
@@ -76,7 +72,6 @@ public class Settings extends ActionBarActivity {
         this.adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        baudSpinner.setAdapter(adapter);
         this.resources = getResources();
 
         // Initialize Record Rate Spinner
@@ -96,13 +91,11 @@ public class Settings extends ActionBarActivity {
         this.customServer.setText(serverURL);
 
         // Set spinners
-        this.baudSpinner.setSelection(baud_pref);
         this.readSpinner.setSelection(read_pref);
 
         // Set checkboxes to appropriate values
         this.autoSyncCheck.setChecked(auto_sync_pref);
         this.dropboxCheck.setChecked(dropbox_pref);
-        this.googleCheck.setChecked(google_pref);
         this.customCheck.setChecked(custom_pref);
 
         // Initialize events
@@ -110,11 +103,9 @@ public class Settings extends ActionBarActivity {
         this.spinnerListener = new OnSpinnerSelected(this);
 
         // Attach 'em
-        this.baudSpinner.setOnItemSelectedListener(spinnerListener);
         this.readSpinner.setOnItemSelectedListener(spinnerListener);
         this.autoSyncCheck.setOnCheckedChangeListener(checkListener);
         this.dropboxCheck.setOnCheckedChangeListener(checkListener);
-        this.googleCheck.setOnCheckedChangeListener(checkListener);
         this.customCheck.setOnCheckedChangeListener(checkListener);
     }
 
@@ -147,11 +138,9 @@ public class Settings extends ActionBarActivity {
         boolean drp = this.dropboxCheck.isChecked();
         // Save sync options
         setPref(this.resources.getString(R.string.dropbox_pref), this.dropboxCheck.isChecked());
-        setPref(this.resources.getString(R.string.google_pref), this.googleCheck.isChecked());
         setPref(this.resources.getString(R.string.custom_pref), this.customCheck.isChecked());
 
         // Save baud/read rate
-        setPref(this.resources.getString(R.string.baud_rate_pref), this.baudSpinner.getSelectedItemPosition());
         setPref(this.resources.getString(R.string.read_rate_pref), this.readSpinner.getSelectedItemPosition());
 
         // Save custom server URL

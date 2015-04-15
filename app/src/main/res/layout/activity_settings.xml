@@ -15,26 +15,6 @@
             android:text="Data Rate Options:"
             android:textSize="20dp"
             android:id="@+id/rateOptions" />
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="40dp"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Read Rate:"
-            android:id="@+id/textView2" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/baud_spinner" />
-    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -154,26 +134,6 @@
             android:text="DropBox"
             android:id="@+id/dropBox" />
 
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginBottom="10dp"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <CheckBox
-            android:id="@+id/google_sync_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Google Drive"
-            android:id="@+id/googleDrive" />
     </LinearLayout>
 
     <Button
