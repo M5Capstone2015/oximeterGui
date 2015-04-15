@@ -497,12 +497,8 @@ public class MainScreenFrag extends Fragment {
                 */
             }
 
-
-
             if (_recording)
-            {
-                // log stuff
-            }
+                _collector.AddNewData(Integer.parseInt(data));
 
             try
             {
