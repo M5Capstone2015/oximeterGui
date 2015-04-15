@@ -52,7 +52,7 @@ public class Settings extends ActionBarActivity {
         setContentView(R.layout.activity_settings);
 
         // Initialize Preferences
-        this.prefs = getPreferences(Context.MODE_PRIVATE);
+        this.prefs = getSharedPreferences("pulse_prefs", Context.MODE_PRIVATE);
 
         // Load setting data
         this.LoadSettingData();

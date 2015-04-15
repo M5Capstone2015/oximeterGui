@@ -86,8 +86,7 @@ public class MainScreenFrag extends Fragment {
     private TextView infoTextView;
     private TextView percent;
     private LinearLayout syncCont;
-
-    // --- Async Workers --- //
+ // --- Async Workers --- //
     private Handler mHandler = new Handler();
     private RequestTask requestTask = new RequestTask();
 
@@ -107,7 +106,7 @@ public class MainScreenFrag extends Fragment {
         }
         pb.setVisibility(View.GONE);
 
-        requestTask.execute("", "");
+        //requestTask.execute("", "");
 
         /*
         for (int i = 0; i < 101; i++)
@@ -353,7 +352,7 @@ public class MainScreenFrag extends Fragment {
         View v = inflater.inflate(R.layout.main_screen, container, false);
         InitializeButtons(v);
 
-        this.prefs = _mainActivity.getPreferences(Context.MODE_PRIVATE);
+        this.prefs = _mainActivity.getSharedPreferences("pulse_prefs", Context.MODE_PRIVATE);
         this._dataSync = new DataSync(_mainActivity, prefs, _resources);
 
         return v;
