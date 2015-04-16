@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 
 /**
  * Created by Hunt on 2/23/2015.
@@ -481,6 +483,7 @@ public class MainScreenFrag extends Fragment {
     OnDataAvailableListener _dataAvailableListner = new OnDataAvailableListener() {
 
         long _startTime=0;
+        int _bpm = 0;
         ArrayList<Integer> RawRValueArray = new ArrayList<Integer>();
         ArrayList<Integer> PeakArray = new ArrayList<Integer>();
         ArrayList<Boolean> BeatArray = new ArrayList<Boolean>();
@@ -510,6 +513,17 @@ public class MainScreenFrag extends Fragment {
             //Function maps data reading to SPO2 percentage
             final String percentValue = this.rawRValueToSP(data);
 
+            if (DetectBeat(data)) {
+                BeatArray.add(true);
+            }
+            long time = System.currentTimeMillis();
+            long diff = time - _startTime;
+            if (diff > 10000) {
+                _bpm = BeatArray.size()*6;
+                BeatArray.clear();
+                diff = 0;
+                _startTime = time;
+            }
             if (_recording)
                 _collector.AddNewData(Integer.parseInt(percentValue));
 
@@ -531,7 +545,7 @@ public class MainScreenFrag extends Fragment {
                         int res = PeakDetection(parsed);
 
                         if (res > 0)
-                            bpmCirlce.setText(res + " b/m");
+                            bpmCirlce.setText(Integer.toString(_bpm) + " b/m");
 
                         //percent.setText(parsed);
                         //percent.setText(data);
@@ -545,13 +559,46 @@ public class MainScreenFrag extends Fragment {
         }
 
     private boolean DetectBeat(String data)
-    {
-        if(RawRValueArray.size()<3) {
-            RawRValueArray.add(Integer.parseInt(data));
-            return false;
-        }
-        if(RawRValueArray.size()>3)
-            RawRValueArray.remove(0);
+            {
+                boolean newPeak = false;
+                if(RawRValueArray.size()<3) {
+                    RawRValueArray.add(Integer.parseInt(data));
+                    return false;
+                }
+                if(RawRValueArray.size()>=3)
+                    RawRValueArray.remove(0);
+                RawRValueArray.add(Integer.parseInt(data));
+
+                Integer prevDeriv, currDeriv;
+
+                prevDeriv = RawRValueArray.get(1) - RawRValueArray.get(0);
+                currDeriv = RawRValueArray.get(2) - RawRValueArray.get(1);
+
+                if(prevDeriv >=0 && currDeriv < 0) {
+                    if (PeakArray.size() < 3) {
+                        PeakArray.add(RawRValueArray.get(2));
+                        return false;
+                    }
+                    if (PeakArray.size()>=3) {
+                        PeakArray.remove(0);
+                    }
+                    PeakArray.add(RawRValueArray.get(2));
+                    newPeak = true;
+                }
+                if(prevDeriv <=0 && currDeriv > 0) {
+                    if (PeakArray.size() <= 3) {
+                        PeakArray.add(RawRValueArray.get(2));
+                        return false;
+                    }
+                    if (PeakArray.size()>3) {
+                        PeakArray.remove(0);
+                    }
+                    PeakArray.add(RawRValueArray.get(2));
+                    newPeak = true;
+                }
+                if (PeakArray.get(1) > PeakArray.get(0) && PeakArray.get(1) > PeakArray.get(2) && newPeak==true) {
+                    return true;
+                }
 
 
         //If we've reached here, no beat return false;
