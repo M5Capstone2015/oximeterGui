@@ -487,10 +487,14 @@ public class MainScreenFrag extends Fragment {
         ArrayList<Integer> RawRValueArray = new ArrayList<Integer>();
         ArrayList<Integer> PeakArray = new ArrayList<Integer>();
         ArrayList<Boolean> BeatArray = new ArrayList<Boolean>();
+        int smoothCounter = 0;
+        ArrayList<String> RawRSmoother = new ArrayList<String>();
+
         @Override
         public void DataAvailable(String _data) {
             if (_startTime == 0)
                 _startTime = System.currentTimeMillis();
+            _data = Smooth(_data);
             _mainScreenFrag.data = _data;
             recData += (_data + ", ");
 
@@ -518,7 +522,7 @@ public class MainScreenFrag extends Fragment {
             }
             long time = System.currentTimeMillis();
             long diff = time - _startTime;
-            if (diff > 10000) {
+            if (diff > 10000){
                 _bpm = BeatArray.size()*6;
                 BeatArray.clear();
                 diff = 0;
@@ -557,6 +561,29 @@ public class MainScreenFrag extends Fragment {
                 e.printStackTrace();
             }
         }
+
+    private String Smooth(String data)
+    {
+        if(RawRSmoother.size() > 10)
+            RawRSmoother.remove(10);
+        RawRSmoother.add(data);
+        if(Integer.parseInt(data)<730)
+        {
+            smoothCounter += 1;
+            if(smoothCounter>100)
+            {
+                return data;
+            }
+            else
+            {
+                return RawRSmoother.get(RawRSmoother.size()-1);
+            }
+        }
+        else {
+            smoothCounter=0;
+        }
+        return data;
+    }
 
     private boolean DetectBeat(String data)
             {
@@ -611,13 +638,13 @@ public class MainScreenFrag extends Fragment {
         if(value<750)
             return "0";
         if(value>=750 && value<=850)
-            return "96";
-        if(value>=850 && value<=950)
             return "97";
-        if(value>=950 && value<=1050)
+        if(value>=850 && value<=950)
             return "98";
-        if(value>=1050 && value<=1150)
+        if(value>=950 && value<=1050)
             return "99";
+        if(value>=1050 && value<=1150)
+            return "100";
         if(value>=1150 && value<=1250)
             return "100";
         //If larger than this return 100 anyway
