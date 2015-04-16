@@ -479,9 +479,15 @@ public class MainScreenFrag extends Fragment {
     private boolean done = false;
 
     OnDataAvailableListener _dataAvailableListner = new OnDataAvailableListener() {
+
+        long _startTime=0;
+        ArrayList<Integer> RawRValueArray = new ArrayList<Integer>();
+        ArrayList<Integer> PeakArray = new ArrayList<Integer>();
+        ArrayList<Boolean> BeatArray = new ArrayList<Boolean>();
         @Override
         public void DataAvailable(String _data) {
-
+            if (_startTime == 0)
+                _startTime = System.currentTimeMillis();
             _mainScreenFrag.data = _data;
             recData += (_data + ", ");
 
@@ -501,9 +507,11 @@ public class MainScreenFrag extends Fragment {
                 });
                 */
             }
+            //Function maps data reading to SPO2 percentage
+            final String percentValue = this.rawRValueToSP(data);
 
             if (_recording)
-                _collector.AddNewData(Integer.parseInt(data));
+                _collector.AddNewData(Integer.parseInt(percentValue));
 
             try
             {
@@ -511,10 +519,10 @@ public class MainScreenFrag extends Fragment {
                     @Override
                     public void run() {
                         //if (done) {
-                            //percent.setText("Done!");
-                            //return;
+                        //percent.setText("Done!");
+                        //return;
                         //}
-                        //percent.setText(data + "%");
+                        percent.setText(percentValue + "%");
                         //percent.setText(counter + "%");
 
                         int parsed = Integer.parseInt(data);
@@ -526,7 +534,7 @@ public class MainScreenFrag extends Fragment {
                             bpmCirlce.setText(res + " b/m");
 
                         //percent.setText(parsed);
-                        percent.setText(data);
+                        //percent.setText(data);
                     }
                 });
             }
@@ -535,19 +543,55 @@ public class MainScreenFrag extends Fragment {
                 e.printStackTrace();
             }
         }
-    };
 
-
-    private ArrayList<Integer> buffer = new ArrayList<>();
-    private ArrayList<Integer> peeks = new ArrayList<>();
-
-    public int PeakDetection(int data)
+    private boolean DetectBeat(String data)
     {
+        if(RawRValueArray.size()<3) {
+            RawRValueArray.add(Integer.parseInt(data));
+            return false;
+        }
+        if(RawRValueArray.size()>3)
+            RawRValueArray.remove(0);
+
+
+        //If we've reached here, no beat return false;
+        return false;
+    }
+
+    private String rawRValueToSP(String data)
+    {
+        int value = Integer.parseInt(data);
+        if(value<750)
+            return "0";
+        if(value>=750 && value<=850)
+            return "96";
+        if(value>=850 && value<=950)
+            return "97";
+        if(value>=950 && value<=1050)
+            return "98";
+        if(value>=1050 && value<=1150)
+            return "99";
+        if(value>=1150 && value<=1250)
+            return "100";
+        //If larger than this return 100 anyway
+        return "100";
+    }
+};
+
+
+
+
+
+private ArrayList<Integer> buffer = new ArrayList<>();
+private ArrayList<Integer> peeks = new ArrayList<>();
+
+public int PeakDetection(int data)
+        {
         // here if smaller than size fuck this shit below just add an return
         //
         buffer.add(data);
         if (buffer.size() < 15)
-            return -1;
+        return -1;
 
 
         int prev = buffer.get(buffer.size()-2);
@@ -559,10 +603,10 @@ public class MainScreenFrag extends Fragment {
 
         if (prev_deriv >= 0 && second_deriv < 0)
         {
-            peeks.add(data);
-            if(peeks.size() < 4) { return -1; }
-            peeks.remove(0);
-            int psize = peeks.size();
+        peeks.add(data);
+        if(peeks.size() < 4) { return -1; }
+        peeks.remove(0);
+        int psize = peeks.size();
 
             if((peeks.get(psize-2) > peeks.get(psize-1)) && (peeks.get(psize-2) > peeks.get(psize-3))) {
                 // This means the previous peak is a beat
@@ -812,7 +856,7 @@ public class MainScreenFrag extends Fragment {
                 case R.id.patient_list:
                     //_mainScreenFrag.SetBar(20);
                     //_mainScreenFrag.animate();
-                    //_mainScreenFrag.PatientListClick();
+                    _mainScreenFrag.PatientListClick();
                     break;
                 case R.id.start_reading:
                     _mainScreenFrag.StartRecording();
